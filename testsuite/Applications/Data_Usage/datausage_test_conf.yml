@@ -1,0 +1,44 @@
+###############################################################################
+# This configuration file is for Airlink data usage test automation.
+# Company: Sierra Wireless
+# Time   : Jul 17, 2013
+# Author : Airlink test team
+#################################################################################
+---
+RUN_ALL_TESTCASES          :    NO
+RUN_SELECTIVE_TESTCASES    :    [[1,3]]
+RUN_REPEAT                 :    1
+TOTAL_TASECASE_NUMBER      :    3
+    
+LIST_TESTCASES:  
+            1  : tc_datausage_transfer_small_once
+            2  : tc_datausage_transfer_medium_once
+            3  : tc_datausage_transfer_large_once
+
+ 
+FTP_SMALL:
+    SIZE        : 1     #unit: MB (megabytes, not megabits)
+    UL_INVERVAL : 20    #unit: s  , TODO: need the actual test
+    DL_INTERVAL : 3     #TODO: need to test
+
+FTP_MEDIUM:
+    SIZE        : 10  
+    UL_INVERVAL : 200
+    DL_INTERVAL : 30
+
+FTP_LARGE: 
+    SIZE        : 100 
+    UL_INVERVAL : 200
+    DL_INTERVAL : 30
+    
+# FTP SERVER SETTING
+FTP_SERVER  :     
+    ADDRESS      :    "100.168.1.101" 
+    PORT         :    21
+    USERNAME     :    "user"
+    PASSWORD     :    "pass"
+#    ADDRESS      :    "208.81.123.2"
+#    USERNAME     :    "user1"
+#    PASSWORD     :    "12345"
+    LOCAL_PATHNAME     :    "/airlinkautomation/data/testfiles"
+    REMOTE_PATHNAME    :    "/inetpub/wwwroot"

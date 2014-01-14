@@ -1,0 +1,246 @@
+###############################################################################
+# This configuration file is for Airlink LAN test automation.
+# Company: Sierra Wireless
+# Time   : Jun  24, 2013
+#
+#################################################################################
+
+---
+#python lan_test_launcher 
+#python lan_test_launcher -v 4.3.3|4.3.4
+#python lan_test_launcher -i [[8,9]]
+#python lan_test_launcher -t smoke|regression
+#python lan_test_launcher -p HIGH|MEDIUM|LOW
+
+# RUN_ALL_TESTCASES          :    NO
+# RUN_SELECTIVE_TESTCASES    :    [[8,10]]
+# RUN_REPEAT                 :    1
+# TOTAL_TESTCASES            :    10
+# RUN_PRODUCT_VER      	   : "4.3.3"
+
+# FEATURE  : LAN
+# OTA shall be in WAN, not LAN
+
+ETH_DEVICE_IP     : "192.168.13.31"
+ETH_SUBNET_MASK   : "255.255.255.0"
+ETH_STARTING_IP   : "192.168.13.100"
+ETH_ENDING_IP     : "192.168.13.150"   
+ETHERNET_IP       : "192.168.13.100"
+
+USB_DEVICE_IP     : "192.168.14.31"
+USB_SUBNET_MASK   : "255.255.255.0"
+USB_STARTING_IP   : "192.168.14.100"
+USB_ENDING_IP     : "192.168.14.100"
+USBNET_IP         : "192.168.14.100"
+
+WIFI_DEVICE_IP    : "192.168.17.31"
+WIFI_STARTING_IP  : "192.168.17.100"
+WIFI_ENDING_IP    : "192.168.17.150"
+WIFI_IP           : "192.168.17.100"
+
+DHCP_NETWORK_MASK : "255.255.255.0"
+DHCP_SERVER_MODE  : "1"   #
+
+
+ 
+LIST_TESTCASES:   
+           1  : 
+              TC_ID       : "/Feature/LAN/AT_Commands/Ethernet_DHCP_commadns"           
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test Ethernet DHCP AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : LAN
+           2  : 
+              TC_ID       : "/Feature/LAN/AT_Commands/Ethernet_ETHMAC"     
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test Ethernet MAC by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : LAN
+           3  : 
+              TC_ID       : "/Feature/LAN/AT_Commands/Ethernet_ETHSTATE"             
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test Ethernet state by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : LAN
+           4  : 
+              TC_ID       : "/Feature/LAN/AT_Commands/Global_DNS"    
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "Global DNS AT commands"
+              PRIORIY     : HIGH              
+              TEST_AREA   : LAN
+           5  : 
+              TC_ID       : "/Feature/LAN/AT_Commands/PPOE_Commands"    
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "PPOE AT commands"
+              PRIORIY     : HIGH              
+              TEST_AREA   : LAN
+           6  : 
+              TC_ID       : "/Feature/LAN/AT_Commands/Dual_eth_state"    
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "WiFi AP Enable"
+              PRIORIY     : HIGH              
+              TEST_AREA   : LAN
+           7  : 
+              TC_ID       : "/Feature/LAN/AT_Commands/Dual_eth_mac"    
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "WiFi AP Enable"
+              PRIORIY     : HIGH              
+              TEST_AREA   : LAN
+           8  : 
+              TC_ID       : "/Feature/LAN/AT_Commands/TBD"    
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "WiFi AP Enable"
+              PRIORIY     : HIGH              
+              TEST_AREA   : LAN
+           9  : 
+              TC_ID       : "/Feature/LAN/AT_Commands/TBD"    
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "WiFi AP Enable"
+              PRIORIY     : HIGH              
+              TEST_AREA   : LAN
+           10  : 
+              TC_ID       : "/Feature/LAN/AT_Commands/TBD"    
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "WiFi AP Enable"
+              PRIORIY     : HIGH              
+              TEST_AREA   : LAN
+           11  : 
+              TC_ID       : "/Feature/LAN/DHCP_Addressing/Wifi_mode"              
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "LAN default, all host use private IPs"
+              PRIORIY     : HIGH
+              TEST_AREA   : LAN
+           12  : 
+              TC_ID       : "/Feature/LAN/DHCP_Addressing/Wifi_mac"      
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "LAN tes, Ethernet uses public IP"
+              PRIORIY     : HIGH
+              TEST_AREA   : LAN
+           13  : 
+              TC_ID       : "/Feature/LAN/DHCP_Addressing/Wifi_apbridged"  
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "LAN test, USB uses public IP"
+              PRIORIY     : HIGH
+              TEST_AREA   : LAN
+           14  : 
+              TC_ID       : "/Feature/LAN/DHCP_Addressing/Wifi_apchannel"          
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "LAN, First host gets public IP"
+              PRIORIY     : HIGH
+              TEST_AREA   : LAN
+           15  :
+              TC_ID       : "/Feature/LAN/DHCP_Addressing/Wifi_apen"          
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "LAN,"
+              PRIORIY     : HIGH
+              TEST_AREA   : LAN
+           16  : 
+              TC_ID       : "/Feature/LAN/AT_Commands/Wifi_ap_max_client"    
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "WiFi AP Enable"
+              PRIORIY     : HIGH              
+              TEST_AREA   : LAN
+           17  : 
+              TC_ID       : "/Feature/LAN/AT_Commands/Wifi_ap_security_type"    
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "WiFi AP Enable"
+              PRIORIY     : HIGH              
+              TEST_AREA   : LAN
+           18  : 
+              TC_ID       : "/Feature/LAN/AT_Commands/Wifi_ap_tx_power"    
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "WiFi AP Enable"
+              PRIORIY     : HIGH              
+              TEST_AREA   : LAN
+           19  : 
+              TC_ID       : "/Feature/LAN/AT_Commands/Wifi_ap_dhcp_commands"    
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "WiFi AP Enable"
+              PRIORIY     : HIGH              
+              TEST_AREA   : LAN
+           20  : 
+              TC_ID       : "/Feature/LAN/AT_Commands/Wifi_ap_ssid_commands"    
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "WiFi AP Enable"
+              PRIORIY     : HIGH              
+              TEST_AREA   : LAN
+           21  : 
+              TC_ID       : "/Feature/LAN/DHCP_Addressing/All_Hosts_use_Private_IPs"              
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "LAN default, all host use private IPs"
+              PRIORIY     : HIGH
+              TEST_AREA   : LAN
+           22  : 
+              TC_ID       : "/Feature/LAN/DHCP_Addressing/Ethernet_uses_Public_IP"      
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "LAN tes, Ethernet uses public IP"
+              PRIORIY     : HIGH
+              TEST_AREA   : LAN
+           23  : 
+              TC_ID       : "/Feature/LAN/DHCP_Addressing/USB_uses_Public_IP"  
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "LAN test, USB uses public IP"
+              PRIORIY     : HIGH
+              TEST_AREA   : LAN
+           24  : 
+              TC_ID       : "/Feature/LAN/DHCP_Addressing/First_Host_uses_Public_IP"          
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "LAN, First host gets public IP"
+              PRIORIY     : HIGH
+              TEST_AREA   : LAN
+           25  :
+              TC_ID       : "/Feature/LAN/DHCP_Addressing/tc_ethernet_display_no_wifi_Card"          
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "LAN,"
+              PRIORIY     : HIGH
+              TEST_AREA   : LAN

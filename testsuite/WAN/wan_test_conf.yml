@@ -1,0 +1,173 @@
+###############################################################################
+# This configuration file is for Airlink WAN test automation.
+# Company: Sierra Wireless
+# Time: June 14, 2013
+#
+#################################################################################
+
+#################################################################################
+# WAN TEST CONFIGURATION
+#################################################################################
+---
+    
+LIST_TESTCASES:
+            1  : 
+              TC_ID       : "/Feature/WAN/AT_Commands/AUTOPRL_and_AUTOPRLFREQ"
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Sanity","SANITY","Functional","FUNCTIONAL"]
+              DESCRIPTION : "To test AT command in CDMA device AUTOPRL and AUTOPRLFREQ"
+              PRIORIY     : HIGH
+              TEST_AREA   : WAN  
+            2  : 
+              TC_ID       : "/Feature/WAN/AT_Commands/BAND"
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Sanity","SANITY","Functional","FUNCTIONAL"]
+              DESCRIPTION : "To test AT command *BAND in GSM device"
+              PRIORIY     : HIGH
+              TEST_AREA   : WAN                 
+            3  : 
+              TC_ID       : "/Feature/WAN/AT_Commands/Diversity_commands"
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Sanity","SANITY","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              PRIORIY     : HIGH
+              TEST_AREA   : WAN  
+            4  : 
+              TC_ID       : "/Feature/WAN/AT_Commands/evdo_data_service"
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Sanity","SANITY","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              PRIORIY     : HIGH
+              TEST_AREA   : WAN  
+            5  : 
+              TC_ID       : "/Feature/WAN/AT_Commands/evdo_roam_pref"
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Sanity","SANITY","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              PRIORIY     : HIGH
+              TEST_AREA   : WAN  
+            6  : 
+              TC_ID       : "/Feature/WAN/AT_Commands/lte_signal_commands"
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Sanity","SANITY","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              PRIORIY     : HIGH
+              TEST_AREA   : WAN                 
+            7  : 
+              TC_ID       : "/Feature/WAN/AT_Commands/netallowzeroip"
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Sanity","SANITY","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              PRIORIY     : HIGH
+              TEST_AREA   : WAN  
+            8  : 
+              TC_ID       : "/Feature/WAN/AT_Commands/netapn"
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Sanity","SANITY","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              PRIORIY     : HIGH
+              TEST_AREA   : WAN  
+            9  : 
+              TC_ID       : "/Feature/WAN/AT_Commands/netwdog"
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Sanity","SANITY","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              PRIORIY     : HIGH
+              TEST_AREA   : WAN  
+            10  : 
+              TC_ID       : "/Feature/WAN/AT_Commands/tc_username_password"
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Sanity","SANITY","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              PRIORIY     : HIGH
+              TEST_AREA   : WAN    
+            11  : 
+              TC_ID       : "/Feature/WAN/user_entered_apn"
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Sanity","SANITY","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              PRIORIY     : HIGH
+              TEST_AREA   : WAN    
+            12  : 
+              TC_ID       : "/Feature/WAN/AT_Commands/tc_user_enetred_apn_with_username_password"
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Sanity","SANITY","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              PRIORIY     : HIGH
+              TEST_AREA   : WAN    
+            13  : 
+              TC_ID       : "/Feature/WAN/user_entered_apn_auto"
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Sanity","SANITY","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              PRIORIY     : HIGH
+              TEST_AREA   : WAN  
+            14  : 
+              TC_ID       : "/Feature/WAN/AT_Commands/tc_username_password"
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Sanity","SANITY","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              PRIORIY     : HIGH
+              TEST_AREA   : WAN    
+            15  : 
+              TC_ID       : "/Feature/WAN/user_enter_apn"
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Sanity","SANITY","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              PRIORIY     : HIGH
+              TEST_AREA   : WAN    
+            16  : 
+              TC_ID       : "/Feature/WAN/AT_Commands/tc_username_password"
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Sanity","SANITY","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              PRIORIY     : HIGH
+              TEST_AREA   : WAN    
+            17  : 
+              TC_ID       : "/Feature/WAN/user_enter_apn"
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Sanity","SANITY","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              PRIORIY     : HIGH
+              TEST_AREA   : WAN  
+            18  : 
+              TC_ID       : "/Feature/WAN/tc_rssi_change"
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Sanity","SANITY","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              PRIORIY     : HIGH
+              TEST_AREA   : WAN
+            19  : 
+              TC_ID       : "/Feature/WAN/tc_ecio"
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Sanity","SANITY","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              PRIORIY     : HIGH
+              TEST_AREA   : WAN
+            20  : 
+              TC_ID       : "/Feature/WAN/tc_test3"
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Sanity","SANITY","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              PRIORIY     : HIGH
+              TEST_AREA   : WAN

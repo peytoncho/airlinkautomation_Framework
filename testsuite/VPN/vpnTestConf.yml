@@ -1,0 +1,163 @@
+###############################################################################
+# This configuration file is for Airlink VPN test automation.
+# Company: Sierra Wireless
+# Time: Feb 14, 2013
+#
+#################################################################################
+
+#################################################################################
+# VPN TEST CONFIGURATION
+#################################################################################
+---
+TESTBED2 : !include  /airlinkautomation/config/testbed2Conf.yml
+
+RUN_ALL_TESTCASES          :    NO
+RUN_SELECTIVE_TESTCASES    :    [[7,10]]
+RUN_REPEAT                 :    1
+ALL_TASECASE_NUMBER        :    26
+    
+VPN_TESTCASES:  
+           1  : tc_ipsec_vpn1_ui_setting    #ipsec vpn 1 setting by UI
+           2  : tc_ipsec_vpn2_ui_setting    #ipsec vpn 2 setting by UI
+           3  : tc_ipsec_vpn3_ui_setting
+           4  : tc_ipsec_vpn4_ui_setting
+           5  : tc_ipsec_vpn5_ui_setting    #ipsec vpn 5 setting by UI
+           6  : tc_ipsec_vpn1_at_setting    #ipsec vpn 1 setting by At Commands
+           7  : tc_ipsec_vpn2_at_setting 
+           8  : tc_ipsec_vpn3_at_setting
+           9  : tc_ipsec_vpn4_at_setting
+           10 : tc_ipsec_vpn5_at_setting    #ipsec vpn 5 setting by At Commands
+           11 : tc_ipsec_vpn1_ui_live_router      #ipsec vpn 1 setting  by ui + cisco router setting
+           12 : tc_ipsec_vpn2_ui_live_router      #ipsec vpn 2 setting + cisco router setting
+           13 : tc_ipsec_vpn3_ui_live_router      #ipsec vpn 3 setting + cisco router setting
+           14 : tc_ipsec_vpn4_ui_live_router      #ipsec vpn 4 setting + cisco router setting
+           15 : tc_ipsec_vpn5_ui_live_router      #ipsec vpn 5 setting + cisco router setting
+           16 : tc_ipsec_vpn1_at_live_router      #ipsec vpn 1 setting  by at commands + cisco router setting
+           17 : tc_ipsec_vpn2_at_live_router      #ipsec vpn 2 setting + cisco router setting
+           18 : tc_ipsec_vpn3_at_live_router      #ipsec vpn 3 setting + cisco router setting
+           19 : tc_ipsec_vpn4_at_live_router      #ipsec vpn 4 setting + cisco router setting
+           20 : tc_ipsec_vpn5_at_live_router      #ipsec vpn 5 setting + cisco router setting 
+           21 : tc_ipsec_vpn1_at_callbox_router   #ipsec vpn 1 setting  by at commands + callbox+ cisco router setting
+           22 : tc_ipsec_vpn2_at_callbox_router   #ipsec vpn 2 setting  by at commands + callbox+ cisco router setting
+           23 : tc_ipsec_vpn3_at_callbox_router   #ipsec vpn 3 setting  by at commands + callbox+ cisco router setting
+           24 : tc_ipsec_vpn4_at_callbox_router   #ipsec vpn 4 setting  by at commands + callbox+ cisco router setting
+           25 : tc_ipsec_vpn5_at_callbox_router   #ipsec vpn 5 setting  by at commands + callbox+ cisco router setting 
+           101: tc_gre_vpn1_ui_setting            #gre vpn 1 setting by UI
+           
+IPSEC_TUNNEL:   
+    VPN_TYPE:            #VPN1   VPN2   VPN3   VPN4   VPN5
+          MSCIID      : ["3151","3180","3206","3232","3258"]
+          VALUE       : 1                                     #0:DISABLED, 1:_IPSEC, 2:GRE, 3:SSL, 5:L2TP+_IPSEC
+          VISIBLE_TEXT: "IPsec Tunnel"
+    VPN_STATUS:
+             MSCIID   : ["3152","3181","3207","3233","3259"]
+             VALUE    : ["Not Connected","Connected"]        
+    VPN_GATEWAY:
+             MSCIID   : ["3153","3182","3208","3234","3260"]
+             VALUE    : "208.81.123.2"
+    PSK1:
+             MSCIID   : ["3155","3184","3210","3236","3262"]
+             VALUE    : "sierra123"
+    MY_ID_TYPE:
+             MSCIID   : ["3157","3186","3212","3238","3264"]
+             VALUE    : [1,1,1,1,1]                          #[1,2,3]                     
+             VISIBLE_TEXT : ["IP","IP","IP","IP","IP"]       #["IP","FQDN","USERFQDN"]
+    MY_ID:
+             MSCIID   : ["3158","3187","3213","3239","3265"]
+             VALUE    : "MWSHARK.EAIRLINK.COM"
+    PEER_ID_TYPE:
+             MSCIID   : ["3159","3188","3214","3240","3266"]
+             VALUE    : [1,1,1,1,1]                          #[1,2,3]                     
+             VISIBLE_TEXT : ["IP","IP","IP","IP","IP"]       #["IP","FQDN","USERFQDN"]
+    PEER_ID:
+             MSCIID   : ["3160","3189","3215","3241","3267"]
+             VALUE    :  "CISCO1811MW.EAIRLINK.COM"
+    NEG_MODE:
+             MSCIID   : ["3161","3190","3216","3242","3268"]
+             VALUE    : [1,1,1,1,2]                          #[1,2]                     
+             VISIBLE_TEXT : ["Main","Main","Main","Main","Aggressive"]   #["Main","Aggressive"]
+    IKE_ENCRYPT:
+             MSCIID   : ["3162","3191","3217","3243","3269"]
+             VALUE    : [3,1,1,1,1]                          #[1,2,3,4]   
+             VISIBLE_TEXT : ["AES-128","DES","DES","DES","DES"]  #["DES","3DES", "AES-128", "AES-256"]
+    IKE_AUTH:                 
+             MSCIID   : ["3163","3192","3218","3244","3270"]
+             VALUE    : [2,1,1,1,1]                          #[1,2,3]   
+             VISIBLE_TEXT : ["SHA1","MD5","MD5","MD5","MD5"] #["MD5","SHA1", "SHA 256"]
+    IKE_KEY_GROUP:                
+             MSCIID   : ["3164","3193","3219","3245","3271"]
+             VALUE    : [2,1,1,1,1]                          #[1,2,5]   
+             VISIBLE_TEXT : ["DH2","DH1","DH1","DH1","DH1"]  #["DH1","DH2", "DH5"]
+    IKE_SA_TIME:
+             MSCIID   : ["3165","3194","3220","3246","3272"]
+             VALUE    : [7200,300, 300,300,7200]
+    LOCAL_ADDRESS_TYPE       :    
+             MSCIID   : ["3166","3195","3221","3247","3273"]
+             VALUE    : [17,17,17,1,5]                       #[1,5,17]         
+             VISIBLE_TEXT : ["Subnet Address","Subnet Address","Subnet Address","Subnet Address","Subnet Address"] #["Use the Host Subnet","Single Address", "Subnet Address"]
+    LOCAL_ADDRESS :   
+             MSCIID   : ["3167","3196","3222","3248","3274"]
+             VALUE    : "10.11.12.0"
+    LOCAL_ADDRESS_MASK :    
+             MSCIID   : ["3168","3197","3223","3249","3275"]
+             VALUE    : "255.255.255.0"
+    REMOTE_ADDRESS_TYPE:   
+             MSCIID   : ["3169","3198","3224","3250","3276"]
+             VALUE    : [17,17,17,1,5]                       #[1,5,17]         
+             VISIBLE_TEXT : ["Subnet Address","Subnet Address","Subnet Address","Subnet Address","Subnet Address"] #["Use the Host Subnet","Single Address", "Subnet Address"]
+    REMOTE_ADDRESS :   
+             MSCIID   : ["3170","3199","3225","3251","3277"]
+             VALUE    : "10.11.12.0"
+    REMOTE_ADDRESS_MASK :    
+             MSCIID   : ["3171","3200","3226","3252","3278"]
+             VALUE    : "255.255.255.0"
+    PERFECT_FW_SECURITY: 
+             MSCIID   : ["3289","3290","3291","3292","3293"]    
+             VALUE    : [0,0,0,0,0]
+    IPSEC_ENCRYPT :          
+             MSCIID   : ["3172","3201","3227","3253","3279"]
+             VALUE    : [3,1,1,1,1]                          #[1,2,3,4]   
+             VISIBLE_TEXT : ["AES-128","DES","DES","DES","DES"]  #["DES","3DES", "AES-128", "AES-256"]         
+    IPSEC_AUTH:               
+             MSCIID   : ["3173","3202","3228","3254","3280"]
+             VALUE    : [2,1,1,1,1]                          #[1,2,3]    
+             VISIBLE_TEXT : ["SHA1","MD5","MD5","MD5","MD5"]  #["MD5","SHA1", "SHA 256"]
+    IPSEC_KEY_GROUP: 
+             MSCIID   : ["3174","3203","3229","3255","3281"]
+             VALUE    : [2,1,1,1,1]                          #[1,2,5]   
+             VISIBLE_TEXT : ["DH2","DH1","DH1","DH1","DH1"]  #["DH1","DH2", "DH5"]
+    IPSEC_SA_TIME:
+             MSCIID   : ["3175","3204","3230","3256","3282"]
+             VALUE    : [7200,300, 300,300,7200]
+              
+GRE_TUNNEL:  
+    VPN_TYPE:            #VPN1   VPN2   VPN3   VPN4   VPN5
+          MSCIID      : ["3151","3180","3206","3232","3258"]
+          VALUE       : 2                                     #0:DISABLED, 1:_IPSEC, 2:GRE, 3:SSL, 5:L2TP+_IPSEC
+          VISIBLE_TEXT: "GRE Tunnel"
+    VPN_STATUS:
+             MSCIID   : ["3152","3181","3207","3233","3259"]
+             VALUE    : ["Not Connected","Connected"]        
+    VPN_GATEWAY:
+             MSCIID   : ["3153","3182","3208","3234","3260"]
+             VALUE    : "208.81.123.2"
+    REMOTE_ADDRESS_TYPE:   
+             MSCIID   : ["3169","3198","3224","3250","3276"]
+             VALUE    : [17,17,17,1,5]                       #[1,5,17]         
+             VISIBLE_TEXT : ["Subnet Address","Subnet Address","Subnet Address","Subnet Address","Subnet Address"] #["Use the Host Subnet","Single Address", "Subnet Address"]
+    REMOTE_ADDRESS :   
+             MSCIID   : ["3170","3199","3225","3251","3277"]
+             VALUE    : "10.11.12.0"
+    REMOTE_ADDRESS_MASK :    
+             MSCIID   : ["3171","3200","3226","3252","3278"]
+             VALUE    : "255.255.255.0"            
+    GRE_TTL:   
+             MSCIID   : ["5201","5202","5203","5204","5205"]   # MSCIID_CFG_VPN1/2/3/4/5_TTL
+             VALUE    : [255,255,200,300,400]                     
+             
+SSL_TUNNEL:  
+    VPN_TYPE:            #VPN1   VPN2   VPN3   VPN4   VPN5
+          MSCIID      : ["3151","3180","3206","3232","3258"]
+          VALUE       : 3                                     #0:DISABLED, 1:_IPSEC, 2:GRE, 3:SSL, 5:L2TP+_IPSEC
+          VISIBLE_TEXT: "SSL Tunnel"
+          
