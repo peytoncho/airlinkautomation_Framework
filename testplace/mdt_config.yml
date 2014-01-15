@@ -1,0 +1,27 @@
+MDT: YES     #YES/NO
+
+TESTING_COMBO: DEVICE_COMBO1
+
+DEVICE_COMBO1: [GX400_MC8705_OSM,
+               GX400_MC8705_ATT,
+               GX400_MC8705_BEL,
+               GX400_MC8705_TLS,
+               GX400_MC8705_OSM]
+
+DEVICE_COMBO2: [LS300_SL5011_VZW,
+               LS300_SL5011_SPT,
+               LS300_SL8090_ATT,
+               LS300_SL8090_BEL,
+               LS300_SL8092_OSM]
+
+DEVICE_COMBO3: [GX400_MC5728_VZW,
+               GX440_MC7750_VZW,
+               GX440_MC7700_ATT,
+               GX400_MC5728_SPT,
+               GX440_MC7700_OSM]
+               
+DEVICE_COMBO4: [ES440_MC7750_VZW,
+               ES440_MC7700_ATT,
+               ES440_MC7710_EMEA,
+               ES440_MC7700_OSM,
+               GX440_MC7700_OSM]

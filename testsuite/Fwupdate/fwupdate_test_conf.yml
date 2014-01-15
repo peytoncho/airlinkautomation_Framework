@@ -202,8 +202,9 @@ LIST_TESTCASES:
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
            
-RM_MAP :
-       MC8705_OSM001_3552: ""
+MDT:NO      #YES/NO
+COMBO: []
+
     
 # TODO these range values need to confirm
 UPDATE_TYPE : ALEOS_Software
