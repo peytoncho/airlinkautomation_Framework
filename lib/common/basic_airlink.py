@@ -20,7 +20,7 @@ from multiprocessing import Process
 import time
 import ftplib
 
-airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME'] 
+airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_FRAMEWORK'] 
 
 slash = "\\" if sys.platform == 'win32' else "/"
 
@@ -540,7 +540,7 @@ def get_config_data(area_name, sub_area_name):
                 'lpm_test_conf.yml','r')
     elif area_name == "TestClass":
         fo=open(airlinkautomation_home_dirname+testclass_path+slash+\
-                'testclass_test_conf.yml','r')
+                'mdt_config.yml','r')
                   
     area_config_data = yaml.load(fo)
     fo.close()
