@@ -1,0 +1,784 @@
+---
+################################################################################
+# This file is for testbed's common configuration.
+# There are a few sections:  
+# General, DUT, Callbox, FTP, Host, Controller
+# User can change the configuration accordingly on the feature and device. 
+#
+# Company: Sierra Wireless
+# Time: Feb 14, 2013
+# Author: Airlink
+#
+################################################################################
+
+#AIRLINKAUTOMATION_HOME: "/users/SQA/workspace/airlinkautomation"  # TBD 
+
+BROWSER : "FF"           # FF for Firefox, IE for InterExplorer
+
+# if set to YES skip immediately once meet failed test, 
+# if set to NO continue the remaining tests whether test passed or failed 
+TERMINATE_ON_FAIL: "YES"  
+
+RESOURCE_MONITOR : "YES"   #YES to monitor the resource usage in device, Roger
+
+LOG_LEVEL : "DEBUG"     
+
+EMAIL_LIST : Airlink_Test@sierrawireless.com  
+
+ACE_URL:
+    ETH  : "HTTP://192.168.13.31:9191/"
+    USB  : "HTTP://192.168.14.31:9191/"
+    DUN  : "HTTP://192.168.15.31:9191/"
+    XXX  : "HTTP://192.168.16.31:9191/"
+    WIFI : "HTTP://192.168.17.31:9191/"
+
+#DUTS : ["DUT_ES440_MC7700"] 
+#DUTS : ["DUT_ES440_MC7710"] 
+#DUTS : ["DUT_ES440_MC7750"] 
+
+#DUTS : ["DUT_GX440_MC7700_ATT"] 
+#DUTS : ["DUT_GX440_MC7750_VZW"] 
+
+#DUTS : ["DUT_GX400_MC8705_ROW"]   
+#DUTS : ["DUT_GX400_MC5728_VZW"]
+#DUTS : ["DUT_GX400_MC5728_SPT"]
+
+#DUTS : ["DUT_LS300_SL8090_ATT"] 
+DUTS : ["DUT_LS300_SL5011_VZW"]
+#DUTS : ["DUT_LS300_SL5011_SPT"] 
+
+# DUTs' basic configuration  ###################################################
+
+DUT_ES440_MC7750: 
+    MODEL           :    ES440
+    RM_TYPE         :    MC7750
+    NET_OPERATOR    :    Verizon    
+    NET_SERVICE_TYPE:    "LTE"  #"EV-DO Rev.A, Roaming"     
+    ACE_URL         :    "HTTP://192.168.13.31:9191/"
+    ACE_LOGIN_WAIT  :    7                  #seconds
+    ETH_DEVICE_IP   :    192.168.13.31
+    ETH_SUBNET_MASK :    255.255.255.0
+    ETH_MAC         :    00:14:3e:11:2b:01
+    ETHERNET_IP     :    192.168.13.100
+    USBNET_IP       :    192.168.14.100
+    APN             :    "VZWINTERNET"
+    WAN_IP          :    192.168.13.15
+    WAN_MASK        :    255.255.255.0
+    WAN_MAC         :    00:0A:0A:00:00:01
+    WAN_NAT_IP      :    192.168.13.15
+    USB_DEVICE_IP   :    192.168.14.31
+    USB_SUBNET_MASK :    255.255.255.0
+    USERNAME        :    "user"
+    PASSWORD        :    "12345"
+    INTERFACE       :    ETHERNET           # OTA/ETHERNET/SERIAL/USB/WIFI INTERFACE 
+    CONNECTION_TYPE :    TELNET             # TELNET/SSH/SERIAL
+    CONNECTION_PORT :    2332
+    COM_PORT        :    COM1
+    REBOOT_TIMEOUT  :    150             #150sec = 2.5min
+    TELNET_TIMEOUT  :    3                
+    TELNET_DEBUGMODE:    YES                
+    SSH_TIMEOUT     :    3
+    SERIAL_TIMEOUT  :    3
+    ALEOS_FW_VER    :    "4.3.4.009"
+    RADIO_FW_VER    :    "SWI9600M_03.05.10.09ap r5700 carmd-en-10527 2013/03/12 10:37:48" 
+    MODEM_NAME      :    "HF33730130001001"
+    RM_TIMEOUT      :    400
+    
+DUT_ES440_MC7710:       
+    MODEL           :    ES440
+    RM_TYPE         :    MC7710
+    NET_OPERATOR    :    "AT&T"
+    NET_SERVICE_TYPE:    "LTE"  #"3G, Roaming"     
+    ACE_URL         :    "HTTP://192.168.13.31:9191/"
+    ACE_LOGIN_WAIT  :    7    #seconds
+    ETH_DEVICE_IP   :    "192.168.13.31"
+    ETH_SUBNET_MASK :    "255.255.255.0"
+    ETH_MAC         :    "00:14:3e:11:02:83"
+    ETHERNET_IP     :    192.168.13.100
+    USBNET_IP       :    192.168.14.100
+    APN             :    "internet.com" #"isp.internet.com"  #"Broadband"
+    WAN_IP          :    192.168.13.15 
+    WAN_MASK        :    255.255.255.0
+    WAN_MAC         :    00:0A:0A:00:00:01
+    WAN_NAT_IP      :    192.168.13.15
+    WAN_IP_STATIC   :    74.198.206.38             
+    USB_DEVICE_IP   :    192.168.14.31
+    USB_SUBNET_MASK :    255.255.255.0
+    USERNAME        :    "user"
+    PASSWORD        :    "12345"
+    INTERFACE       :    USB           # OTA/ETHERNET/SERIAL/USB/WIFI INTERFACE 
+    CONNECTION_TYPE :    TELNET        # TELNET/SSH/SERIAL
+    CONNECTION_PORT :    2332
+    COM_PORT        :    COM1
+    REBOOT_TIMEOUT  :    180                #150sec = 2.5min
+    TELNET_TIMEOUT  :    3                
+    TELNET_DEBUGMODE:    YES                
+    SSH_TIMEOUT     :    3
+    SERIAL_TIMEOUT  :    3
+    ALEOS_FW_VER    :    "4.3.4.009"
+    RADIO_FW_VER    :    "SWI9200X_03.05.10.02AP R4684 CARMD-EN-10527 2012/02/25 11:58:38"
+    MODEM_NAME      :    "CA1250202761004"  #SSID/Network name
+    RM_TIMEOUT      :    400
+
+DUT_ES440_MC7700:       
+    MODEL           :    ES440
+    RM_TYPE         :    MC7700
+    NET_OPERATOR    :    "AT&T"
+    NET_SERVICE_TYPE:    "LTE"   #"3G, Roaming"     
+    ACE_URL         :    "HTTP://192.168.13.31:9191/"
+    ACE_LOGIN_WAIT  :    7    #seconds
+    ETH_DEVICE_IP   :    "192.168.13.31"
+    ETH_SUBNET_MASK :    "255.255.255.0"
+    ETH_MAC         :    "00:14:3e:11:02:83"
+    ETHERNET_IP     :    192.168.13.100
+    USBNET_IP       :    192.168.14.100
+    APN             :    "Broadband"
+    WAN_IP          :    192.168.13.15 
+    WAN_MASK        :    255.255.255.0
+    WAN_MAC         :    00:0A:0A:00:00:01
+    WAN_NAT_IP      :    192.168.13.15
+    WAN_IP_STATIC   :    NO               
+    USB_DEVICE_IP   :    192.168.14.31
+    USB_SUBNET_MASK :    255.255.255.0
+    USERNAME        :    "user"
+    PASSWORD        :    "12345"
+    INTERFACE       :    ETHERNET        # OTA/ETHERNET/SERIAL/USB/WIF INTERFACE 
+    CONNECTION_TYPE :    TELNET        # TELNET/SSH/SERIAL
+    CONNECTION_PORT :    2332
+    COM_PORT        :    COM1
+    REBOOT_TIMEOUT  :    180                #150sec = 2.5min
+    TELNET_TIMEOUT  :    3                
+    TELNET_DEBUGMODE:    YES                
+    SSH_TIMEOUT     :    3
+    SERIAL_TIMEOUT  :    3
+    ALEOS_FW_VER    :    "4.3.4.009"
+    RADIO_FW_VER    :    "SWI9200X_03.05.10.02AP R4684 CARMD-EN-10527 2012/02/25 11:58:38"
+    MODEM_NAME      :    "CA1250202761004"  #SSID/Network name
+    RM_TIMEOUT      :    400
+    
+DUT_GX440_MC7700_ATT:       
+    MODEL           :    GX440
+    RM_TYPE         :    MC7700
+    NET_OPERATOR    :    "AT&T"
+    NET_SERVICE_TYPE:    "LTE" #"3G, Roaming"     
+    ACE_URL         :    "HTTP://192.168.13.31:9191/"
+    ACE_LOGIN_WAIT  :    7    #seconds
+    ETH_DEVICE_IP   :    "192.168.13.31"
+    ETH_SUBNET_MASK :    "255.255.255.0"
+    ETH_MAC         :    "00:14:3e:11:02:83"
+    ETH2_MAC        :    "00:14:32:ff:00:5c"
+    ETH3_MAC        :    "00:14:32:ff:00:5d"
+    ETHERNET_IP     :    192.168.13.100
+    USBNET_IP       :    192.168.14.100
+    APN             :    "broadband"
+    WAN_IP          :    192.168.13.15 
+    WAN_MASK        :    255.255.255.0
+    WAN_MAC         :    00:0A:0A:00:00:01
+    WAN_NAT_IP      :    192.168.13.15
+    WAN_IP_STATIC   :    NO               
+    USB_DEVICE_IP   :    192.168.14.31
+    USB_SUBNET_MASK :    255.255.255.0
+    WIFI_DEVICE_IP  :    192.168.17.31
+    WIFI_IP         :    192.168.17.100
+    USERNAME        :    "user"
+    PASSWORD        :    "12345"
+    INTERFACE       :    ETHERNET      # OTA/ETHERNET/SERIAL/USB/WIFI INTERFACE 
+    CONNECTION_TYPE :    TELNET        # TELNET/SSH/SERIAL
+    CONNECTION_PORT :    2332
+    COM_PORT        :    COM1
+    REBOOT_TIMEOUT  :    180                #s
+    TELNET_TIMEOUT  :    3                
+    TELNET_DEBUGMODE:    YES                
+    SSH_TIMEOUT     :    3
+    SERIAL_TIMEOUT  :    3
+    ALEOS_FW_VER    :    "4.3.4.009"
+    RADIO_FW_VER    :    "SWI9200X_03.05.10.02AP R4684 CARMD-EN-10527 2012/02/25 11:58:38"
+    MODEM_NAME      :    "CA1250202761004"  #SSID/Network name
+    RM_TIMEOUT      :    400
+      
+DUT_GX440_MC7750_VZW: 
+    MODEL           :    GX440
+    RM_TYPE         :    MC7750
+    NET_OPERATOR    :    Verizon    
+    NET_SERVICE_TYPE:    "EV-DO Rev.A, Roaming"     
+    ACE_URL         :    "HTTP://192.168.13.31:9191/"
+    ACE_LOGIN_WAIT  :    7                  #seconds
+    ETH_DEVICE_IP   :    192.168.13.31
+    ETH_SUBNET_MASK :    255.255.255.0
+    ETH_MAC         :    00:14:3e:11:2b:01
+    ETH2_MAC        :    00:14:3e:11:2b:01
+    ETH3_MAC        :    00:14:3e:11:2b:01
+    ETHERNET_IP     :    192.168.13.100
+    USBNET_IP       :    192.168.14.100
+    APN             :    "vzwinternet"
+    WAN_IP          :    192.168.13.15
+    WAN_MASK        :    255.255.255.0
+    WAN_MAC         :    00:0A:0A:00:00:01
+    WAN_NAT_IP      :    192.168.13.15
+    WIFI_DEVICE_IP  :    192.168.17.31
+    WIFI_IP         :    192.168.17.100
+    USB_DEVICE_IP   :    192.168.14.31
+    USB_SUBNET_MASK :    255.255.255.0
+    USERNAME        :    "user"
+    PASSWORD        :    "12345"
+    INTERFACE       :    ETHERNET      # OTA/ETHERNET/SERIAL/USB/WIFI INTERFACE 
+    CONNECTION_TYPE :    TELNET             # TELNET/SSH/SERIAL
+    CONNECTION_PORT :    2332
+    COM_PORT        :    COM1
+    REBOOT_TIMEOUT  :    180             #180sec = 3min
+    TELNET_TIMEOUT  :    3                
+    TELNET_DEBUGMODE:    YES                
+    SSH_TIMEOUT     :    3
+    SERIAL_TIMEOUT  :    3
+    ALEOS_FW_VER    :    "4.3.4.009"
+    RADIO_FW_VER    :    "SWI9600M_03.05.10.06ap r5595 carmd-en-10527 2012/11/12 15:07:45" 
+    MODEM_NAME      :    "CA1256107161002"
+    RM_TIMEOUT      :    400
+   
+DUT_GX400_MC8705_ROW:       
+    MODEL           :    GX400 
+    RM_TYPE         :    "MC8705" 
+    NET_OPERATOR    :    "BELL"  #"Rogers"
+    NET_SERVICE_TYPE:    "HSPA+"     
+    ACE_URL         :    "HTTP://192.168.13.31:9191/"
+    ACE_PORT        :    9191
+    ACE_LOGIN_WAIT  :    7                  #seconds
+    ETH_DEVICE_IP   :    "192.168.13.31"
+    ETH_SUBNET_MASK :    "255.255.255.0"
+    ETH_MAC         :    "00:14:3e:11:44:49"
+    ETH2_MAC        :    "00:14:32:ff:00:5c"
+    ETH3_MAC        :    "00:14:32:ff:00:5d"
+    ETHERNET_IP     :    192.168.13.100
+    USBNET_IP       :    192.168.14.100
+    APN             :    "wrstat.bell.ca"   #"internet.com"     #"inet.bell.ca"  
+    WAN_IP          :    184.151.218.13
+    WAN_MASK        :    255.255.255.0
+    WAN_MAC         :    00:0A:0A:00:00:01
+    WAN_NAT_IP      :    192.168.13.15
+    USB_DEVICE_IP   :    192.168.14.31
+    USB_SUBNET_MASK :    255.255.255.0
+    WIFI_DEVICE_IP  :    192.168.17.31
+    WIFI_IP         :    192.168.17.100
+    USERNAME        :    "user"
+    PASSWORD        :    "12345"
+    INTERFACE       :    "ETHERNET"     # OTA/ETHERNET/USB/WIFI/SERIAL INTERFACE 
+    CONNECTION_TYPE :    "TELNET"             # TELNET/SSH/SERIAL
+    CONNECTION_PORT :    2332
+    COM_PORT        :    COM1
+    REBOOT_TIMEOUT  :    180                #150sec = 2.5min
+    TELNET_TIMEOUT  :    3                
+    TELNET_DEBUGMODE:    YES                
+    SSH_TIMEOUT     :    3
+    SERIAL_TIMEOUT  :    3
+    ALEOS_FW_VER    :    "4.3.4.009"
+    RADIO_FW_VER    :    "T1_0_4_3DAP R554 CNSZXD00000140 2012/08/21 13:10:40"
+    MODEM_NAME      :    "CA1300201401004"  #SSID
+    RM_TIMEOUT      :    400
+    
+DUT_LS300_SL8092_ROW:      
+    MODEL           :    LS300
+    RM_TYPE         :    SL8092
+    NET_OPERATOR    :    Rogers     
+    NET_SERVICE_TYPE:    EDGE     
+    ACE_URL         :    "HTTP://192.168.13.31:9191/"
+    ACE_LOGIN_WAIT  :    7                       #seconds
+    ETH_DEVICE_IP   :    "192.168.13.31"
+    ETH_SUBNET_MASK :    "255.255.255.0"
+    ETH_MAC         :    "a0:b3:cc:c7:dc:8f"
+    ETHERNET_IP     :    "192.168.13.100"
+    USBNET_IP       :    "192.168.14.100"
+    APN             :    "internet.com"
+    WAN_IP          :    "74.198.207.52"
+    WAN_MASK        :    "255.255.255.0"
+    WAN_MAC         :    "00:0A:0A:00:00:01"
+    WAN_NAT_IP      :    "192.168.13.15"
+    WAN_IP_STATIC   :    YES                # or "NO"
+    USB_DEVICE_IP   :    192.168.14.31
+    USB_SUBNET_MASK :    255.255.255.0
+    USERNAME        :    "user"
+    PASSWORD        :    "12345"
+    INTERFACE       :    ETHERNET       # OTA/ETHERNET/SERIAL/USB/WIFI INTERFACE 
+    CONNECTION_TYPE :    SSH             # TELNET/SSH/SERIAL
+    CONNECTION_PORT :    22
+    COM_PORT        :    COM1
+    REBOOT_TIMEOUT  :    300             # 150sec = 2.5min
+    TELNET_TIMEOUT  :    3                
+    TELNET_DEBUGMODE:    YES                
+    SSH_TIMEOUT     :    3
+    SERIAL_TIMEOUT  :    3   
+    ALEOS_FW_VER    :    "4.3.4.009"
+    RADIO_FW_VER    :    "P1_0_0_8AP R1338 CNHKGDKCE01 2011/10/21 09:21:31"    
+    MODEM_NAME      :    "CA916520029100F"       # Modem name/Global ID
+    HW_CONFIG       :    "161D0A06000700000000000000000000"
+    RM_TIMEOUT      :    400
+
+DUT_LS300_SL8090_ATT:      
+    MODEL           :    LS300
+    RM_TYPE         :    SL8090
+    SIM             :    "AT&T"
+    NET_OPERATOR    :    "ROGERS, 302720"     #Bell, Telus
+    NET_SERVICE_TYPE:    "HSPA, Roaming"   
+    ACE_URL         :    "HTTP://192.168.13.31:9191/"
+    ACE_LOGIN_WAIT  :    7                      #seconds 
+    ETH_DEVICE_IP   :    192.168.13.31
+    ETH_SUBNET_MASK :    255.255.255.0
+    ETH_MAC         :    "a0:b3:cc:c7:dc:8f"
+    ETHERNET_IP     :    192.168.13.100
+    USBNET_IP       :    192.168.14.100
+    APN             :    "isp.cingular"
+    WAN_IP          :    192.168.13.15
+    WAN_IP_STATIC   :    NO                
+    WAN_MASK        :    255.255.255.0
+    WAN_MAC         :    "00:14:3e:10:ca:6d"
+    WAN_NAT_IP      :    192.168.13.15
+    USB_DEVICE_IP   :    192.168.14.31
+    USB_SUBNET_MASK :    255.255.255.0
+    USERNAME        :    "user"
+    PASSWORD        :    "12345"
+    INTERFACE       :    ETHERNET      # OTA/ETHERNET/SERIAL/USB/WIFI INTERFACE 
+    CONNECTION_TYPE :    TELNET        # TELNET/SSH/SERIAL
+    CONNECTION_PORT :    2332
+    COM_PORT        :    COM1
+    REBOOT_TIMEOUT  :    360             # 150sec = 2.5min
+    TELNET_TIMEOUT  :    60                
+    TELNET_DEBUGMODE:    YES                
+    SSH_TIMEOUT     :    60
+    SERIAL_TIMEOUT  :    60  
+    ALEOS_FW_VER    :    "4.3.3a.014"
+    RADIO_FW_VER    :    "P1_0_0_8AP R1338 CNHKGDKCE01 2011/10/21 09:21:31"   
+    MODEM_NAME      :   "CA817220095100E"       # Modem name/Global ID
+    HW_CONFIG       :   "161C0A06000700000000000000000000"
+    RM_TIMEOUT      :    400
+
+
+#when use callbox 
+DUT_GX440_MC7700_ATT_CBX:       
+    MODEL           :    GX440 
+    RM_TYPE         :    "MC7700" 
+    NET_OPERATOR    :    "AT&T"
+    NET_SERVICE_TYPE:    LTE     
+    ACE_URL         :    "HTTP://192.168.13.31:9191/"
+    ACE_LOGIN_WAIT  :    7                  #seconds
+    ETH_DEVICE_IP   :    "192.168.13.31"
+    ETH_SUBNET_MASK :    "255.255.255.0"
+    ETH_MAC         :    00:14:3e:11:02:83
+    ETH2_MAC        :    00:14:32:ff:00:5c
+    ETH3_MAC        :    00:14:32:ff:00:5d
+    ETHERNET_IP     :    192.168.13.100
+    USBNET_IP       :    192.168.14.100
+    WAN_IP          :    10.168.1.4
+    WAN_MASK        :    255.255.255.0
+    WAN_MAC         :    00:0A:0A:00:00:01
+    WAN_NAT_IP      :    192.168.13.15
+    WAN_IP_STATIC   :    YES                # or "NO"
+    USB_DEVICE_IP   :    192.168.14.31
+    USB_SUBNET_MASK :    255.255.255.0
+    WIFI_DEVICE_IP  :    192.168.17.31
+    WIFI_IP         :    192.168.17.100
+    USERNAME        :    "user"
+    PASSWORD        :    "12345"
+    INTERFACE       :    ETHERNET       # OTA/ETHERNET/SERIAL/USB/WIFI INTERFACE 
+    CONNECTION_TYPE :    TELNET             # TELNET/SSH/SERIAL
+    CONNECTION_PORT :    2332
+    COM_PORT        :    COM1
+    REBOOT_TIMEOUT  :    180                #150sec = 2.5min
+    TELNET_TIMEOUT  :    3                
+    TELNET_DEBUGMODE:    YES                
+    SSH_TIMEOUT     :    3
+    SERIAL_TIMEOUT  :    3
+    ALEOS_FW_VER    :    "4.3.4.009"
+    RADIO_FW_VER    :   "SWI9200X_03.05.10.02AP R4684 CARMD-EN-10527 2012/02/25"
+    MODEM_NAME      :   "CA1250202761004"  #"CA1250205061004"
+
+DUT_LS300_SL5011_VZW:      
+    MODEL           :    LS300
+    RM_TYPE         :    "SL5011"
+    NET_OPERATOR    :    "Verizon"     
+    NET_SERVICE_TYPE:    "EV-DO Rev.A, Roaming"   
+    ACE_URL         :    "HTTP://192.168.13.31:9191/"
+    ACE_LOGIN_WAIT  :    7                      #seconds 
+    ETH_DEVICE_IP   :    192.168.13.31
+    ETH_SUBNET_MASK :    255.255.255.0
+    ETH_MAC         :    "00:14:3e:10:c9:89"
+    ETHERNET_IP     :    192.168.13.100
+    USBNET_IP       :    192.168.14.100
+    WAN_IP          :    192.168.13.15
+    WAN_IP_STATIC   :    NO                
+    WAN_MASK        :    255.255.255.0
+    WAN_MAC         :    "00:14:3e:10:ca:6d"
+    WAN_NAT_IP      :    192.168.13.15
+    USB_DEVICE_IP   :    192.168.14.31
+    USB_SUBNET_MASK :    255.255.255.0
+    USERNAME        :    "user"
+    PASSWORD        :    "12345"
+    INTERFACE       :    ETHERNET         # OTA/ETHERNET/SERIAL/USB/WIFI INTERFACE
+    CONNECTION_TYPE :    TELNET         # TELNET/SSH/SERIAL
+    CONNECTION_PORT :    2332
+    COM_PORT        :    COM1
+    REBOOT_TIMEOUT  :    210             # 150sec = 2.5min
+    TELNET_TIMEOUT  :    3                
+    TELNET_DEBUGMODE:    YES                
+    SSH_TIMEOUT     :    3
+    SERIAL_TIMEOUT  :    3   
+    ALEOS_FW_VER    :    "4.3.4.009"
+    RADIO_FW_VER    :    "p3110506,52992 [Oct 30 2011 22:54:02]"   
+    MODEM_NAME      :    "CA719220179100F"       # Modem name/Global ID
+    HW_CONFIG       :    "161B0A06000700000000000000000000"
+    RM_TIMEOUT      :    400
+
+DUT_LS300_SL5011_SPT:      
+    MODEL           :    LS300
+    RM_TYPE         :    "SL5011"
+    NET_OPERATOR    :    "Sprint"     
+    NET_SERVICE_TYPE:    "EV-DO Rev.A, Roaming"   
+    ACE_URL         :    "HTTP://192.168.13.31:9191/"
+    ACE_LOGIN_WAIT  :    7                      #seconds 
+    ETH_DEVICE_IP   :    192.168.13.31
+    ETH_SUBNET_MASK :    255.255.255.0
+    ETH_MAC         :    "00:14:3e:10:c9:89"
+    ETHERNET_IP     :    192.168.13.100
+    USBNET_IP       :    192.168.14.100
+    WAN_IP          :    192.168.13.15
+    WAN_IP_STATIC   :    NO                
+    WAN_MASK        :    255.255.255.0
+    WAN_MAC         :    "00:14:3e:10:ca:6d"
+    WAN_NAT_IP      :    192.168.13.15
+    USB_DEVICE_IP   :    192.168.14.31
+    USB_SUBNET_MASK :    255.255.255.0
+    USERNAME        :    "user"
+    PASSWORD        :    "12345"
+    INTERFACE       :    ETHERNET         # OTA/ETHERNET/SERIAL/USB/WIFI INTERFACE
+    CONNECTION_TYPE :    TELNET         # TELNET/SSH/SERIAL
+    CONNECTION_PORT :    2332
+    COM_PORT        :    COM1
+    REBOOT_TIMEOUT  :    210             # 150sec = 2.5min
+    TELNET_TIMEOUT  :    3                
+    TELNET_DEBUGMODE:    YES                
+    SSH_TIMEOUT     :    3
+    SERIAL_TIMEOUT  :    3   
+    ALEOS_FW_VER    :    "4.3.4.009"
+    RADIO_FW_VER    :    "p3110506,52992 [Oct 30 2011 22:54:02]"   
+    MODEM_NAME      :    "CA719220179100F"       # Modem name/Global ID
+    HW_CONFIG       :    "161B0A06000700000000000000000000"
+    RM_TIMEOUT      :    400
+
+DUT_GX400_MC5728_VZW:       
+    MODEL           :    GX400 
+    RM_TYPE         :    "MC5728" 
+    NET_OPERATOR    :    "Verizon"
+    NET_SERVICE_TYPE:    "EV-DO Rev.A, Roaming"     
+    ACE_URL         :    "HTTP://192.168.13.31:9191/"
+    ACE_LOGIN_WAIT  :    7                  #seconds
+    ETH_DEVICE_IP   :    "192.168.13.31"
+    ETH_SUBNET_MASK :    "255.255.255.0"
+    ETH_MAC         :    00:14:3e:11:02:83
+    ETH2_MAC        :    00:14:32:ff:00:5c
+    ETH3_MAC        :    00:14:32:ff:00:5d
+    ETHERNET_IP     :    192.168.13.100
+    USBNET_IP       :    192.168.14.100
+    WAN_IP          :    192.168.13.15
+    WAN_MASK        :    255.255.255.0
+    WAN_MAC         :    00:0A:0A:00:00:01
+    WAN_NAT_IP      :    192.168.13.15
+    WAN_IP_STATIC   :    NO                # 
+    USB_DEVICE_IP   :    192.168.14.31
+    USB_SUBNET_MASK :    255.255.255.0
+    WIFI_DEVICE_IP  :    192.168.17.31
+    WIFI_IP         :    192.168.17.100
+    USERNAME        :    "user"
+    PASSWORD        :    "12345"
+    INTERFACE       :    ETHERNET       # OTA/ETHERNET/SERIAL/USB/WIFI INTERFACE
+    CONNECTION_TYPE :    TELNET         # TELNET/SSH/SERIAL
+    CONNECTION_PORT :    2332
+    COM_PORT        :    COM1
+    REBOOT_TIMEOUT  :    240                #150sec = 2.5min
+    TELNET_TIMEOUT  :    3                
+    TELNET_DEBUGMODE:    YES                
+    SSH_TIMEOUT     :    3
+    SERIAL_TIMEOUT  :    3
+    ALEOS_FW_VER    :    "4.3.4.009"
+    RADIO_FW_VER    :    "p2815600,58016 [Aug 27 2012 10:01:25]"
+    MODEM_NAME      :    "CA1162106690K0B"  #SSID
+
+DUT_GX400_MC5728_SPT:       
+    MODEL           :    GX400 
+    RM_TYPE         :    "MC5728" 
+    NET_OPERATOR    :    "Sprint"
+    NET_SERVICE_TYPE:    "EV-DO Rev.A, Roaming"     
+    ACE_URL         :    "HTTP://192.168.13.31:9191/"
+    ACE_LOGIN_WAIT  :    7                  #seconds
+    ETH_DEVICE_IP   :    "192.168.13.31"
+    ETH_SUBNET_MASK :    "255.255.255.0"
+    ETH_MAC         :    00:14:3e:11:02:83
+    ETH2_MAC        :    00:14:32:ff:00:5c
+    ETH3_MAC        :    00:14:32:ff:00:5d
+    ETHERNET_IP     :    192.168.13.100
+    USBNET_IP       :    192.168.14.100
+    WAN_IP          :    192.168.13.15
+    WAN_MASK        :    255.255.255.0
+    WAN_MAC         :    00:0A:0A:00:00:01
+    WAN_NAT_IP      :    192.168.13.15
+    WAN_IP_STATIC   :    NO                # 
+    USB_DEVICE_IP   :    192.168.14.31
+    USB_SUBNET_MASK :    255.255.255.0
+    WIFI_DEVICE_IP  :    192.168.17.31
+    WIFI_IP         :    192.168.17.100
+    USERNAME        :    "user"
+    PASSWORD        :    "12345"
+    INTERFACE       :    ETHERNET       # OTA/ETHERNET/SERIAL/USB/WIFI INTERFACE
+    CONNECTION_TYPE :    TELNET         # TELNET/SSH/SERIAL
+    CONNECTION_PORT :    2332
+    COM_PORT        :    COM1
+    REBOOT_TIMEOUT  :    230                #150sec = 2.5min
+    TELNET_TIMEOUT  :    3                
+    TELNET_DEBUGMODE:    YES                
+    SSH_TIMEOUT     :    3
+    SERIAL_TIMEOUT  :    3
+    ALEOS_FW_VER    :    "4.3.4.009"
+    RADIO_FW_VER    :    "p2815600,58016 [Aug 27 2012 10:01:25]"
+    MODEM_NAME      :    "CA1162106690K0B"  #SSID
+
+DUT_LS300_SL5011_SPR:      
+    MODEL           :    LS300
+    RM_TYPE         :    "SL5011"
+    NET_OPERATOR    :    "Sprint"     
+    NET_SERVICE_TYPE:    "EV-DO Rev.A, Roaming"   
+    ACE_URL         :    "HTTP://192.168.13.31:9191/"
+    ACE_LOGIN_WAIT  :    7                      #seconds 
+    ETH_DEVICE_IP   :    192.168.13.31
+    ETH_SUBNET_MASK :    255.255.255.0
+    ETH_MAC         :    "a0:b3:cc:c7:dc:8f"
+    ETHERNET_IP     :    192.168.13.100
+    USBNET_IP       :    192.168.14.100
+    WAN_IP          :    192.168.13.15
+    WAN_IP_STATIC   :    NO                # or "NO"
+    WAN_MASK        :    255.255.255.0
+    WAN_MAC         :    "00:14:3e:10:ca:6d"
+    WAN_NAT_IP      :    192.168.13.15
+    USB_DEVICE_IP   :    192.168.14.31
+    USB_SUBNET_MASK :    255.255.255.0
+    #PING_IP        :    74.198.207.51
+    USERNAME        :    "user"
+    PASSWORD        :    "12345"
+    INTERFACE       :    ETHERNET        #OTA/ETHERNET/SERIAL/USB/WIFI INTERFACE
+    CONNECTION_TYPE :    SSH             #TELNET/SSH/SERIAL
+    CONNECTION_PORT :    22
+    COM_PORT        :    COM1
+    REBOOT_TIMEOUT  :    300             # 150sec = 2.5min
+    TELNET_TIMEOUT  :    3                
+    TELNET_DEBUGMODE:    YES                
+    SSH_TIMEOUT     :    3
+    SERIAL_TIMEOUT  :    3   
+    ALEOS_FW_VER    :    "4.3.4.009"
+    RADIO_FW_VER    :    "p3110506,52992 [Oct 30 2011 22:54:02]"   
+    MODEM_NAME      :   "CA719220179100F"       # Modem name/Global ID
+    HW_CONFIG       :   "161B0A06000700000000000000000000"
+   
+# To contgrol Agilent power supply by GPIB or COM1
+POWER_SUPPLY:
+    MODEL            :  E3648A
+    INTERFACE        :  GPIB      #COM1
+    GPIB_VISA_ADDRESS: "GPIB::5::INSTR"
+    COM_VISA_ADDRESS : "ASRL::1::INSTR"
+    
+# CALL BOX SETTING
+CALLBOX_IN_USE: "ANRITSU_MD8754A"  #"AG8960","RsCMW500","ANRITSU_MD8750A","NULL"
+    
+CBX_AG8960:
+    MODEL        :    AG8960
+    COM_LIB      :    GPIB
+    PORT_ID      :    14
+    CFG_DESC     :    "WIRELESS TEST SET, CELULAR CALL BOX"
+    WAN_ADDRESS  :    192.168.1.250 # -- THE ISP'S _IP ADDRESS - AG8960 DEFAULT 
+
+CBX_CMW500:
+    MODEL        :    "CMW500"
+    MAN_INTERFACE:    Ethernet    #GPIB
+    MAN_ADDRESS  :    172.22.1.100
+    CONNECT_RESOURCE_NAME:    
+           HISLIP  : "TCPIP::CMW50050-101378::hislip0::INSTR"
+           GPIB    : "GPIB::20:INSTR"
+           SOCKET  : "TCPIP::CMW50050-101378::5025::SOCKET"
+           USB     : "USB::0x0AAD::87::0101378::INSTR"
+           X11     : "TCPIP::CMW50050-101378::INST0::INSTR"
+           
+    CFG_DESC     :  "Rohde&Schwarz,CMW,1201.0002k50/101378,3.2.10"
+    EMODE        :  ["FDD","TDD"]
+    ECMWAPP      :  ["GPRF","GSM","LTE","WCDMA","CDMA","EVDO"]
+    ECMWMODE     :  ["GSM","EDGE","WCDMA","HSDPA","HSUPA","LTE","CDMA","EVDO"]
+    
+CBX_MD8475A:
+    MODEL         :   MD8475A
+    MAN_INTERFACE :   Ethernet    #GPIB
+    WNS_PROXY_ADDR:   192.168.100.4
+    MAN_ADDRESS   :   192.168.100.4   #management IP at Callbox
+    WAN_ADDRESS   :   172.16.1.4     
+    #DNS_ADDRESS_PRIMARY    :    100.168.1.102
+    #DNS_ADDRESS_SECONDARY  :    100.168.1.103
+    CONNECT_RESOURCE_NAME:    
+       HISLIP  : "TCPIP::CMW50050-101378::hislip0::INSTR"
+       GPIB    : "GPIB::20:INSTR"
+       SOCKET  : "TCPIP::CMW50050-101378::5025::SOCKET"
+       USB     : "USB::0x0AAD::87::0101378::INSTR"
+       X11     : "TCPIP::CMW50050-101378::INST0::INSTR"
+    CFG_DESC       : "ANRITSU MD8475A signalling Tester, 2G/3G/LTE"
+    UE_STATUS      : ["POWEROFF","DETACH", "REGISTRATION","PACKET TERMINATION","PACKET COMMUNICATION","FAIL"]
+    NETWORK_STATUS : ["WIN RUN","WNS EXIT","WNS IDLE","WNS SIMULATION","FAIL", "OK"]
+    TIME_START_SS_APP     : 90   # unit s  
+    TIME_CLOSE_SS_APP     : 30
+    TIME_START_SS_SIMU    : 150
+    TIME_CLOSE_SIMU       : 30
+    
+    # SIMULATION PARAMETER FILES in Callbox folder
+    SIM_PARAM_FILE  : 
+            ATT_LTE   : "D:\\Config_files\\SimParam_att_L1_MIMO.wnssp"  
+            VZW_LTE   : "D:\\Config_files\\SimParam_vzw_L1_MIMO.wnssp"
+            ATT_HSPA  : "D:\\Config_files\\SimParam_att_L2.wnssp"   
+            VZW_EVDO  : "D:\\Config_files\\SimParam_evdo.wnssp"    
+
+    # Celluar PARAMETER FIELS in Callbox folder
+    CELL_PARAM_FILE : 
+            ATT_LTE   : "D:\\Config_files\\CellParam_L1_MIMO.wnscp" 
+            VZW_LTE   : "D:\\Config_files\\CellParam_vzw_L1_MIMO.wnscp"
+            ATT_HSPA  : "D:\\Config_files\\CellParam_2Cells.wnscp"    
+            VZW_EVDO  : "D:\\Config_files\\CellParam_evdo.wnscp"     
+
+# WEB SERVER SETTING
+WEB_SERVER  :     
+    ADDRESS      :    "208.81.123.2"
+    PORT         :    21
+    USERNAME     :    "user2"
+    PASSWORD     :    "12345"
+    
+# FTP SERVER SETTING
+FTP_SERVER  :     
+    ADDRESS      :    "172.20.20.2" 
+    PORT         :    21
+    USERNAME     :    "user"
+    PASSWORD     :    "pass"
+    LOCAL_PATHNAME     :    "/airlinkautomation/data/testfiles"      
+    REMOTE_PATHNAME    :    "/ftpclient"  #"/USERS/PUBLIC"      
+    FILENAME           :    "100MB-data.bin"
+
+# SNMP TRAP SERVER SETTING
+TRAP_SERVER  :     
+    ADDRESS      :    "208.81.123.2"   #public/static IP
+    PORT         :    21
+    USERNAME     :    "user"
+    PASSWORD     :    "pass"
+    
+# SMARTBITS200 SETTING
+SMARTBITS:
+    MODEL_ID   :    SMB200
+    COM_LIB    :    SNMP
+    PORT_ID    :    172.16.1.206
+    SOCKET_ID  :     16385           #CONFUSING: _PORT IS TERMED AS SOCKET ID
+    CFG_DESC   :    "SMARTBITS NDPA"
+    LIB_DIR    :    "C:/PROGRAM FILES/SMARTBITS/SMARTLIB/TCL/TCLFILES"
+    NET_MASK   :    255.255.255.0
+    GATEWAY    :    192.168.10.80
+
+#CISCO ROUTER CONFIGURATION  
+ROUTER:
+    MODEL                    :    ["1811","2911"]
+    
+    LOCAL_END_POINT_IP       :    192.168.13.100
+    LOCAL_END_POINT_MASK     :    255.255.255.0
+    LOCAL_END_POINT_GW       :    192.168.13.31
+
+    REMOTE_END_POINT_IP      :    10.11.12.13
+    REMOTE_END_POINT_MASK    :    255.255.255.0
+    REMOTE_END_POINT_GW      :    10.11.12.254
+
+    WAN_IP            :    ["208.81.123.2", "192.168.168.19"]   #without/with cb
+    WAN_INTERFACE     :    FASTETHERNET0
+
+    MAN_IP            :    172.22.1.100    # CISCO ROUTER MANAGEMENT IP
+    MAN_MASK          :    255.255.255.0
+    MAN_GW            :    172.22.1.254
+    
+    USERNAME          :    ["",      "user"]
+    PASSWORD          :    ["enable","sierra"]
+    PORT              :    ["23","2005"]   
+    CONNECTION        :    ["Serial","Telent"]
+    USE_PROMPT        :    ["SM5","Router"]
+    ENABLE_PROMPT     :    ["SM5","Router"]
+    
+    VPN_POLICY_NUM    :    90   #unit s
+    CRYPTOMAP_NAME    :    "_IPSEC_CB"
+    CRYPTOMAP_NUM     :    45
+    TRANSFORM_NAME    :    AUTOTRANS
+    ACCESS_LIST_NUM   :    102
+
+MANAGEMENT_IP: 
+    CONTROLLER : 192.168.100.1
+    HOST1      : 192.168.100.2
+    HOST2      : 192.168.100.3
+
+PUBLIC_IP: 
+    WAN_CISCO_ROUTER : 208.81.123.90
+    WAN_CONTROLLER   : 208.81.123.91
+    VPN_CISCO_ROUTER : 208.81.123.93
+    VPN_CONTROLLER   : 208.81.123.92
+    GPS_CONTROLLER   : 208.81.123.94
+    GPS_REPORT_SERVER: 208.81.123.95
+
+PRIVATE_IP: 
+     CONTROLLER: 192.168.13.100
+     HOST1: 192.168.13.100
+     HOST2: 172.20.20.2
+
+JENKINS:
+     MASTER_ADDRESS: "10.1.11.18"
+     URL: "http://10.1.11.18:8080"
+     USERNAME: airlink
+     PASSWORD: airlink1
+     
+IPV4_ROUTE_TABLES:
+          CONTROLLER:
+     
+IPV6_ROUTE_TABLES: ""
+
+# Matrix of ALEOS SW version/device model valid mapping
+ALEOS_SW_HW:
+      4.3.1 : ["GX400","GX440","LS300"]
+      4.3.2 : ["GX400","GX440","LS300"]
+      4.3.3 : ["GX400","GX440","LS300"]
+      4.3.3a: ["GX400","GX440","LS300"]
+      4.3.3b: ["GX400","GX440","LS300"]
+      4.3.4 : ["GX400","GX440","LS300","ES440"]
+      4.3.5 : ["GX400","GX440","LS300","ES440"]
+
+DUT_MODELS:  
+     LS300 : ["ROW","ATT","VZW","SPR"]
+     GX400 : ["ROW","ATT","VZW","SPR"]
+     GX440 : ["ATT","VZW"]
+     ES440 : ["ATT","VZW"]
+     
+RM_TYPES:
+    LS300 : ["SL5011", "SL8090", "SL8091"]
+    GX400 : ["MC5728", "MC8705"]
+    GX440 : ["MC7700", "MC7750"]
+    ES440 : ["MC7700", "MC7710", "MC7750"]
+    
+NET_OPERATORS    :  ["AT&T", "VZW", "ROW", "SPR", "Rogers", "BELL", "TELUS"]
+
+NET_SERVICE_TYPES:  ["EVDO", "EV-DO Rev.A","LTE", "UMTS", "3G", "EDGE", "HSPA", "HSPA+"]
+
+CELL_NET:
+      CDMA:   ["CDMA1x","EVDO", "EV-DO Rev.A, Roaming"]
+      GSM:    ["GSM","GPRS","UMTS","3G","3G, Roaming", "UMTS, Roaming", "EDGE","HSPA, Roaming"]
+      LTE:    ["LTE"]
+      
+#PHYSICAL INTERFACE BETWEEN PC CONTROLLER AND DUT      
+INTERFACE_TYPES  :  [OTA, ETHERNET, SERIAL, USB, WIFI] 
+
+#LOGICAL CONNECTION BETWEEN PC CONTROLLER AND DUT
+CONNECTION_TYPES :  [TELNET, SSH, SERIAL]     
+
+# To Be Removed ################################################################
+#LOG_FILE_FOLDER     : "/airlinkautomation/logs/"
+#REPORT_FILE_FOLDER  : "/airlinkautomation/results/"
+#TEST_REPORT_PATH    : "/airlinkautomation/results"
+#TEST_REPORT_FILE    : "/airlinkautomation/results/TEST_RESULTS.html"
+################################################################################
