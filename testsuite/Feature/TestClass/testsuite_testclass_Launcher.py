@@ -64,15 +64,42 @@ tc_ts_map = {
     20:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_LS300_SL8092_OSM",0],
 }
 
+testing_combo = testclass_config_map["TESTING_COMBO"]
 
+def readCombo(testing_combo):
+    combo_list = testclass_config_map[testing_combo]
+    print str(combo_list)
+    return combo_list
 
+def pickTestcase(combo_list):
+    pick_list = []
+    for device in combo_list:
+        for keys in tc_ts_map:
+            if device in tc_ts_map[keys][1]:
+                pick_list.append(keys)
+    print str(pick_list)
+    return pick_list
+    
 
 ####################################################
 #  Test Class test automation main
 ####################################################
 
 if __name__ == "__main__":
-  
+    
+#     basic_airlink.slog(str(testclass_config_map["DEVICE_COMBO1"]))
+#     basic_airlink.slog(str(testclass_config_map["DEVICE_COMBO2"]))
+#     basic_airlink.slog(str(testclass_config_map["DEVICE_COMBO3"]))
+#     basic_airlink.slog(str(testclass_config_map["DEVICE_COMBO4"]))
+
+
+    if testclass_config_map["MDT"] == "YES":
+        combo_list = readCombo(testing_combo)
+        pick_list = pickTestcase(combo_list)
+        mySuite = basic_airlink.setup_suite_mdt(tc_ts_map, pick_list)
+    else:
+        mySuite = basic_airlink.setup_suite(tbd_config_map,testclass_config_map, tc_ts_map)
+    
     log_filename=basic_airlink.get_log_filename(tbd_config_map, "TESTCLASS","")
     FORMAT ='%(asctime)-15s => %(levelname)-8s => %(message)s'
     if tbd_config_map["LOG_LEVEL"]=="DEBUG":
@@ -81,34 +108,33 @@ if __name__ == "__main__":
         LEVEL = logging.INFO 
     logging.basicConfig(level = LEVEL,filename = log_filename, format=FORMAT,  filemode='w')     
     time_stamp = time.strftime("%b-%d-%Y_%H-%M")
-
+ 
     report_filename=basic_airlink.get_report_filename(tbd_config_map, "TESTCLASS","")
     report_file_name = report_filename.split('/')[-1]
     log_file_name = log_filename.split('/')[-1]
     fpp = file(report_filename, 'wb')    
     description_text= r""" ***"""+ "log file name " +log_filename 
+      
      
-    
     runner = htmlreport.HTMLTestRunner(
                 stream = fpp,
                 title = 'TestClass Test Report', 
                 description = description_text
-                )    
-    
-
-    
-    mySuite = basic_airlink.setup_suite(testclass_config_map, tc_ts_map)   
+                )   
     test_cases = mySuite.countTestCases()
-    
+     
     print "\x1b[0mTotal test cases: %d" % test_cases 
-            
+             
     test_result=runner.run(mySuite)
-            
+             
     #print test_result.result  
     print "Total %d test cases PASS." % test_result.success_count
     print "Total %d test cases FAILED." % test_result.failure_count 
     print "Total %d test cases has ERROR." % test_result.error_count
     fpp.close()
+     
+    
+    
 #     os.chdir("C:\\airlinkautomation\\results")
 #     csv_path = airlinkautomation_home_dirname+'/results/csv/'
 #     test_area = 'Fwupdate'
@@ -124,9 +150,4 @@ if __name__ == "__main__":
 
 #     sys.stdout.write("\nFor details of the results please check \n"+basic_airlink.get_report_url(test_area, report_file_name)+'\n\n')
     
-       
-    if (test_result.error_count + test_result.failure_count):
-        sys.exit(1)
-    else:
-        sys.exit(0)
 

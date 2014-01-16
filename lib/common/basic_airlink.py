@@ -540,7 +540,7 @@ def get_config_data(area_name, sub_area_name):
                 'lpm_test_conf.yml','r')
     elif area_name == "TestClass":
         fo=open(airlinkautomation_home_dirname+testclass_path+slash+\
-                'mdt_config.yml','r')
+                'testclass_test_conf.yml','r')
                   
     area_config_data = yaml.load(fo)
     fo.close()
@@ -761,6 +761,15 @@ def setup_suite_v2(area_config_map, tc_ts_map):
                 
         
     return test_suite    
+
+def setup_suite_mdt(tc_ts_map, tc_pick_list):
+    test_suite = unittest.TestSuite()
+    for i in tc_pick_list:
+        test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
+        tc_ts_map[i][2]=1
+    return test_suite
+
+
 
 def setup_suite(tbd_config_map, area_config_map, tc_ts_map):
     """  Gather all the tests from this test module into a test suite.  

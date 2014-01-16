@@ -41,14 +41,6 @@ testcase_map = {
     20:[MultipleDeviceTest,"tc_fwupdate_LS300_SL8092_OSM",0],
 }
 
-if testing_combo == "DEVICE_COMBO1":
-    argss = "1-5"    
-elif testing_combo == "DEVICE_COMBO2":
-    argss = "6-10"
-elif testing_combo == "DEVICE_COMBO3":
-    argss = "11-15"
-else:
-    argss = "16-20"
     
 IP_map = {
       1: "192.168.13.1",
