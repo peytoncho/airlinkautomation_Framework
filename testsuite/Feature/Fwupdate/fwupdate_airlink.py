@@ -28,9 +28,10 @@ basic_airlink.append_sys_path()
 tbd_config_map, fwupdate_config_map = basic_airlink.get_config_data(test_area,"")
 
 class FwupdateAirlink(unittest.TestCase):
-    def __init__(self):
-        self.device_name = tbd_config_map["DUTS"][0]
-        self.url = tbd_config_map[self.device_name]["ACE_URL"]
+    def __init__(self, dut_ip="192.168.13.31", dut_name):
+        self.device_name = dut_name
+        self.dut_ip = dut_ip
+        self.url = "HTTP://"+self.dut_ip+":9191/" 
         self.username = tbd_config_map[self.device_name]["USERNAME"]
         self.password = tbd_config_map[self.device_name]["PASSWORD"]
         self.ftp_server_ip = fwupdate_config_map["FTP_SERVER_ADDRESS"]

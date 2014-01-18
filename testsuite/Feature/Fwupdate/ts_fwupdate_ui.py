@@ -29,8 +29,6 @@ test_sub_area=""
 airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME']
 basic_airlink.append_sys_path()
 tbd_config_map, fwupdate_config_map = basic_airlink.get_config_data(test_area,"")
-device_name = tbd_config_map["DUTS"][0]
-
 
 
 class TsFwupdateUi(unittest.TestCase):
@@ -45,29 +43,40 @@ class TsFwupdateUi(unittest.TestCase):
         
         Returns: None
         '''
-        self.conn_ins = connectivity.Connectivity() 
         
-        self.url = tbd_config_map[device_name]["ACE_URL"]
-        self.username = tbd_config_map[device_name]["USERNAME"]
-        self.password = tbd_config_map[device_name]["PASSWORD"]
-        self.se_ins = selenium_utilities.SeleniumAcemanager()
-        self.fw_ins = fwupdate_airlink.FwupdateAirlink()
-        
-#        check the connection between host and dut
-        try:
-            self.assertTrue(self.conn_ins.testbed_ready(), "DUT not Ready")
-        except Exception:
-            logging.debug("DUT not ready")
-            basic_airlink.cslog("DUT not ready", "RED")           
-            self.skipTest("DUT not ready")      
-#        check the connected device if match the one set in config file
-        try:
-            self.assertTrue(self.fw_ins._device_check(device_name), "Device does not match the one set in config file")
-        except Exception:
-            logging.debug("Device does not match the one set in config file")
-            basic_airlink.cslog("Device does not match the one set in config file", "RED")          
-            self.skipTest("Device does not match the one set in config file")
+        if fwupdate_config_map["MDT"] == "YES":
+            
+            testing_combo = fwupdate_config_map["TESTING_COMBO"]
+            dut_name = fwupdate_config_map[testing_combo][ip_postfix]
+            basic_airlink.cslog(testing_dut, "RED")
+                        
+            dut_ip = "192.168.13."+str(ip_postfix)
+            self.fw_ins = fwupdate_airlink.FwupdateAirlink(dut_ip,dut_name)
+            self.conn_ins = connectivity.Connectivity(device_name=dut_name)
+            
+            
+                    
+        else:
+            dut_name =  tbd_config_map["DUTS"][0]
+            self.fw_ins = fwupdate_airlink.FwupdateAirlink(dut_name=dut_name)
+            self.conn_ins = connectivity.Connectivity(device_name=dut_name)
+            #        check the connection between host and dut
+            try:
+                self.assertTrue(self.conn_ins.testbed_ready(), "DUT not Ready")
+            except Exception:
+                logging.debug("DUT not ready")
+                basic_airlink.cslog("DUT not ready", "RED")           
+                self.skipTest("DUT not ready")
 
+            #        check the connected device if match the one set in config file
+            try:
+                self.assertTrue(self.fw_ins._device_check(device_name), "Device does not match the one set in config file")
+            except Exception:
+                logging.debug("Device does not match the one set in config file")
+                basic_airlink.cslog("Device does not match the one set in config file", "RED")          
+                self.skipTest("Device does not match the one set in config file")
+
+    
     def tearDown(self):
         ''' the test runner will invoke that method after each test
         
@@ -182,8 +191,7 @@ class TsFwupdateUi(unittest.TestCase):
             ssh_ins.command(cmd2)
             ssh_ins.close()
             return result
-        
-        
+       
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware Roundtrip upgrade ", "BLUE", "YELLOW")      
         fw1 = fwupdate_config_map["ALEOS_BUILD_FROM"]
         fw2 = fwupdate_config_map["ALEOS_BUILD_TO"]       
@@ -212,175 +220,79 @@ class TsFwupdateUi(unittest.TestCase):
         
 
 
-    @unittest.skipIf(tbd_config_map[device_name]["MODEL"]=="LS300","Not support this device")
-    def tc_fwupdate_local_432009_432a010I(self):
-        ''' Update from 4.3.2.009 to 4.3.2a.010-I
-        
-        Args: None
-        
-        Returns: None
-        '''
-        fw1 = '4.3.2.009'
-        fw2 = '4.3.2a.010-I'
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware upgrade from "+fw1+" to "+fw2, "BLUE", "YELLOW")      
-        self.local_fwupdate_from_to(fw2, fw1)
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
+    def tc_fwupdate_GX400_MC8705_OSM(self):
+        basic_airlink.cslog(self.url, "RED")
+        basic_airlink.cslog("tc_fwupdate_GX400_MC8705_OSM", "RED")
     
-    @unittest.skipIf(tbd_config_map[device_name]["MODEL"]=="LS300","Not support this device")    
-    def tc_fwupdate_local_432a010I_433014(self):
-        ''' Update from 4.3.2a.010-I to 4.3.3.014
-        
-        Args: None
-        
-        Returns: None
-        '''
-        fw1 = '4.3.2a.010-I'
-        fw2 = '4.3.3.014'
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware upgrade from "+fw1+" to "+fw2, "BLUE", "YELLOW")
-        self.local_fw_update(fw2)
-        self.assertEqual(self.aleos_verify(self.aleos_check(), fw2), True, "Fw update Failed")
-        basic_airlink.clog(time.ctime(time.time())+" ===>> Firmware version Verify: Pass", "GREEN")      
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
+    def tc_fwupdate_GX400_MC8705_ATT(self):
+        basic_airlink.cslog(self.url, "GREEN")
+        basic_airlink.cslog("tc_fwupdate_GX400_MC8705_ATT", "GREEN")
     
-    @unittest.skipIf(tbd_config_map[device_name]["MODEL"]=="LS300","Not support this device")
-    def tc_fwupdate_local_432a010_432a010I(self):
-        ''' Update from 4.3.2a.010 to 4.3.2a.010-I
-        
-        Args: None
-        
-        Returns: None
-        '''
-        fw1 = '4.3.2a.010'
-        fw2 = '4.3.2a.010-I'
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware upgrade from "+fw1+" to "+fw2, "BLUE", "YELLOW")      
-        self.local_fwupdate_from_to(fw2, fw1)
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
+    def tc_fwupdate_GX400_MC8705_BEL(self):
+        basic_airlink.cslog(self.url, "BLUE")
+        basic_airlink.cslog("tc_fwupdate_GX400_MC8705_BEL", "BLUE")
     
-    @unittest.skipIf(tbd_config_map[device_name]["MODEL"]=="LS300","Not support this device")
-    def tc_fwupdate_local_432a010I_434009(self):
-        ''' Update from 4.3.2a.010-I to 4.3.4.009
-        
-        Args: None
-        
-        Returns: None
-        '''
-        fw1 = '4.3.2a.010-I'
-        fw2 = '4.3.4.009'
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware upgrade from "+fw1+" to "+fw2, "BLUE", "YELLOW")
-        self.local_fw_update(fw2)
-        self.assertEqual(self.aleos_verify(self.aleos_check(), fw2), True, "Fw update Failed")
-        basic_airlink.clog(time.ctime(time.time())+" ===>> Firmware version Verify: Pass", "GREEN")      
-#         self.local_fwupdate_from_to(fw2, fw1)
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
-        
-    def tc_fwupdate_local_432009_433014(self):
-        ''' Update from 4.3.2.009 to 4.3.3.014
-        
-        Args: None
-        
-        Returns: None
-        '''
-        fw1 = '4.3.2.009'
-        fw2 = '4.3.3.014'
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware upgrade from "+fw1+" to "+fw2, "BLUE", "YELLOW")       
-        self.local_fwupdate_from_to(fw2, fw1)
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
+    def tc_fwupdate_GX400_MC8705_TLS(self):
+        basic_airlink.cslog(self.url, "YELLOW")
+        basic_airlink.cslog("tc_fwupdate_GX400_MC8705_TLS", "YELLOW")
     
-    def tc_fwupdate_local_432009_433a014(self):
-        ''' Update from 4.3.2.009 to 4.3.3a.014
-        
-        Args: None
-        
-        Returns: None
-        '''
-        fw1 = '4.3.2.009'
-        fw2 = '4.3.3a.014'
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware upgrade from "+fw1+" to "+fw2, "BLUE", "YELLOW")       
-        self.local_fwupdate_from_to(fw2, fw1)
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
+    def tc_fwupdate_GX410_MC8705_OSM(self):
+        basic_airlink.cslog(self.url)
+        basic_airlink.cslog("tc_fwupdate_GX410_MC8705_OSM")
+       
+    def tc_fwupdate_GX400_MC5728_VZW(self):
+        pass
     
-    @unittest.skipIf(tbd_config_map[device_name]["MODEL"]=="LS300","Not support this device")
-    def tc_fwupdate_local_432a010_433014(self):
-        ''' Update from 4.3.2a.010 to 4.3.3.014
-        
-        Args: None
-        
-        Returns: None
-        '''
-        fw1 = '4.3.2a.010'
-        fw2 = '4.3.3.014'
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware upgrade from "+fw1+" to "+fw2, "BLUE", "YELLOW")       
-        self.local_fwupdate_from_to(fw2, fw1)
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
+    def tc_fwupdate_GX440_MC7750_VZW(self):
+        pass
     
-    @unittest.skipIf(tbd_config_map[device_name]["MODEL"]=="LS300","Not support this device")
-    def tc_fwupdate_local_432a010_433a014(self):
-        ''' Update from 4.3.2a.010 to 4.3.3a.014
-        
-        Args: None
-        
-        Returns: None
-        '''
-        fw1 = '4.3.2a.010'
-        fw2 = '4.3.3a.014'
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware upgrade from "+fw1+" to "+fw2, "BLUE", "YELLOW")       
-        self.local_fwupdate_from_to(fw2, fw1)
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
+    def tc_fwupdate_GX440_MC7700_ATT(self):
+        basic_airlink.cslog(self.url, "RED")
+        basic_airlink.cslog("tc_fwupdate_GX440_MC7700_ATT", "RED")
+        self.se_ins.status_about_page(self.driver)
+        pass
+    
+    def tc_fwupdate_GX400_MC5728_SPT(self):
+        pass
 
-    @unittest.skipIf(tbd_config_map[device_name]["MODEL"]=="LS300","Not support this device")
-    def tc_fwupdate_local_432a010_434009(self):
-        ''' Update from 4.3.2a.010 to 4.3.4.009
-        
-        Args: None
-        
-        Returns: None
-        '''
-        fw1 = '4.3.2a.010'
-        fw2 = '4.3.4.009'
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware upgrade from "+fw1+" to "+fw2, "BLUE", "YELLOW")       
-        self.local_fwupdate_from_to(fw2, fw1)
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")       
-                       
+    def tc_fwupdate_GX440_MC7700_OSM(self):
+        pass
+
+    def tc_fwupdate_ES440_MC7750_VZW(self):
+        basic_airlink.cslog(self.url, "RED")
+        basic_airlink.cslog("tc_fwupdate_ES440_MC7750_VZW", "RED")
+        self.se_ins.status_about_page(self.driver)
+        pass
     
-    def tc_fwupdate_local_433a014_434009(self):
-        ''' Update from 4.3.3a.014 to 4.3.4.009
-        
-        Args: None
-        
-        Returns: None
-        '''
-        fw1 = '4.3.3a.014'
-        fw2 = '4.3.4.009'
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware upgrade from "+fw1+" to "+fw2, "BLUE", "YELLOW")       
-        self.local_fwupdate_from_to(fw2, fw1)
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
-    
-        
-    def tc_fwupdate_local_433014_434009(self):
-        ''' Update from 4.3.3.014 to 4.3.4.009
-        
-        Args: None
-        
-        Returns: None
-        '''       
-        fw1 = '4.3.3.014'
-        fw2 = '4.3.4.009'
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware upgrade from "+fw1+" to "+fw2, "BLUE", "YELLOW")       
-        self.local_fwupdate_from_to(fw2, fw1)
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
-        
-    
-    def tc_fwupdate_local_434008_434009(self):
-        ''' Update from 4.3.4.008 to 4.3.4.009
-        
-        Args: None
-        
-        Returns: None
-        '''
-        fw1 = '4.3.4.008'
-        fw2 = '4.3.4.009'
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware upgrade from "+fw1+" to "+fw2, "BLUE", "YELLOW")       
-        self.local_fwupdate_from_to(fw2, fw1)
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
-        
- 
+    def tc_fwupdate_ES440_MC7700_ATT(self):
+        pass
+
+    def tc_fwupdate_ES440_MC7710_EMEA(self):
+        basic_airlink.cslog(self.url, "RED")
+        basic_airlink.cslog("tc_fwupdate_ES440_MC7710_EMEA", "RED")
+        self.se_ins.status_about_page(self.driver)
+        pass
+
+    def tc_fwupdate_ES440_MC7700_OSM(self):
+        pass   
+
+    def tc_fwupdate_LS300_SL5011_VZW(self):
+        basic_airlink.cslog(self.url, "RED")
+        basic_airlink.cslog("tc_fwupdate_LS300_SL5011_VZW", "RED")
+        self.se_ins.status_about_page(self.driver)
+        pass 
+
+    def tc_fwupdate_LS300_SL5011_SPT(self):
+        pass 
+
+    def tc_fwupdate_LS300_SL8090_ATT(self):
+        pass 
+
+    def tc_fwupdate_LS300_SL8090_BEL(self):
+        pass 
+
+    def tc_fwupdate_LS300_SL8092_OSM(self):
+        basic_airlink.cslog(self.url, "RED")
+        basic_airlink.cslog("tc_fwupdate_LS300_SL8092_OSM", "RED")
+        self.se_ins.status_about_page(self.driver)
+        pass 

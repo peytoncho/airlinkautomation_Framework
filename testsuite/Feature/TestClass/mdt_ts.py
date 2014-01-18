@@ -13,7 +13,6 @@ device_name = tbd_config_map["DUTS"][0]
 
 class MultipleDeviceTest(unittest.TestCase):    
     def setUp(self):
-        self.url = ""
         if testclass_config_map["MDT"] == "YES":
             self.url = "HTTP://192.168.13."+str(ip_postfix)+":9191/"           
         else:
@@ -24,7 +23,6 @@ class MultipleDeviceTest(unittest.TestCase):
         self.se_ins = selenium_utilities.SeleniumAcemanager()
         
         self.driver = self.se_ins.login(self.url, self.username, self.password)
-        time.sleep(7)
     
     def tearDown(self):
         if testclass_config_map["MDT"] == "YES":

@@ -29,11 +29,11 @@ import linux_airlink
 
 class Connectivity:
     
-    def __init__(self, username="user", password="12345", debug_level = "0", verbose = False):
+    def __init__(self, device_name=tbd_config_map["DUTS"][0], username="user", password="12345", debug_level = "0", verbose = False):
         
         ''' check all related items in testbed for testing '''
                 
-        self.device_name  = tbd_config_map["DUTS"][0]
+        self.device_name = device_name
         self.username = username
         self.password = password
         self.debug_level = debug_level
@@ -162,7 +162,7 @@ class Connectivity:
             return self.serial_interface()
    
  
-    def testbed_ready(self, testbed_name="WAN"):
+    def testbed_ready(self):
         ''' check if testbed ready 
         '''
 #         if not self.controller_ready(testbed_name):
@@ -178,26 +178,24 @@ class Connectivity:
         
         return True    
             
-    def dut_ready(self):
+    def dut_ready(self,dut_ip=self.address()):
         ''' check if DUT is ready 
-        TODO
         '''
-        for device in tbd_config_map["DUTS"]:    
-            if  tbd_config_map[device]["INTERFACE"] == "SERIAL":
-                logging.debug("please make sure the serial line connected!\n")  
-                return True
-                       
+               
+        ret = True  
+        if  tbd_config_map[device]["INTERFACE"] == "SERIAL":
+            logging.debug("please make sure the serial line connected!\n")  
+            return ret
+        else:               
             pp=ping_airlink.PingAirlink()         # shall not be Serial cable connection
-            adr = self.address()
-            if  pp.ping_test(adr):            
+            if  pp.ping_test(dut_ip):            
                 logging.debug("DUT ready\n")  
             else: 
                 logging.debug("DUT not ready yet\n")  
                 self.error_flag +=1
-
-                return False
+                ret = False
             
-        return True    
+        return ret    
 
     def host_ready(self, host_no=1, testbed_name="WAN"):
         ''' check if host1/host2 ready
