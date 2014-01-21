@@ -54,8 +54,7 @@ class FwupdateAirlink(unittest.TestCase):
             if "True" in self._verify_aleos(update_fw_version) and "True" in self._verify_rm(update_rm_version):
                 result = "True"
             else:
-                result = "False"
-             
+                result = "False"             
         return result
     
     def fwupdate_ui(self, update_fw_version):
@@ -72,8 +71,37 @@ class FwupdateAirlink(unittest.TestCase):
         result = self._local_fw_update(update_fw_version)
         if result == "completed":
             result = self._verify_aleos(update_fw_version)             
-        return result        
-
+        return result
+    
+    def fwrmuupdate_ui_roundtrip(self, fw_from, fw_to, rm_from, rm_to):
+        '''
+        This method will update ALEOS with the version in parameter
+        
+        Args:fw_version
+        
+        Return:result, If there are any issues during the update process, 
+        the result will return the error code from the specific point
+        
+        Notes: Keep the browser closed before calling this function
+        '''
+        
+        fw1 = fw_from
+        fw2 = fw_to
+        rm1 = rm_from
+        rm2 = rm_to      
+        times_count = fwupdate_config_map["ROUNDTRIP_TIMES"]
+        for round in range(times_count):
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Round: "+str(round+1)+" Started", "BLUE")
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Upgrade to: "+fw2, "BLUE")
+            result = self.fw_ins.fwupdate_ui(fw_to)
+            if result != "True":
+                self.fail("Test failed. Reason: "+result)
+            else:
+                basic_airlink.cslog(time.ctime(time.time())+" ===>> Firmware version Verify: Pass", "GREEN")
+            
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Downgrade to: "+fw1, "BLUE")
+            result = self.fw_ins.fwupdate_ui(fw1)
+                       
 
     def fw_update_at_command(self, update_fw_version):
         '''

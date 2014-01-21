@@ -27,26 +27,71 @@ basic_airlink.append_sys_path()
 tbd_config_map, fwupdate_config_map = basic_airlink.get_config_data(test_area,"")
 
 tc_ts_map={
-    1:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_single",0],  
+    1:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_single",0],
     2:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_roundtrip",0],
-    3:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_sp_LS300",0],
-    4:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_sp_GX400",0],
-    5:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_432a010_432a010I",0],
-    6:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_432a010I_434009",0],
-    7:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_432009_433014",0],
-    8:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_432009_433a014",0],
-    9:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_432a010_433014",0],
-    10:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_432a010_433a014",0],
-    11:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_432a010_434009",0],
-    12:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_433a014_434009",0],
-    13:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_433014_434009",0],   
-    14:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_434008_434009",0],
-    15:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_local_single",0],
-    16:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_local_roundtrip",0],
-    17:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_rm_update_local",0],
-    18:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fw_rm_update_local",0],
-    19:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_local_434008_434009",0],             
+    3:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_GX400_MC8705_OSM",0],
+    4:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_GX400_MC8705_ATT",0],
+    5:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_GX400_MC8705_BEL",0],
+    6:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_GX400_MC8705_TLS",0],
+    7:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_GX410_MC8705_OSM",0],
+    8:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_GX400_MC5728_VZW",0],
+    9:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_GX440_MC7750_VZW",0],
+    10:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_GX440_MC7700_ATT",0],
+    11:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_GX400_MC5728_SPT",0],
+    12:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_GX440_MC7700_OSM",0],
+    13:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_ES440_MC7750_VZW",0],
+    14:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_ES440_MC7700_ATT",0],
+    15:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_ES440_MC7710_EMEA",0],
+    16:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_ES440_MC7700_OSM",0],
+    17:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_GX440_MC7700_OSM",0],
+    18:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_LS300_SL5011_VZW",0],
+    19:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_LS300_SL5011_SPT",0],
+    20:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_LS300_SL8090_ATT",0],
+    21:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_LS300_SL8090_BEL",0],
+    22:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_LS300_SL8092_OSM",0],
+    23:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_local_single",0],
+    24:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_local_roundtrip",0],
+    25:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_rm_update_local",0],
+    26:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fw_rm_update_local",0],
+    27:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_GX400_MC8705_OSM",0],
+    28:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_GX400_MC8705_ATT",0],
+    29:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_GX400_MC8705_BEL",0],
+    30:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_GX400_MC8705_TLS",0],
+    31:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_GX410_MC8705_OSM",0],
+    32:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_GX400_MC5728_VZW",0],
+    33:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_GX440_MC7750_VZW",0],
+    34:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_GX440_MC7700_ATT",0],
+    35:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_GX400_MC5728_SPT",0],
+    36:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_GX440_MC7700_OSM",0],
+    37:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ES440_MC7750_VZW",0],
+    38:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ES440_MC7700_ATT",0],
+    39:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ES440_MC7710_EMEA",0],
+    40:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ES440_MC7700_OSM",0],
+    41:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_GX440_MC7700_OSM",0],
+    42:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_LS300_SL5011_VZW",0],
+    43:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_LS300_SL5011_SPT",0],
+    44:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_LS300_SL8090_ATT",0],
+    45:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_LS300_SL8090_BEL",0],
+    46:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_LS300_SL8092_OSM",0],            
 }
+
+testing_combo = testclass_config_map["TESTING_COMBO"]
+
+def readCombo(testing_combo):
+    combo_list = testclass_config_map[testing_combo]
+    print str(combo_list)
+    return combo_list
+
+def pickTestcase(combo_list):
+    pick_list = []
+    for device in combo_list:
+        for keys in tc_ts_map:
+            if device in tc_ts_map[keys][1]:
+                pick_list.append(keys)
+    print str(pick_list)
+    return pick_list
+
+
 
 ####################################################
 #  Firmware Update test automation main
@@ -54,6 +99,14 @@ tc_ts_map={
 
 if __name__ == "__main__":
   
+    if testclass_config_map["MDT"] == "YES":
+        combo_list = readCombo(testing_combo)
+        pick_list = pickTestcase(combo_list)
+        mySuite = basic_airlink.setup_suite_mdt(tc_ts_map, pick_list)
+    else:
+        mySuite = basic_airlink.setup_suite(tbd_config_map,testclass_config_map, tc_ts_map)
+    
+            
     log_filename=basic_airlink.get_log_filename(tbd_config_map, test_area,"")
     FORMAT ='%(asctime)-15s => %(levelname)-8s => %(message)s'
     if tbd_config_map["LOG_LEVEL"]=="DEBUG":

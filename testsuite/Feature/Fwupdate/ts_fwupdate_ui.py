@@ -48,7 +48,7 @@ class TsFwupdateUi(unittest.TestCase):
             
             testing_combo = fwupdate_config_map["TESTING_COMBO"]
             dut_name = fwupdate_config_map[testing_combo][ip_postfix]
-            basic_airlink.cslog(testing_dut, "RED")
+            basic_airlink.cslog(dut_name, "RED")
                         
             dut_ip = "192.168.13."+str(ip_postfix)
             self.fw_ins = fwupdate_airlink.FwupdateAirlink(dut_ip,dut_name)
@@ -106,7 +106,6 @@ class TsFwupdateUi(unittest.TestCase):
             basic_airlink.clog(time.ctime(time.time())+" ===>> Firmware version Verify: Pass", "GREEN")
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")            
 
-        
     
     def tc_fwupdate_local_roundtrip(self):
         '''  This method will run the round trip update
@@ -116,22 +115,7 @@ class TsFwupdateUi(unittest.TestCase):
         Returns: None
         '''
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware Roundtrip upgrade ", "BLUE", "YELLOW")      
-        fw1 = fwupdate_config_map["ALEOS_BUILD_FROM"]
-        fw2 = fwupdate_config_map["ALEOS_BUILD_TO"]
-        rm1 = fwupdate_config_map["RM_VERSION_FROM"]
-        rm2 = fwupdate_config_map["RM_VERSION_TO"]      
-        times_count = fwupdate_config_map["ROUNDTRIP_TIMES"]
-        for round in range(times_count):
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Round: "+str(round+1)+" Started", "BLUE")
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Upgrade to: "+fw2, "BLUE")
-            result = self.fw_ins.fwupdate_ui(fw2)
-            if result != "True":
-                self.fail("Test failed. Reason: "+result)
-            else:
-                basic_airlink.cslog(time.ctime(time.time())+" ===>> Firmware version Verify: Pass", "GREEN")
-            
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Downgrade to: "+fw1, "BLUE")
-            result = self.fw_ins.fwupdate_ui(fw1)
+       
             if result != "True":
                 self.fail("Test failed. Reason: "+result)
             else:
@@ -219,11 +203,10 @@ class TsFwupdateUi(unittest.TestCase):
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")        
         
 
-
     def tc_fwupdate_GX400_MC8705_OSM(self):
         basic_airlink.cslog(self.url, "RED")
         basic_airlink.cslog("tc_fwupdate_GX400_MC8705_OSM", "RED")
-    
+            
     def tc_fwupdate_GX400_MC8705_ATT(self):
         basic_airlink.cslog(self.url, "GREEN")
         basic_airlink.cslog("tc_fwupdate_GX400_MC8705_ATT", "GREEN")
