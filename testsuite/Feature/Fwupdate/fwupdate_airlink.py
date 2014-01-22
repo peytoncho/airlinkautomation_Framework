@@ -38,26 +38,9 @@ class FwupdateAirlink(unittest.TestCase):
         self.ftp_username = fwupdate_config_map["FTP_USERNAME"]
         self.ftp_password = fwupdate_config_map["FTP_PASSWORD"]
 
-    def fwrmupdate_ui(self, update_fw_version, update_rm_version):
-        '''
-        This method will update ALEOS and Radio Module with the version in parameter
-        
-        Args:fw_version
-        
-        Return:result, If there are any issues during the update process, 
-        the result will return the error code from the specific point
-        
-        Notes: Keep the browser closed before calling this function
-        '''
-        result = self._local_fw_update(update_fw_version, update_rm_version)
-        if result == "completed":
-            if "True" in self._verify_aleos(update_fw_version) and "True" in self._verify_rm(update_rm_version):
-                result = "True"
-            else:
-                result = "False"             
-        return result
+
     
-    def fwupdate_ui(self, update_fw_version):
+    def fwupdate_ui(self, update_fw_version, update_rm_version=""):
         '''
         This method will update ALEOS with the version in parameter
         
@@ -70,7 +53,14 @@ class FwupdateAirlink(unittest.TestCase):
         '''
         result = self._local_fw_update(update_fw_version)
         if result == "completed":
-            result = self._verify_aleos(update_fw_version)             
+            if not self._match_rm():
+                if "True" in self._verify_aleos(update_fw_version) and "True" in self._verify_rm(update_rm_version):
+                    result = "True"
+                else:
+                    result = "False"
+            else: 
+                result = self._verify_aleos(update_fw_version)
+                             
         return result
     
     def fwrmuupdate_ui_roundtrip(self, fw_from, fw_to, rm_from, rm_to):
@@ -665,7 +655,30 @@ class FwupdateAirlink(unittest.TestCase):
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Step:  Finished update, wait reboot...")
         time.sleep(tbd_config_map[self.device_name]["REBOOT_TIMEOUT"])
         
+    def _match_rm(self):
+        fw1_version = ""
+        fw2_version = ""
+        ret = True
+        fw_lst = fwupdate_config_map["ALEOS_VERSION_LIST"]
+        for version in fw_lst:
+            if version in fwupdate_config_map["ALEOS_BUILD_FROM"]:
+                fw1_version = version
+            elif version in fwupdate_config_map["ALEOS_BUILD_TO"]:
+                fw2_version = version
+        
+        rm1_name = fwupdate_config_map[fw1_version][self.device_name]
+        rm2_name = fwupdate_config_map[fw1_version][self.device_name]
+        
+        basic_airlink.clog(time.ctime(time.time())+" ===>> rm1_version: "+rm1_name)
+        basic_airlink.clog(time.ctime(time.time())+" ===>> rm2_version: "+rm2_name)
+        
+        if rm1_name != rm2_name:
+            ret = False
+        
+        return ret
+        
     def _verify_rm(self, rm_version):
+       
         rm_version_rear = rm_version.split("_")[2]
 #        basic_airlink.clog(time.ctime(time.time())+" ===>> rm_version_rear: "+rm_version_rear)
         rm_ver_dict = {
