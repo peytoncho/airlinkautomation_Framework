@@ -75,10 +75,10 @@ tc_ts_map={
     46:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_LS300_SL8092_OSM",0],            
 }
 
-testing_combo = testclass_config_map["TESTING_COMBO"]
+testing_combo = fwupdate_config_map["TESTING_COMBO"]
 
 def readCombo(testing_combo):
-    combo_list = testclass_config_map[testing_combo]
+    combo_list = fwupdate_config_map[testing_combo]
     print str(combo_list)
     return combo_list
 
@@ -86,7 +86,7 @@ def pickTestcase(combo_list):
     pick_list = []
     for device in combo_list:
         for keys in tc_ts_map:
-            if device in tc_ts_map[keys][1]:
+            if device[4:] in tc_ts_map[keys][1] and tc_ts_map[keys][0] is ts_fwupdate_ui.TsFwupdateUi:
                 pick_list.append(keys)
     print str(pick_list)
     return pick_list
@@ -99,12 +99,12 @@ def pickTestcase(combo_list):
 
 if __name__ == "__main__":
   
-    if testclass_config_map["MDT"] == "YES":
+    if fwupdate_config_map["MDT"] == "YES":
         combo_list = readCombo(testing_combo)
         pick_list = pickTestcase(combo_list)
         mySuite = basic_airlink.setup_suite_mdt(tc_ts_map, pick_list)
     else:
-        mySuite = basic_airlink.setup_suite(tbd_config_map,testclass_config_map, tc_ts_map)
+        mySuite = basic_airlink.setup_suite(tbd_config_map,fwupdate_config_map, tc_ts_map)
     
             
     log_filename=basic_airlink.get_log_filename(tbd_config_map, test_area,"")
@@ -126,8 +126,7 @@ if __name__ == "__main__":
                 description = description_text
                 )       
 
-    
-    mySuite = basic_airlink.setup_suite(tbd_config_map, fwupdate_config_map, tc_ts_map)    
+       
     test_cases = mySuite.countTestCases()
     basic_airlink.slog("\x1b[0mTotal test cases: %d" % test_cases)
      

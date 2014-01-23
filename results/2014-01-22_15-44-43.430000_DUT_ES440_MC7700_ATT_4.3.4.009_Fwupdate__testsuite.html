@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>TestClass Test Report</title>
+    <title>Firmware Update Test Report</title>
     <meta name="generator" content="HTMLTestRunner 0.8.1"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     
@@ -144,12 +144,12 @@ function showOutput(id, name) {
 --></script>
 
 <div class='heading'>
-<h1>TestClass Test Report</h1>
-<p class='attribute'><strong>Start Time:</strong> 2014-01-15 14:59:48</p>
-<p class='attribute'><strong>Duration:</strong> 0:00:04.025000</p>
-<p class='attribute'><strong>Status:</strong> Pass 3</p>
+<h1>Firmware Update Test Report</h1>
+<p class='attribute'><strong>Start Time:</strong> 2014-01-22 15:44:43</p>
+<p class='attribute'><strong>Duration:</strong> 0:00:55.952000</p>
+<p class='attribute'><strong>Status:</strong> Error 1</p>
 
-<p class='description'> ***log file name C:\Users\airlink\Documents\GitHub\airlinkautomation_Framework\logs\2014-01-15_14-59-48.677000_DUT_LS300_SL5011_VZW_4.3.4.009_TESTCLASS__testsuite.log</p>
+<p class='description'> ***log file name C:\Users\airlink\Documents\GitHub\airlinkautomation_Framework\logs\2014-01-22_15-44-43.430000_DUT_ES440_MC7700_ATT_4.3.4.009_Fwupdate__testsuite.log</p>
 </div>
 
 
@@ -177,42 +177,28 @@ function showOutput(id, name) {
     <td>View</td>
 </tr>
 
-<tr class='passClass'>
-    <td>mdt_ts.MultipleDeviceTest</td>
-    <td>3</td>
-    <td>3</td>
+<tr class='errorClass'>
+    <td>ts_fwupdate_ui.TsFwupdateUi: TsFwupdateUi class provides a firmware update automation using Selenium UI test features.</td>
+    <td>1</td>
     <td>0</td>
     <td>0</td>
-    <td><a href="javascript:showClassDetail('c1',3)">Detail</a></td>
+    <td>1</td>
+    <td><a href="javascript:showClassDetail('c1',1)">Detail</a></td>
 </tr>
 
-<tr id='pt1.1' class='hiddenRow'>
-    <td class='none'><div class='testcase'>tc_fwupdate_GX400_MC8705_OSM</div></td>
-    <td colspan='5' align='center'><a href="javascript:showOutput('pt1.1', 'tc_fwupdate_GX400_MC8705_OSM')">pass</a>
-<script language="javascript" type="text/javascript">output_list['pt1.1'] = '\n\ntc_fwupdate_GX400_MC8705_OSM\n';</script>
-</td>
-</tr>
-
-<tr id='pt1.2' class='hiddenRow'>
-    <td class='none'><div class='testcase'>tc_fwupdate_GX400_MC8705_BEL</div></td>
-    <td colspan='5' align='center'><a href="javascript:showOutput('pt1.2', 'tc_fwupdate_GX400_MC8705_BEL')">pass</a>
-<script language="javascript" type="text/javascript">output_list['pt1.2'] = '\n\ntc_fwupdate_GX400_MC8705_BEL\n';</script>
-</td>
-</tr>
-
-<tr id='pt1.3' class='hiddenRow'>
-    <td class='none'><div class='testcase'>tc_fwupdate_GX410_MC8705_OSM</div></td>
-    <td colspan='5' align='center'><a href="javascript:showOutput('pt1.3', 'tc_fwupdate_GX410_MC8705_OSM')">pass</a>
-<script language="javascript" type="text/javascript">output_list['pt1.3'] = '\n\ntc_fwupdate_GX410_MC8705_OSM\n';</script>
+<tr id='ft1.1' class='none'>
+    <td class='errorCase'><div class='testcase'>tc_fwupdate_local_roundtrip: This method will run the round trip update</div></td>
+    <td colspan='5' align='center'><a href="javascript:showOutput('ft1.1', 'tc_fwupdate_local_roundtrip: This method will run the round trip update')">error</a>
+<script language="javascript" type="text/javascript">output_list['ft1.1'] = '\ndevice_name:DUT_ES440_MC7700_ATT\nPing to 192.168.13.31 succeed from airlink-HP with its Windows OS\nPing to 192.168.13.31 succeed from airlink-HP with its Windows OS\nPing to 192.168.13.31 succeed from airlink-HP with its Windows OS\nPing to 192.168.13.31 succeed from airlink-HP with its Windows OS\n\ndevice_name:DUT_ES440_MC7700_ATT\nPing to 192.168.13.31 succeed from airlink-HP with its Windows OS\nPing to 192.168.13.31 succeed from airlink-HP with its Windows OS\nPing to 192.168.13.31 succeed from airlink-HP with its Windows OS\nPing to 192.168.13.31 succeed from airlink-HP with its Windows OS\n\nStep:  Write to non volatile memory by AT command  AT\x26W\n\n\r\nATI\r\nOK\r\n\r\r\nES440\r\r\nOK\r\r\n\n\nStep:  get radio version by AT command  ATI2\n\nATI2\r\n\r\r\nSWI9200X_03.05.10.02AP R4684 CARMD-EN-10527 2012/02/25 11:58:38\r\r\nMC7700\r\r\nOK\r\r\n\n\n\nWed Jan 22 15:45:31 2014 ===\x3E\x3E Test case: ACEManager Firmware Roundtrip upgrade \nTraceback (most recent call last):\n  File \"C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\testsuite\\Feature\\Fwupdate\\ts_fwupdate_ui.py\", line 118, in tc_fwupdate_local_roundtrip\n    self.fwrmupdate_ui_roundtrip(fw_from, fw_to)\nAttributeError: \'TsFwupdateUi\' object has no attribute \'fwrmupdate_ui_roundtrip\'\n';</script>
 </td>
 </tr>
 
 <tr id='total_row'>
     <td>Total</td>
-    <td>3</td>
-    <td>3</td>
+    <td>1</td>
     <td>0</td>
     <td>0</td>
+    <td>1</td>
     <td>&nbsp;</td>
 </tr>
 </table>

@@ -36,10 +36,10 @@ DEVICE_COMBO4: [DUT_ES440_MC7750_VZW,
                DUT_GX440_MC7700_OSM]
 
 DEVICE_COMBO5: [DUT_LS300_SL5011_VZW,
-                DUT_ES440_MC7750_VZW,
-                DUT_ES440_MC7710_EMEA,
+                DUT_ES440_MC7700_ATT,
+                DUT_LS300_SL8090_ATT,
                 DUT_LS300_SL8092_OSM,
-                DUT_GX440_MC7700_ATT]
+                DUT_GX400_MC8705_OSM]
 
 
 #RM version for each device by ALEOS
@@ -67,7 +67,7 @@ DEVICE_COMBO5: [DUT_LS300_SL5011_VZW,
 
 4.3.5:
    DUT_GX400_MC8705_OSM:   MC8705_OSM001_3552
-   DUT_GX400_MC8705_ATT:   MC
+   DUT_GX400_MC8705_ATT:   MC8705_ATT001_3553
    DUT_GX400_MC8705_BEL:   
    DUT_GX400_MC8705_TLS:   
    DUT_GX400_MC8705_OSM:   MC8705_OSM001_3552
@@ -82,8 +82,8 @@ DEVICE_COMBO5: [DUT_LS300_SL5011_VZW,
    DUT_GX400_MC5728_SPT:   MC5728_SPT001_15601
    DUT_GX440_MC7700_OSM:   
    DUT_ES440_MC7750_VZW:   MC7750_VZW002_35109
-   DUT_ES440_MC7700_ATT:
-   DUT_ES440_MC7710_EMEA:  MC7700_ATT002_35102
+   DUT_ES440_MC7700_ATT:   MC7700_ATT002_35102
+   DUT_ES440_MC7710_EMEA:  
    DUT_ES440_MC7700_OSM:
    DUT_GX440_MC7700_OSM: 
 
@@ -93,7 +93,7 @@ LIST_TESTCASES:
            1  : 
               TC_ID       : "Feature/ ACEmgr_Functions_Amit_Nasser_Shanifer/ FW_update_ALEOS_and_RMFU_Amit/ ALEOS_FW_update_Peyton/ Using_ACEManager/ Local_Connection/ ALEOS_update_to_current_version
 "           
-              PRODUCT_VER : ["4.3.3","4.3.4"]
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
               RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
@@ -283,10 +283,7 @@ LIST_TESTCASES:
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
            
-MDT:NO      #YES/NO
-COMBO: []
-
-    
+   
 # TODO these range values need to confirm
 UPDATE_TYPE : ALEOS_Software
 #UPDATE_TYPE : Radio_Module_Firmware
@@ -301,7 +298,7 @@ RM_VERSION_TO : "SL5011_VZW003_11301"
 
 RM_VERSION : "MC8705_OSM001_3552"
 
-ROUNDTRIP_TIMES : 10
+ROUNDTRIP_TIMES : 2
 
 FTP_SERVER_ADDRESS: "192.168.13.100"
 USERNAME: user

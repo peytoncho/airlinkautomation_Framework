@@ -32,9 +32,9 @@ ACE_URL:
     XXX  : "HTTP://192.168.16.31:9191/"
     WIFI : "HTTP://192.168.17.31:9191/"
 
-#DUTS : ["DUT_ES440_MC7700"] 
+#DUTS : ["DUT_ES440_MC7700_ATT"] 
 #DUTS : ["DUT_ES440_MC7710"] 
-#DUTS : ["DUT_ES440_MC7750"] 
+#DUTS : ["DUT_ES440_MC7750_VZW"] 
 
 #DUTS : ["DUT_GX440_MC7700_ATT"] 
 #DUTS : ["DUT_GX440_MC7750_VZW"] 
@@ -49,7 +49,7 @@ DUTS : ["DUT_LS300_SL5011_VZW"]
 
 # DUTs' basic configuration  ###################################################
 
-DUT_ES440_MC7750: 
+DUT_ES440_MC7750_VZW: 
     MODEL           :    ES440
     RM_TYPE         :    MC7750
     NET_OPERATOR    :    Verizon    
@@ -120,7 +120,7 @@ DUT_ES440_MC7710:
     MODEM_NAME      :    "CA1250202761004"  #SSID/Network name
     RM_TIMEOUT      :    400
 
-DUT_ES440_MC7700:       
+DUT_ES440_MC7700_ATT:       
     MODEL           :    ES440
     RM_TYPE         :    MC7700
     NET_OPERATOR    :    "AT&T"

@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>TestClass Test Report</title>
+    <title>Firmware Update Test Report</title>
     <meta name="generator" content="HTMLTestRunner 0.8.1"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     
@@ -144,12 +144,12 @@ function showOutput(id, name) {
 --></script>
 
 <div class='heading'>
-<h1>TestClass Test Report</h1>
-<p class='attribute'><strong>Start Time:</strong> 2014-01-16 14:15:27</p>
-<p class='attribute'><strong>Duration:</strong> 0:00:20.905000</p>
+<h1>Firmware Update Test Report</h1>
+<p class='attribute'><strong>Start Time:</strong> 2014-01-22 17:27:33</p>
+<p class='attribute'><strong>Duration:</strong> 0:00:07.502000</p>
 <p class='attribute'><strong>Status:</strong> Error 1</p>
 
-<p class='description'> ***log file name C:\Users\airlink\Documents\GitHub\airlinkautomation_Framework\logs\2014-01-16_14-15-27.835000_DUT_LS300_SL5011_VZW_4.3.4.009_TESTCLASS__testsuite.log</p>
+<p class='description'> ***log file name C:\Users\airlink\Documents\GitHub\airlinkautomation_Framework\logs\2014-01-22_17-27-33.238000_DUT_LS300_SL5011_VZW_4.3.4.009_Fwupdate__testsuite.log</p>
 </div>
 
 
@@ -178,7 +178,7 @@ function showOutput(id, name) {
 </tr>
 
 <tr class='errorClass'>
-    <td>mdt_ts.MultipleDeviceTest</td>
+    <td>ts_fwupdate_ui.TsFwupdateUi: TsFwupdateUi class provides a firmware update automation using Selenium UI test features.</td>
     <td>1</td>
     <td>0</td>
     <td>0</td>
@@ -189,7 +189,7 @@ function showOutput(id, name) {
 <tr id='ft1.1' class='none'>
     <td class='errorCase'><div class='testcase'>tc_fwupdate_LS300_SL5011_VZW</div></td>
     <td colspan='5' align='center'><a href="javascript:showOutput('ft1.1', 'tc_fwupdate_LS300_SL5011_VZW')">error</a>
-<script language="javascript" type="text/javascript">output_list['ft1.1'] = '\n\n192.168.13.1:9191\n\n\ntc_fwupdate_LS300_SL5011_VZW\n\nstep: from Ace Manager come to Status/About page: \nTraceback (most recent call last):\n  File \"C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\testsuite\\Feature\\TestClass\\mdt_ts.py\", line 96, in tc_fwupdate_LS300_SL5011_VZW\n    self.se_ins.status_about_page(self.driver)\n  File \"C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\lib\\common\\selenium_utilities.py\", line 1087, in status_about_page\n    driver.find_element_by_css_selector(\"#SM1_Status_AboutM1 \x3E a \x3E span\").click()\n  File \"C:\\Python27\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 365, in find_element_by_css_selector\n    return self.find_element(by=By.CSS_SELECTOR, value=css_selector)\n  File \"C:\\Python27\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 681, in find_element\n    {\'using\': by, \'value\': value})[\'value\']\n  File \"C:\\Python27\\lib\\site-packages\\selenium\\webdriver\\remote\\webdriver.py\", line 164, in execute\n    self.error_handler.check_response(response)\n  File \"C:\\Python27\\lib\\site-packages\\selenium\\webdriver\\remote\\errorhandler.py\", line 164, in check_response\n    raise exception_class(message, screen, stacktrace)\nNoSuchElementException: Message: u\'Unable to locate element: {\"method\":\"css selector\",\"selector\":\"#SM1_Status_AboutM1 \x3E a \x3E span\"}\' ; Stacktrace: \n    at FirefoxDriver.prototype.findElementInternal_ (file:///c:/users/airlink/appdata/local/temp/tmpsjbcqw/extensions/fxdriver@googlecode.com/components/driver_component.js:8860)\n    at FirefoxDriver.prototype.findElement (file:///c:/users/airlink/appdata/local/temp/tmpsjbcqw/extensions/fxdriver@googlecode.com/components/driver_component.js:8869)\n    at DelayedCommand.prototype.executeInternal_/h (file:///c:/users/airlink/appdata/local/temp/tmpsjbcqw/extensions/fxdriver@googlecode.com/components/command_processor.js:10831)\n    at DelayedCommand.prototype.executeInternal_ (file:///c:/users/airlink/appdata/local/temp/tmpsjbcqw/extensions/fxdriver@googlecode.com/components/command_processor.js:10836)\n    at DelayedCommand.prototype.execute/\x3C (file:///c:/users/airlink/appdata/local/temp/tmpsjbcqw/extensions/fxdriver@googlecode.com/components/command_processor.js:10778) \n';</script>
+<script language="javascript" type="text/javascript">output_list['ft1.1'] = '\n\nDUT_ES440_MC7700_ATT\nTraceback (most recent call last):\n  File \"C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\testsuite\\Feature\\Fwupdate\\ts_fwupdate_ui.py\", line 57, in setUp\n    self.fw_ins = fwupdate_airlink.FwupdateAirlink(dut_name,dut_ip)\nNameError: global name \'dut_ip\' is not defined\n';</script>
 </td>
 </tr>
 

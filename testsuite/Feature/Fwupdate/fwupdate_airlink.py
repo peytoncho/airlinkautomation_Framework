@@ -28,7 +28,7 @@ basic_airlink.append_sys_path()
 tbd_config_map, fwupdate_config_map = basic_airlink.get_config_data(test_area,"")
 
 class FwupdateAirlink(unittest.TestCase):
-    def __init__(self, dut_ip="192.168.13.31", dut_name):
+    def __init__(self, dut_name, dut_ip="192.168.13.31"):
         self.device_name = dut_name
         self.dut_ip = dut_ip
         self.url = "HTTP://"+self.dut_ip+":9191/" 
@@ -37,10 +37,11 @@ class FwupdateAirlink(unittest.TestCase):
         self.ftp_server_ip = fwupdate_config_map["FTP_SERVER_ADDRESS"]
         self.ftp_username = fwupdate_config_map["FTP_USERNAME"]
         self.ftp_password = fwupdate_config_map["FTP_PASSWORD"]
+        self.rm_update_flag = False
 
 
     
-    def fwupdate_ui(self, update_fw_version, update_rm_version=""):
+    def fwupdate_ui(self, update_fw_version):
         '''
         This method will update ALEOS with the version in parameter
         
@@ -51,19 +52,22 @@ class FwupdateAirlink(unittest.TestCase):
         
         Notes: Keep the browser closed before calling this function
         '''
-        result = self._local_fw_update(update_fw_version)
+        update_rm_version = self._match_rm(update_fw_version)
+        result = self._local_fw_update(update_fw_version, update_rm_version)
+        
         if result == "completed":
-            if not self._match_rm():
+            if self.rm_update_flag:
                 if "True" in self._verify_aleos(update_fw_version) and "True" in self._verify_rm(update_rm_version):
-                    result = "True"
+                    result = "ALEOS and RM verify: True"
                 else:
-                    result = "False"
+                    result = "ALEOS and RM verify: False"
+                self.rm_update_flag = False
             else: 
-                result = self._verify_aleos(update_fw_version)
+                result = "ALEOS verify: "+self._verify_aleos(update_fw_version)
                              
         return result
     
-    def fwrmuupdate_ui_roundtrip(self, fw_from, fw_to, rm_from, rm_to):
+    def fwrmupdate_ui_roundtrip(self, fw_from, fw_to):
         '''
         This method will update ALEOS with the version in parameter
         
@@ -74,24 +78,27 @@ class FwupdateAirlink(unittest.TestCase):
         
         Notes: Keep the browser closed before calling this function
         '''
-        
-        fw1 = fw_from
-        fw2 = fw_to
-        rm1 = rm_from
-        rm2 = rm_to      
+             
         times_count = fwupdate_config_map["ROUNDTRIP_TIMES"]
         for round in range(times_count):
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Round: "+str(round+1)+" Started", "BLUE")
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Upgrade to: "+fw2, "BLUE")
-            result = self.fw_ins.fwupdate_ui(fw_to)
-            if result != "True":
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Upgrade to: "+fw_to, "BLUE")
+            
+            result = self.fwupdate_ui(fw_to)
+            if not "True" in result :
                 self.fail("Test failed. Reason: "+result)
             else:
-                basic_airlink.cslog(time.ctime(time.time())+" ===>> Firmware version Verify: Pass", "GREEN")
+                basic_airlink.clog(time.ctime(time.time())+" ===>> "+result, "GREEN")
+                basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE") 
             
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Downgrade to: "+fw1, "BLUE")
-            result = self.fw_ins.fwupdate_ui(fw1)
-                       
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Downgrade to: "+fw_from, "BLUE")
+            result = self.fwupdate_ui(fw_from)
+            if not "True" in result :
+                self.fail("Test failed. Reason: "+result)
+            else:
+                basic_airlink.clog(time.ctime(time.time())+" ===>> "+result, "GREEN")
+                basic_airlink.cslog(time.ctime(time.time())+" ===>> Round: "+str(round+1)+" Completed", "BLUE")
+                   
 
     def fw_update_at_command(self, update_fw_version):
         '''
@@ -197,7 +204,7 @@ class FwupdateAirlink(unittest.TestCase):
         '''
         aleos_version = ""
         at_ins = at_utilities.AtCommands()
-        conn_ins = connectivity.Connectivity()
+        conn_ins = connectivity.Connectivity(self.device_name)
         connect_instance = conn_ins.connection_types()
         attempt_count = 1
 
@@ -210,7 +217,7 @@ class FwupdateAirlink(unittest.TestCase):
         
         return aleos_version
     
-    def _device_check(self, device_name):
+    def _device_check(self):
         '''
         To check whether the device model matches the one configured in testbed yml file or not
         
@@ -220,7 +227,7 @@ class FwupdateAirlink(unittest.TestCase):
         '''
         result = True       
         at_ins = at_utilities.AtCommands()
-        conn_ins = connectivity.Connectivity()
+        conn_ins = connectivity.Connectivity(self.device_name)
         connect_instance = conn_ins.connection_types()
         if not connect_instance.connect():
             result = False
@@ -284,7 +291,7 @@ class FwupdateAirlink(unittest.TestCase):
         rm_build_path = airlinkautomation_home_dirname + '\\data\\builds\\RmFwImages\\'+ rm_build_filename
         return rm_build_path
 
-    def _local_fw_update(self, fw_version, rm_version=""):
+    def _local_fw_update(self, fw_version, rm_version):
         ''' 
         This method will check the ALEOS version and decide 
         which update type should be used, call update execute function
@@ -297,14 +304,11 @@ class FwupdateAirlink(unittest.TestCase):
 
         self.current_fw_version = self._aleos_check()
         basic_airlink.clog(time.ctime(time.time())+" ===>> Current Firmware Version: "+self.current_fw_version)        
-        aleos_build_path = self._get_aleos_path(device_prefix, fw_version)
+        aleos_build_path = self._get_aleos_path(device_prefix, fw_version)      
         rm_build_path = self._get_rm_path(rm_version)  
         basic_airlink.cslog(time.ctime(time.time())+" ===>> ALEOS Build: "+aleos_build_path)
         basic_airlink.cslog(time.ctime(time.time())+" ===>> RM Build: "+rm_build_path)
                 
-#        aleos_version = self._aleos_check()
-#        basic_airlink.clog(time.ctime(time.time())+" ===>> Current Firmware Version: "+aleos_version)        
-        
         if not "4.3.3" in self.current_fw_version:
             update_type = fwupdate_config_map["UPDATE_TYPE"]            
         else:
@@ -442,7 +446,7 @@ class FwupdateAirlink(unittest.TestCase):
                 driver.find_element_by_name("image").send_keys(rm_build_path)
                 driver.find_element_by_name("go").click()
                 basic_airlink.cslog(time.ctime(time.time())+" ===>> Applying Firmware ...")
-                #self._default_content_switch(self.driver)
+                self.rm_update_flag = True
                 time.sleep(tbd_config_map[self.device_name]["RM_TIMEOUT"])
                 
         except:
@@ -655,27 +659,17 @@ class FwupdateAirlink(unittest.TestCase):
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Step:  Finished update, wait reboot...")
         time.sleep(tbd_config_map[self.device_name]["REBOOT_TIMEOUT"])
         
-    def _match_rm(self):
+    def _match_rm(self, fw_version):
         fw1_version = ""
-        fw2_version = ""
-        ret = True
         fw_lst = fwupdate_config_map["ALEOS_VERSION_LIST"]
         for version in fw_lst:
-            if version in fwupdate_config_map["ALEOS_BUILD_FROM"]:
+            if version in fw_version:
                 fw1_version = version
-            elif version in fwupdate_config_map["ALEOS_BUILD_TO"]:
-                fw2_version = version
         
-        rm1_name = fwupdate_config_map[fw1_version][self.device_name]
-        rm2_name = fwupdate_config_map[fw1_version][self.device_name]
-        
+        rm1_name = fwupdate_config_map[fw1_version][self.device_name]        
         basic_airlink.clog(time.ctime(time.time())+" ===>> rm1_version: "+rm1_name)
-        basic_airlink.clog(time.ctime(time.time())+" ===>> rm2_version: "+rm2_name)
         
-        if rm1_name != rm2_name:
-            ret = False
-        
-        return ret
+        return rm1_name
         
     def _verify_rm(self, rm_version):
        
@@ -691,7 +685,7 @@ class FwupdateAirlink(unittest.TestCase):
             }
         result = True
         at_ins = at_utilities.AtCommands()
-        conn_ins = connectivity.Connectivity()
+        conn_ins = connectivity.Connectivity(self.device_name)
         connect_instance = conn_ins.connection_types()
         attempt_count = 1
         
@@ -710,30 +704,7 @@ class FwupdateAirlink(unittest.TestCase):
             basic_airlink.clog(time.ctime(time.time())+" ===>> rm_version_dict: "+rm_version_dict)
             result = False
         return str(result)
-    
-    def _verify_rm2(self, rm_version):
-        rm_version_rear = rm_version.split("_")[2]
-#        basic_airlink.clog(time.ctime(time.time())+" ===>> rm_version_rear: "+rm_version_rear)
-        result = True
-        at_ins = at_utilities.AtCommands()
-        conn_ins = connectivity.Connectivity()
-        connect_instance = conn_ins.connection_types()
-        attempt_count = 1
-        
-        while (not connect_instance.connect()) and (attempt_count<=5):
-            aleos_version = -1
-            attempt_count+=1
-            basic_airlink.clog(time.ctime(time.time())+" ===>> _verify_rm: Connection Failed, try again")
-        
-        current_rm_version = at_ins.get_rm_version(connect_instance).split(",")[0]
-#        basic_airlink.clog(time.ctime(time.time())+" ===>> current_rm_version: "+current_rm_version)
-        basic_airlink.clog(time.ctime(time.time())+" ===>> "+current_rm_version)
-        if not ("03.05.10.09ap" in current_rm_version or "03.05.10.09ap" in current_rm_version):
-            result = False
-#        basic_airlink.clog(time.ctime(time.time())+" ===>> rm_version_dict: "+rm_version_dict)       
-        connect_instance.close()
-        return str(result)
-        
+           
     def _execute_at_rm_update(self, update_rm_version):
         ''' 
         This method will call the firmware update function in the library
@@ -745,7 +716,7 @@ class FwupdateAirlink(unittest.TestCase):
         at_ins = at_utilities.AtCommands()
         current_aleos_version = self._aleos_check()
         
-        conn_ins = connectivity.Connectivity()
+        conn_ins = connectivity.Connectivity(self.device_name)
         connect_instance = conn_ins.connection_types()
         rm_filename = update_rm_version + ".bin"
         attempt_count = 1
@@ -777,7 +748,7 @@ class FwupdateAirlink(unittest.TestCase):
         at_ins = at_utilities.AtCommands()
         current_aleos_version = self._aleos_check()
         
-        conn_ins = connectivity.Connectivity()
+        conn_ins = connectivity.Connectivity(self.device_name)
         connect_instance = conn_ins.connection_types()
         device_prefix = self._get_device_prefix()
         fw_filename = device_prefix +"_"+ update_fw_version + ".bin"

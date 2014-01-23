@@ -29,7 +29,7 @@ import linux_airlink
 
 class Connectivity:
     
-    def __init__(self, device_name=tbd_config_map["DUTS"][0], username="user", password="12345", debug_level = "0", verbose = False):
+    def __init__(self, device_name, username="user", password="12345", debug_level = "0", verbose = False):
         
         ''' check all related items in testbed for testing '''
                 
@@ -172,28 +172,29 @@ class Connectivity:
 #             if not self.host_ready(1, testbed_name) or \
 #                not self.host_ready(2, testbed_name):
 #                 return False
-            
-        if not self.dut_ready(): 
+        dut_ip=self.address()    
+        if not self.dut_ready(dut_ip): 
             return False
         
         return True    
             
-    def dut_ready(self,dut_ip=self.address()):
+    def dut_ready(self,dut_ip):
         ''' check if DUT is ready 
         '''
                
         ret = True  
-        if  tbd_config_map[device]["INTERFACE"] == "SERIAL":
+        if  tbd_config_map[self.device_name]["INTERFACE"] == "SERIAL":
             logging.debug("please make sure the serial line connected!\n")  
             return ret
         else:               
             pp=ping_airlink.PingAirlink()         # shall not be Serial cable connection
-            if  pp.ping_test(dut_ip):            
-                logging.debug("DUT ready\n")  
-            else: 
-                logging.debug("DUT not ready yet\n")  
-                self.error_flag +=1
-                ret = False
+            for i in range(1,5):
+                if  pp.ping_test(dut_ip):            
+                    logging.debug("DUT ready\n")  
+                else: 
+                    logging.debug("DUT not ready yet\n")  
+                    self.error_flag +=1
+                    ret = False
             
         return ret    
 
