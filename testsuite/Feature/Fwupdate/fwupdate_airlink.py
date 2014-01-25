@@ -180,14 +180,13 @@ class FwupdateAirlink(unittest.TestCase):
     
     def _verify_aleos(self, fw_version):
         result = True
-        attempt_verify_times = 1
+        attempt_verify_times = 100
         while attempt_verify_times > 0:
-            time.sleep(2)
             aleos_version = self._aleos_check()
             basic_airlink.cslog("Current fw version: "+aleos_version)
             if aleos_version != fw_version:
                 result = False
-                attempt_verify_times-=1
+                attempt_verify_times=attempt_verify_times-1
                 basic_airlink.cslog("fw version does not match", "RED")
             else:
                 break
@@ -204,12 +203,15 @@ class FwupdateAirlink(unittest.TestCase):
         '''
         aleos_version = ""
         at_ins = at_utilities.AtCommands()
-        conn_ins = connectivity.Connectivity(self.device_name)
-        connect_instance = conn_ins.connection_types()
+        conn_ins = connectivity.Connectivity(self.device_name, self.dut_ip)
+        if fwupdate_config_map["MDT"] == "YES":
+            connect_instance = conn_ins.connection_types(test_type="mdt")
+        else:
+            connect_instance = conn_ins.connection_types()
         attempt_count = 1
 
         if not connect_instance.connect():
-            aleos_version = -1
+            aleos_version = "connection fail"
             basic_airlink.clog(time.ctime(time.time())+" ===>> aleos_check: Connection Failed, try again")          
         else:
             aleos_version = at_ins.get_fw_version(connect_instance)
@@ -227,8 +229,11 @@ class FwupdateAirlink(unittest.TestCase):
         '''
         result = True       
         at_ins = at_utilities.AtCommands()
-        conn_ins = connectivity.Connectivity(self.device_name)
-        connect_instance = conn_ins.connection_types()
+        conn_ins = connectivity.Connectivity(self.device_name, self.dut_ip)
+        if fwupdate_config_map["MDT"] == "YES":
+            connect_instance = conn_ins.connection_types(test_type="mdt")
+        else:
+            connect_instance = conn_ins.connection_types()
         if not connect_instance.connect():
             result = False
             basic_airlink.clog(time.ctime(time.time())+" ===>> device_check: Connection Failed")
@@ -639,8 +644,11 @@ class FwupdateAirlink(unittest.TestCase):
         fw_filename = self._get_device_prefix()+"_"+update_fw_version+".bin"
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Step:  Start running the *fwupdate command")
         
-        conn_ins = connectivity.Connectivity()
-        connect_instance = conn_ins.connection_types()
+        conn_ins = connectivity.Connectivity(self.device_name, self.dut_ip)
+        if fwupdate_config_map["MDT"] == "YES":
+            connect_instance = conn_ins.connection_types(test_type="mdt")
+        else:
+            connect_instance = conn_ins.connection_types()
         attempt_count = 1
 
         while (not connect_instance.connect()) and (attempt_count<=5):
@@ -678,26 +686,29 @@ class FwupdateAirlink(unittest.TestCase):
         rm_ver_dict = {
                 "P1008":"P1_0_0_8AP",
                 "T1043D":"T1_0_4_3DAP",
+                "1032":"T1_0_3_2AP",
                 "3552":"T3_5_5_2AP",
+                "3553":"T3_5_5_3AP",
                 "11301":"p3111301",
                 "153":"p3110503",
                 "156":"p3110506",                 
             }
         result = True
         at_ins = at_utilities.AtCommands()
-        conn_ins = connectivity.Connectivity(self.device_name)
-        connect_instance = conn_ins.connection_types()
+        conn_ins = connectivity.Connectivity(self.device_name, self.dut_ip)
+        if fwupdate_config_map["MDT"] == "YES":
+            connect_instance = conn_ins.connection_types(test_type="mdt")
+        else:
+            connect_instance = conn_ins.connection_types()
         attempt_count = 1
         
-        while (not connect_instance.connect()) and (attempt_count<=5):
+        while (not connect_instance.connect()) and (attempt_count<=100):
             aleos_version = -1
             attempt_count+=1
             basic_airlink.clog(time.ctime(time.time())+" ===>> _verify_rm: Connection Failed, try again")
         
         current_rm_version = at_ins.get_rm_version(connect_instance)
-#        basic_airlink.clog(time.ctime(time.time())+" ===>> current_rm_version: "+current_rm_version)
         rm_version_dict = rm_ver_dict[rm_version_rear]
-#        basic_airlink.clog(time.ctime(time.time())+" ===>> rm_version_dict: "+rm_version_dict)
         connect_instance.close()
         basic_airlink.clog(time.ctime(time.time())+" ===>> "+current_rm_version)
         if (rm_version_dict == "") or (not rm_version_dict in current_rm_version):
@@ -716,8 +727,11 @@ class FwupdateAirlink(unittest.TestCase):
         at_ins = at_utilities.AtCommands()
         current_aleos_version = self._aleos_check()
         
-        conn_ins = connectivity.Connectivity(self.device_name)
-        connect_instance = conn_ins.connection_types()
+        conn_ins = connectivity.Connectivity(self.device_name, self.dut_ip)
+        if fwupdate_config_map["MDT"] == "YES":
+            connect_instance = conn_ins.connection_types(test_type="mdt")
+        else:
+            connect_instance = conn_ins.connection_types()
         rm_filename = update_rm_version + ".bin"
         attempt_count = 1
 
@@ -748,8 +762,11 @@ class FwupdateAirlink(unittest.TestCase):
         at_ins = at_utilities.AtCommands()
         current_aleos_version = self._aleos_check()
         
-        conn_ins = connectivity.Connectivity(self.device_name)
-        connect_instance = conn_ins.connection_types()
+        conn_ins = connectivity.Connectivity(self.device_name, self.dut_ip)
+        if fwupdate_config_map["MDT"] == "YES":
+            connect_instance = conn_ins.connection_types(test_type="mdt")
+        else:
+            connect_instance = conn_ins.connection_types()
         device_prefix = self._get_device_prefix()
         fw_filename = device_prefix +"_"+ update_fw_version + ".bin"
         rm_filename = update_rm_version + ".bin"

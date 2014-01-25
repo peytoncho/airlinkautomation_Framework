@@ -22,8 +22,6 @@ import ts_fwupdate_at_commands
 
 test_area = "Fwupdate"
 test_sub_area=""
-airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME']
-basic_airlink.append_sys_path()
 tbd_config_map, fwupdate_config_map = basic_airlink.get_config_data(test_area,"")
 
 tc_ts_map={

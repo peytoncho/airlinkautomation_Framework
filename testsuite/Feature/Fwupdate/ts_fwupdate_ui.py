@@ -77,7 +77,7 @@ class TsFwupdateUi(unittest.TestCase):
         '''
         if fwupdate_config_map["MDT"] == "YES":
             global ip_postfix
-            ip_postfix+=1 
+            ip_postfix+=1
         return
 
 #===========================================================================

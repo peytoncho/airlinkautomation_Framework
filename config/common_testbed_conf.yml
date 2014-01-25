@@ -17,7 +17,7 @@ BROWSER : "FF"           # FF for Firefox, IE for InterExplorer
 
 # if set to YES skip immediately once meet failed test, 
 # if set to NO continue the remaining tests whether test passed or failed 
-TERMINATE_ON_FAIL: "YES"  
+TERMINATE_ON_FAIL: "NO"  
 
 RESOURCE_MONITOR : "YES"   #YES to monitor the resource usage in device, Roger
 
@@ -39,13 +39,15 @@ ACE_URL:
 #DUTS : ["DUT_GX440_MC7700_ATT"] 
 #DUTS : ["DUT_GX440_MC7750_VZW"] 
 
+DUTS : ["DUT_GX400_MC8705_ATT"] 
 #DUTS : ["DUT_GX400_MC8705_ROW"]   
 #DUTS : ["DUT_GX400_MC5728_VZW"]
 #DUTS : ["DUT_GX400_MC5728_SPT"]
 
 #DUTS : ["DUT_LS300_SL8090_ATT"] 
-DUTS : ["DUT_LS300_SL5011_VZW"]
-#DUTS : ["DUT_LS300_SL5011_SPT"] 
+#DUTS : ["DUT_LS300_SL5011_VZW"]
+#DUTS : ["DUT_LS300_SL5011_SPT"]
+#DUTS : ["DUT_LS300_SL8092_OSM"]
 
 # DUTs' basic configuration  ###################################################
 
@@ -274,6 +276,46 @@ DUT_GX400_MC8705_ROW:
     RADIO_FW_VER    :    "T1_0_4_3DAP R554 CNSZXD00000140 2012/08/21 13:10:40"
     MODEM_NAME      :    "CA1300201401004"  #SSID
     RM_TIMEOUT      :    400
+
+DUT_GX400_MC8705_ATT:       
+    MODEL           :    GX400 
+    RM_TYPE         :    "MC8705" 
+    NET_OPERATOR    :    "AT&T"  #"Rogers"
+    NET_SERVICE_TYPE:    "HSPA+"     
+    ACE_URL         :    "HTTP://192.168.13.31:9191/"
+    ACE_PORT        :    9191
+    ACE_LOGIN_WAIT  :    7                  #seconds
+    ETH_DEVICE_IP   :    "192.168.13.31"
+    ETH_SUBNET_MASK :    "255.255.255.0"
+    ETH_MAC         :    "00:14:3e:11:44:49"
+    ETH2_MAC        :    "00:14:32:ff:00:5c"
+    ETH3_MAC        :    "00:14:32:ff:00:5d"
+    ETHERNET_IP     :    192.168.13.100
+    USBNET_IP       :    192.168.14.100
+    APN             :    "wrstat.bell.ca"   #"internet.com"     #"inet.bell.ca"  
+    WAN_IP          :    184.151.218.13
+    WAN_MASK        :    255.255.255.0
+    WAN_MAC         :    00:0A:0A:00:00:01
+    WAN_NAT_IP      :    192.168.13.15
+    USB_DEVICE_IP   :    192.168.14.31
+    USB_SUBNET_MASK :    255.255.255.0
+    WIFI_DEVICE_IP  :    192.168.17.31
+    WIFI_IP         :    192.168.17.100
+    USERNAME        :    "user"
+    PASSWORD        :    "12345"
+    INTERFACE       :    "ETHERNET"     # OTA/ETHERNET/USB/WIFI/SERIAL INTERFACE 
+    CONNECTION_TYPE :    "TELNET"             # TELNET/SSH/SERIAL
+    CONNECTION_PORT :    2332
+    COM_PORT        :    COM1
+    REBOOT_TIMEOUT  :    250                #150sec = 2.5min
+    TELNET_TIMEOUT  :    3                
+    TELNET_DEBUGMODE:    YES                
+    SSH_TIMEOUT     :    3
+    SERIAL_TIMEOUT  :    3
+    ALEOS_FW_VER    :    "4.3.4.009"
+    RADIO_FW_VER    :    "T1_0_4_3DAP R554 CNSZXD00000140 2012/08/21 13:10:40"
+    MODEM_NAME      :    "CA1300201401004"  #SSID
+    RM_TIMEOUT      :    400
     
 DUT_LS300_SL8092_ROW:      
     MODEL           :    LS300
@@ -430,6 +472,42 @@ DUT_LS300_SL5011_SPT:
     MODEL           :    LS300
     RM_TYPE         :    "SL5011"
     NET_OPERATOR    :    "Sprint"     
+    NET_SERVICE_TYPE:    "EV-DO Rev.A, Roaming"   
+    ACE_URL         :    "HTTP://192.168.13.31:9191/"
+    ACE_LOGIN_WAIT  :    7                      #seconds 
+    ETH_DEVICE_IP   :    192.168.13.31
+    ETH_SUBNET_MASK :    255.255.255.0
+    ETH_MAC         :    "00:14:3e:10:c9:89"
+    ETHERNET_IP     :    192.168.13.100
+    USBNET_IP       :    192.168.14.100
+    WAN_IP          :    192.168.13.15
+    WAN_IP_STATIC   :    NO                
+    WAN_MASK        :    255.255.255.0
+    WAN_MAC         :    "00:14:3e:10:ca:6d"
+    WAN_NAT_IP      :    192.168.13.15
+    USB_DEVICE_IP   :    192.168.14.31
+    USB_SUBNET_MASK :    255.255.255.0
+    USERNAME        :    "user"
+    PASSWORD        :    "12345"
+    INTERFACE       :    ETHERNET         # OTA/ETHERNET/SERIAL/USB/WIFI INTERFACE
+    CONNECTION_TYPE :    TELNET         # TELNET/SSH/SERIAL
+    CONNECTION_PORT :    2332
+    COM_PORT        :    COM1
+    REBOOT_TIMEOUT  :    210             # 150sec = 2.5min
+    TELNET_TIMEOUT  :    3                
+    TELNET_DEBUGMODE:    YES                
+    SSH_TIMEOUT     :    3
+    SERIAL_TIMEOUT  :    3   
+    ALEOS_FW_VER    :    "4.3.4.009"
+    RADIO_FW_VER    :    "p3110506,52992 [Oct 30 2011 22:54:02]"   
+    MODEM_NAME      :    "CA719220179100F"       # Modem name/Global ID
+    HW_CONFIG       :    "161B0A06000700000000000000000000"
+    RM_TIMEOUT      :    400
+    
+DUT_LS300_SL8092_OSM:      
+    MODEL           :    LS300
+    RM_TYPE         :    "SL8092"
+    NET_OPERATOR    :    "OpenSIM"     
     NET_SERVICE_TYPE:    "EV-DO Rev.A, Roaming"   
     ACE_URL         :    "HTTP://192.168.13.31:9191/"
     ACE_LOGIN_WAIT  :    7                      #seconds 

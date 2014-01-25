@@ -29,11 +29,12 @@ import linux_airlink
 
 class Connectivity:
     
-    def __init__(self, device_name, username="user", password="12345", debug_level = "0", verbose = False):
+    def __init__(self, device_name, dut_ip = "", username="user", password="12345", debug_level = "0", verbose = False):
         
         ''' check all related items in testbed for testing '''
                 
         self.device_name = device_name
+        self.dut_ip = dut_ip
         self.username = username
         self.password = password
         self.debug_level = debug_level
@@ -89,6 +90,11 @@ class Connectivity:
         else: 
             logging.debug("\n Wrong interface type")
             
+        return connect_instance
+    
+    def telnet_interface_mdt(self):
+        tn_timeout = tbd_config_map[self.device_name]["TELNET_TIMEOUT"]
+        connect_instance = telnet_airlink.TelnetAirlink(self.dut_ip, "2332", self.username,self.password,self.verbose, tn_timeout)
         return connect_instance
 
 
@@ -150,17 +156,20 @@ class Connectivity:
             logging.debug("\n Wrong connection type")
             
     
-    def connection_types(self):
+    def connection_types(self,test_type="singel"):
         '''
         
         '''
-        if    tbd_config_map[self.device_name]["CONNECTION_TYPE"] == "TELNET":
-            return self.telnet_interface()
-        elif  tbd_config_map[self.device_name]["CONNECTION_TYPE"] == "SSH":
-            return self.ssh_interface()
-        elif  tbd_config_map[self.device_name]["CONNECTION_TYPE"] == "SERIAL":
-            return self.serial_interface()
-   
+        if test_type == "singel":
+            if tbd_config_map[self.device_name]["CONNECTION_TYPE"] == "TELNET":
+                interface = self.telnet_interface()
+            elif tbd_config_map[self.device_name]["CONNECTION_TYPE"] == "SSH":
+                interface = self.ssh_interface()
+            elif tbd_config_map[self.device_name]["CONNECTION_TYPE"] == "SERIAL":
+                interface = self.serial_interface()
+        elif test_type == "mdt":
+            interface = self.telnet_interface_mdt()
+        return interface
  
     def testbed_ready(self):
         ''' check if testbed ready 
