@@ -1,0 +1,6 @@
+messages :Jan  1 00:12:59 err ALEOS_SERVICES_ACEmanager: send failed - Error: (104) Connection reset by peer
+messages :Jan  1 00:12:59 err ALEOS_SERVICES_ACEmanager: send failed - Error: (104) Connection reset by peer
+messages :Jan  1 00:12:59 err ALEOS_SERVICES_ACEmanager: send failed - Error: (104) Connection reset by peer
+messages.0 :Jan  1 00:17:38 err ALEOS_SERVICES_ACEmanager: send failed - Error: (104) Connection reset by peer
+messages.0 :Jan  1 00:17:38 err ALEOS_SERVICES_ACEmanager: send failed - Error: (104) Connection reset by peer
+messages.0 :Jan  1 00:17:38 err ALEOS_SERVICES_ACEmanager: send failed - Error: (104) Connection reset by peer

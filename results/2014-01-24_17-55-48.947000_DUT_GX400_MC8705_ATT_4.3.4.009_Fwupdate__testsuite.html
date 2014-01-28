@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Firmware Update Test Report</title>
+    <meta name="generator" content="HTMLTestRunner 0.8.1"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    
+<style type="text/css" media="screen">
+body        { font-family: verdana, arial, helvetica, sans-serif; font-size: 80%; }
+table       { font-size: 100%; }
+pre         { }
+
+/* -- heading ---------------------------------------------------------------------- */
+h1 {
+}
+.heading {
+    margin-top: 0ex;
+    margin-bottom: 1ex;
+}
+
+.heading .attribute {
+    margin-top: 1ex;
+    margin-bottom: 0;
+}
+
+.heading .description {
+    margin-top: 4ex;
+    margin-bottom: 6ex;
+}
+
+/* -- report ------------------------------------------------------------------------ */
+#show_detail_line {
+    margin-top: 3ex;
+    margin-bottom: 1ex;
+}
+#result_table {
+    width: 80%;
+    border-collapse: collapse;
+    border: medium solid #777;
+}
+#header_row {
+    font-weight: bold;
+    color: white;
+    background-color: #777;
+}
+#result_table td {
+    border: thin solid #777;
+    padding: 2px;
+}
+#total_row  { font-weight: bold; }
+.passClass  { background-color: #6c6; }
+.failClass  { background-color: #c60; }
+.errorClass { background-color: #c00; }
+.passCase   { color: #6c6; }
+.failCase   { color: #c60; font-weight: bold; }
+.errorCase  { color: #c00; font-weight: bold; }
+.hiddenRow  { display: none; }
+.testcase   { margin-left: 2em; }
+
+
+/* -- ending ---------------------------------------------------------------------- */
+#ending {
+}
+
+</style>
+
+</head>
+<body>
+<script language="javascript" type="text/javascript"><!--
+output_list = Array();
+
+/* level - 0:Summary; 1:Failed; 2:All */
+function showCase(level) {
+    trs = document.getElementsByTagName("tr");
+    for (var i = 0; i < trs.length; i++) {
+        tr = trs[i];
+        id = tr.id;
+        if (id.substr(0,2) == 'ft') {
+            if (level < 1) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+            }
+        }
+        if (id.substr(0,2) == 'pt') {
+            if (level > 1) {
+                tr.className = '';
+            }
+            else {
+                tr.className = 'hiddenRow';
+            }
+        }
+    }
+}
+
+function showClassDetail(cid, count) {
+    var id_list = Array(count);
+    var toHide = 1;
+    for (var i = 0; i < count; i++) {
+        tid0 = 't' + cid.substr(1) + '.' + (i+1);
+        tid = 'f' + tid0;
+        tr = document.getElementById(tid);
+        if (!tr) {
+            tid = 'p' + tid0;
+            tr = document.getElementById(tid);
+        }
+        id_list[i] = tid;
+        if (tr.className) {
+            toHide = 0;
+        }
+    }
+    for (var i = 0; i < count; i++) {
+        tid = id_list[i];
+        if (toHide) {
+            document.getElementById(tid).className = 'hiddenRow';
+        }
+        else {
+            document.getElementById(tid).className = '';
+        }
+    }
+}
+
+function html_escape(s) {
+    s = s.replace(/&/g,'&amp;');
+    s = s.replace(/</g,'&lt;');
+    s = s.replace(/>/g,'&gt;');
+    return s;
+}
+
+function showOutput(id, name) {
+    var w = window.open("", //url
+                    "",
+                    "resizable,scrollbars,status,width=800,height=450");
+    d = w.document;
+    d.write("<pre>");
+    d.write(html_escape(output_list[id]));
+    d.write("\n");
+    d.write("<a href='javascript:window.close()'>close</a>\n");
+    d.write("</pre>\n");
+    d.close();
+}
+--></script>
+
+<div class='heading'>
+<h1>Firmware Update Test Report</h1>
+<p class='attribute'><strong>Start Time:</strong> 2014-01-24 17:55:48</p>
+<p class='attribute'><strong>Duration:</strong> 0:35:30.750000</p>
+<p class='attribute'><strong>Status:</strong> Failure 1</p>
+
+<p class='description'> ***log file name C:\Users\airlink\Documents\GitHub\airlinkautomation_Framework\logs\2014-01-24_17-55-48.947000_DUT_GX400_MC8705_ATT_4.3.4.009_Fwupdate__testsuite.log</p>
+</div>
+
+
+
+<p id='show_detail_line'>Show
+<a href='javascript:showCase(0)'>Summary</a>
+<a href='javascript:showCase(1)'>Failed</a>
+<a href='javascript:showCase(2)'>All</a>
+</p>
+<table id='result_table'>
+<colgroup>
+<col align='left' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+</colgroup>
+<tr id='header_row'>
+    <td>Test Group/Test case</td>
+    <td>Count</td>
+    <td>Pass</td>
+    <td>Fail</td>
+    <td>Error</td>
+    <td>View</td>
+</tr>
+
+<tr class='failClass'>
+    <td>ts_fwupdate_ui.TsFwupdateUi: TsFwupdateUi class provides a firmware update automation using Selenium UI test features.</td>
+    <td>1</td>
+    <td>0</td>
+    <td>1</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c1',1)">Detail</a></td>
+</tr>
+
+<tr id='ft1.1' class='none'>
+    <td class='failCase'><div class='testcase'>tc_fwupdate_local_roundtrip: This method will run the round trip update</div></td>
+    <td colspan='5' align='center'><a href="javascript:showOutput('ft1.1', 'tc_fwupdate_local_roundtrip: This method will run the round trip update')">fail</a>
+<script language="javascript" type="text/javascript">output_list['ft1.1'] = '\ndevice_name:DUT_GX400_MC8705_ATT\nPing to 192.168.13.31 succeed from airlink-HP with its Windows OS\nPing to 192.168.13.31 succeed from airlink-HP with its Windows OS\nPing to 192.168.13.31 succeed from airlink-HP with its Windows OS\nPing to 192.168.13.31 succeed from airlink-HP with its Windows OS\n\nStep:  Write to non volatile memory by AT command  AT\x26W\n\n\r\nATI\r\nOK\r\n\r\r\nGX400\r\r\nOK\r\r\n\n\nStep:  get radio version by AT command  ATI2\n\nATI2\r\n\r\r\nT1_0_3_2AP R361 CNSZXD00000061 2011/04/15 17:40:48\r\r\nMC8705\r\r\nOK\r\r\n\n\n\nFri Jan 24 17:56:21 2014 ===\x3E\x3E Test case: ACEManager Firmware Roundtrip upgrade \n\n\nFri Jan 24 17:56:30 2014 ===\x3E\x3E Round: 1 Started\n\n\nFri Jan 24 17:56:38 2014 ===\x3E\x3E Upgrade to: 4.3.5.006\n\nStep:  get ALEOS FW version by AT command  ATI1\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.4.009\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2013 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\n\nFri Jan 24 17:57:09 2014 ===\x3E\x3E ALEOS Build: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_dev\\data\\builds\\RmFwImages\\GX_4.3.5.006.bin\n\n\nFri Jan 24 17:57:17 2014 ===\x3E\x3E RM Build: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_dev\\data\\builds\\RmFwImages\\MC8705_ATT001_3553.bin\n\n\nstep: login to ACEmanager\n\n\nFri Jan 24 17:57:46 2014 ===\x3E\x3E Clicking firmware update button\n\n\nFri Jan 24 17:57:56 2014 ===\x3E\x3E Getting update type\n\n\nFri Jan 24 17:58:05 2014 ===\x3E\x3E Browsing ALEOS Build file\n\n\nFri Jan 24 17:58:13 2014 ===\x3E\x3E Clicking Go\n\n\nFri Jan 24 18:01:33 2014 ===\x3E\x3E Fail on wait log out\n\n\nFri Jan 24 18:01:42 2014 ===\x3E\x3E Applying ...\n\n\nFri Jan 24 18:01:50 2014 ===\x3E\x3E Applying Firmware ...\n\n\nFri Jan 24 18:08:36 2014 ===\x3E\x3E Done ALEOS Updating\n\n\nFri Jan 24 18:08:44 2014 ===\x3E\x3E Rebooting ...\n\nStep:  get ALEOS FW version by AT command  ATI1\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.5.006\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2014 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\n\nCurrent fw version: 4.3.5.006\n\nStep:  get radio version by AT command  ATI2\n\n\r\nATI2\r\nOK\r\n\r\r\nT3_5_5_3AP R703 CNSZXD00000155 2013/09/28 16:32:14\r\r\nMC8705\r\r\nOK\r\r\n\n\n\nFri Jan 24 18:13:35 2014 ===\x3E\x3E Test case Completed\n\n\nFri Jan 24 18:13:43 2014 ===\x3E\x3E Downgrade to: 4.3.4.009\n\nStep:  get ALEOS FW version by AT command  ATI1\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.5.006\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2014 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\n\nFri Jan 24 18:14:13 2014 ===\x3E\x3E ALEOS Build: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_dev\\data\\builds\\RmFwImages\\GX_4.3.4.009.bin\n\n\nFri Jan 24 18:14:21 2014 ===\x3E\x3E RM Build: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_dev\\data\\builds\\RmFwImages\\MC8705_ATT001_1032.bin\n\n\nstep: login to ACEmanager\n\n\nFri Jan 24 18:14:49 2014 ===\x3E\x3E Clicking firmware update button\n\n\nFri Jan 24 18:14:56 2014 ===\x3E\x3E Getting update type\n\n\nFri Jan 24 18:15:05 2014 ===\x3E\x3E Browsing ALEOS Build file\n\n\nFri Jan 24 18:15:14 2014 ===\x3E\x3E Clicking Go\n\n\nFri Jan 24 18:18:25 2014 ===\x3E\x3E Fail on wait log out\n\n\nFri Jan 24 18:18:30 2014 ===\x3E\x3E Applying ...\n\n\nFri Jan 24 18:18:34 2014 ===\x3E\x3E Applying Firmware ...\n\n\nFri Jan 24 18:25:20 2014 ===\x3E\x3E Done ALEOS Updating\n\n\nFri Jan 24 18:25:29 2014 ===\x3E\x3E Rebooting ...\n\nStep:  get ALEOS FW version by AT command  ATI1\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.5.006\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2014 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\n\nCurrent fw version: 4.3.5.006\n\n\nfw version does not match\n\n\nCurrent fw version: connection fail\n\n\nfw version does not match\n\n\nCurrent fw version: connection fail\n\n\nfw version does not match\n\nStep:  get ALEOS FW version by AT command  ATI1\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.4.009\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2013 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\n\nCurrent fw version: 4.3.4.009\nTraceback (most recent call last):\n  File \"C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\testsuite\\Feature\\Fwupdate\\ts_fwupdate_ui.py\", line 112, in tc_fwupdate_local_roundtrip\n    self.fw_ins.fwrmupdate_ui_roundtrip(self.fw_from, self.fw_to)\n  File \"C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\testsuite\\Feature\\Fwupdate\\fwupdate_airlink.py\", line 97, in fwrmupdate_ui_roundtrip\n    self.fail(\"Test failed. Reason: \"+result)\nAssertionError: Test failed. Reason: ALEOS and RM verify: False\n';</script>
+</td>
+</tr>
+
+<tr id='total_row'>
+    <td>Total</td>
+    <td>1</td>
+    <td>0</td>
+    <td>1</td>
+    <td>0</td>
+    <td>&nbsp;</td>
+</tr>
+</table>
+
+<div id='ending'>&nbsp;</div>
+
+</body>
+</html>
