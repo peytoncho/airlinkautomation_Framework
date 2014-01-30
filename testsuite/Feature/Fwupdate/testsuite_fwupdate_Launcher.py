@@ -90,7 +90,6 @@ def pickTestcase(combo_list):
     return pick_list
 
 
-
 ####################################################
 #  Firmware Update test automation main
 ####################################################
