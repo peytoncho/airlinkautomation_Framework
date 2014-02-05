@@ -95,6 +95,7 @@ class ConfigFrame(wx.Frame):
 		self.cancleButton = wx.Button(panel, -1, "Cancel", pos=(550, 330))
 		
 		self.Bind(wx.EVT_BUTTON, self.onClickOK, self.okButton)
+		self.Bind(wx.EVT_BUTTON,self.onClickCancel, self.cancleButton)
 		
 	def makeSdtConfigPage(self,parent):
 		sdtPanel = wx.Panel(parent)
@@ -175,9 +176,7 @@ class ConfigFrame(wx.Frame):
 		self.aleos_to_choice = wx.Choice(mdtPanel, -1, (400, 57), choices=ALEOS_list)
 		self.aleos_from_choice.SetSelection(0)
 		self.aleos_to_choice.SetSelection(0)
-		
-			
-		
+				
 		return mdtPanel
 	
 	def makeFtpConfigPage(self,parent):
@@ -198,10 +197,9 @@ class ConfigFrame(wx.Frame):
 # 		str2 = self.aleos_from_choice.GetStringSelection()
 # 		str3 = self.aleos_to_choice.GetStringSelection()		
 		self.Close()
-		pass
 	
 	def onClickCancel(self,event):
-		pass
+		self.Close()
         
 if __name__ == '__main__':
     app = FwupdateApp(False)
