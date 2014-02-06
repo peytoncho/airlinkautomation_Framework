@@ -1,8 +1,12 @@
 import wx
+import fwupdate_controller
+
+fwupdate_ctr = fwupdate_controller.FwupdateController()
 
 class FwupdateApp(wx.App):
 	def OnInit(self):
-		frame = MainFrame("Fwupdate Automaiton GUI", (50, 60), (340, 400))
+		
+		frame = MainFrame("Fwupdate Automaiton GUI", (50, 60), (340, 450))
 		frame.Show()
 		self.SetTopWindow(frame)
 		return True
@@ -11,33 +15,56 @@ class MainFrame(wx.Frame):
 	def __init__(self, title, pos, size):
 		wx.Frame.__init__(self, None, -1, title, pos, size)
 		panel = wx.Panel(self, -1)
-		box = wx.StaticBox(panel, -1, "Info", (20,20),(280,250))
-		self.infoButton = wx.Button(box, -1, "MDT", pos=(90, 220))
-		self.configButton = wx.Button(panel, -1, "Config", pos=(60, 300))
-		self.runButton = wx.Button(panel, -1, "Run", pos=(160, 300))		
+		self.box = wx.StaticBox(panel, -1, "Info", (20,20),(280,300))
+		self.infoButton = wx.Button(self.box, -1, "MDT", pos=(90, 270))
+		self.configButton = wx.Button(panel, -1, "Config", pos=(60, 350))
+		self.runButton = wx.Button(panel, -1, "Run", pos=(160, 350))		
+		
+		#Call function to get all info
+		self.fwupdate_map = fwupdate_ctr.loadGuiYmlFile()
 		
 		#sdt info
-		self.deviceName = wx.StaticText(box, -1, "Device Name: ", (20,30))
-		self.aleosFrom = wx.StaticText(box, -1, "ALEOS From: ", (20,60))
-		self.aleosTo = wx.StaticText(box, -1, "ALEOS To: ", (20,90))
-		self.testMethod = wx.StaticText(box, -1, "Test method: ", (20,120))
-		self.updateType = wx.StaticText(box, -1, "Update Type: ", (20,150))
+		self.deviceNameLabel = wx.StaticText(self.box, -1, "Device Name: ", (20,30))
+		self.aleosFromLabel = wx.StaticText(self.box, -1, "ALEOS From: ", (20,60))
+		self.aleosToLabel = wx.StaticText(self.box, -1, "ALEOS To: ", (20,90))
+		self.testMethodLabel = wx.StaticText(self.box, -1, "Test method: ", (20,120))
+		self.updateTypeLabel = wx.StaticText(self.box, -1, "Update Type: ", (20,150))
+		
+		self.deviceName = wx.StaticText(self.box, -1, self.fwupdate_map['DEVICE_NAME'], (100,30))
+		self.aleosFrom  = wx.StaticText(self.box, -1, self.fwupdate_map['ALEOS_FROM'], (100,60))
+		self.aleosTo = wx.StaticText(self.box, -1, self.fwupdate_map['ALEOS_TO'], (100,90))
+		self.testMethod = wx.StaticText(self.box, -1, self.fwupdate_map['TEST_METHOD'], (100,120))
+		self.updateType = wx.StaticText(self.box, -1, self.fwupdate_map['UPDATE_TYPE'], (100,150))		
 		
 		#mdt info
-		self.mdt = wx.StaticText(box, -1, "", (20,30))
-		self.device1 = wx.StaticText(box, -1, "", (20,60))
-		self.device2 = wx.StaticText(box, -1, "", (20,90))
-		self.device3 = wx.StaticText(box, -1, "", (20,120))
-		self.device4 = wx.StaticText(box, -1, "", (20,150))
-		self.device5 = wx.StaticText(box, -1, "", (20,180))
+		self.mdtLabel = wx.StaticText(self.box, -1, "", (20,30))
+		self.device1Label = wx.StaticText(self.box, -1, "", (20,60))
+		self.device2Label = wx.StaticText(self.box, -1, "", (20,90))
+		self.device3Label = wx.StaticText(self.box, -1, "", (20,120))
+		self.device4Label = wx.StaticText(self.box, -1, "", (20,150))
+		self.device5Label = wx.StaticText(self.box, -1, "", (20,180))
+		self.mdt_aleosFromLabel = wx.StaticText(self.box, -1, "", (20,210))
+		self.mdt_aleosToLabel = wx.StaticText(self.box, -1, "", (20,240))
 		
-		
-		
-		
-		
+		self.mdt = wx.StaticText(self.box, -1, "", (100,30))
+		self.device1 = wx.StaticText(self.box, -1, "", (100,60))
+		self.device2 = wx.StaticText(self.box, -1, "", (100,90))
+		self.device3 = wx.StaticText(self.box, -1, "", (100,120))
+		self.device4 = wx.StaticText(self.box, -1, "", (100,150))
+		self.device5 = wx.StaticText(self.box, -1, "", (100,180))		
+		self.mdt_aleosFrom = wx.StaticText(self.box, -1, "", (100,210))
+		self.mdt_aleosTo = wx.StaticText(self.box, -1, "", (100,240))
+						
 		#set events to the components
 		self.Bind(wx.EVT_BUTTON, self.onClickConfig, self.configButton)
 		self.Bind(wx.EVT_BUTTON, self.onClickInfoChange, self.infoButton)
+	
+	def onClickRefresh(self,event):
+		fwupdate_map = fwupdate_ctr.loadGuiYmlFile()
+		
+		
+		fwupdate_ctr.getMapData(fwupdate_map, key)
+	
 		
 	def onClickConfig(self,event):
 		frame = ConfigFrame("Configuration", (50,50), (700, 400))
@@ -51,32 +78,64 @@ class MainFrame(wx.Frame):
 			self.deviceName.SetLabelText("")
 			self.testMethod.SetLabelText("")
 			self.updateType.SetLabelText("")
+			self.aleosFromLabel.SetLabelText("")
+			self.aleosToLabel.SetLabelText("")
+			self.deviceNameLabel.SetLabelText("")
+			self.testMethodLabel.SetLabelText("")
+			self.updateTypeLabel.SetLabelText("")
+			self.aleosFrom.SetLabelText("")
+			self.aleosTo.SetLabelText("")
 			
-			self.mdt.SetLabelText("MDT: ")
-			self.device1.SetLabelText("Device 1: ")
-			self.device2.SetLabelText("Device 2: ")
-			self.device3.SetLabelText("Device 3: ")
-			self.device4.SetLabelText("Device 4: ")
-			self.device5.SetLabelText("Device 5: ")
+			self.mdtLabel.SetLabelText("MDT: ")
+			self.device1Label.SetLabelText("Device 1: ")
+			self.device2Label.SetLabelText("Device 2: ")
+			self.device3Label.SetLabelText("Device 3: ")
+			self.device4Label.SetLabelText("Device 4: ")
+			self.device5Label.SetLabelText("Device 5: ")
+			self.mdt_aleosFromLabel.SetLabelText("ALEOS From: ")
+			self.mdt_aleosToLabel.SetLabelText("ALEOS To: ")
 			
-			self.aleosFrom.SetPosition((20,210))
-			self.aleosTo.SetPosition((20,240))
-			
+			self.mdt.SetLabelText(self.fwupdate_map['MDT'])
+			self.device1.SetLabelText(self.fwupdate_map['DEVICE_1'])
+			self.device2.SetLabelText(self.fwupdate_map['DEVICE_2'])
+			self.device3.SetLabelText(self.fwupdate_map['DEVICE_3'])
+			self.device4.SetLabelText(self.fwupdate_map['DEVICE_4'])
+			self.device5.SetLabelText(self.fwupdate_map['DEVICE_5'])
+			self.mdt_aleosFrom.SetLabelText(self.fwupdate_map['MDT_ALEOS_FROM'])
+			self.mdt_aleosTo.SetLabelText(self.fwupdate_map['MDT_ALEOS_TO'])			
+
 		else:
 			self.infoButton.SetLabel("MDT")
+			self.mdtLabel.SetLabelText("")
+			self.device1Label.SetLabelText("")
+			self.device2Label.SetLabelText("")
+			self.device3Label.SetLabelText("")
+			self.device4Label.SetLabelText("")
+			self.device5Label.SetLabelText("")
+			self.mdt_aleosFromLabel.SetLabelText("")
+			self.mdt_aleosToLabel.SetLabelText("")
 			self.mdt.SetLabelText("")
 			self.device1.SetLabelText("")
 			self.device2.SetLabelText("")
 			self.device3.SetLabelText("")
 			self.device4.SetLabelText("")
 			self.device5.SetLabelText("")
+			self.mdt_aleosFrom.SetLabelText("")
+			self.mdt_aleosTo.SetLabelText("")			
 			
-			self.deviceName.SetLabelText("Device Name: ")
-			self.testMethod.SetLabelText("Test method: ")
-			self.updateType.SetLabelText("Update Type: ")
-
-			self.aleosFrom.SetPosition((20,60))
-			self.aleosTo.SetPosition((20,90))
+			self.deviceNameLabel.SetLabelText("Device Name: ")
+			self.testMethodLabel.SetLabelText("Test method: ")
+			self.updateTypeLabel.SetLabelText("Update Type: ")
+			self.aleosFromLabel.SetLabelText("ALEOS From: ")
+			self.aleosToLabel.SetLabelText("ALEOS To: ")
+			self.aleosFrom.SetLabelText("")
+			self.aleosTo.SetLabelText("")			
+			
+			self.deviceName.SetLabelText(self.fwupdate_map['DEVICE_NAME'])
+			self.aleosFrom.SetLabelText(self.fwupdate_map['ALEOS_FROM'])
+			self.aleosTo.SetLabelText(self.fwupdate_map['ALEOS_TO'])
+			self.testMethod.SetLabelText(self.fwupdate_map['TEST_METHOD'])
+			self.updateType.SetLabelText(self.fwupdate_map['UPDATE_TYPE'])
 
 class ConfigFrame(wx.Frame):
 	def __init__(self,title,pos,size):
@@ -97,6 +156,10 @@ class ConfigFrame(wx.Frame):
 		self.Bind(wx.EVT_BUTTON, self.onClickOK, self.okButton)
 		self.Bind(wx.EVT_BUTTON,self.onClickCancel, self.cancleButton)
 		
+		self.fwupdate_info_map = fwupdate_ctr.getInfoData()
+		self.device_list = self.fwupdate_info_map['DEVICE_LIST']
+		self.aleos_list = self.fwupdate_info_map['ALEOS_LIST']
+		
 	def makeSdtConfigPage(self,parent):
 		sdtPanel = wx.Panel(parent)
 		
@@ -110,12 +173,8 @@ class ConfigFrame(wx.Frame):
 		#Control components
 		
 		#Devices name
-		Device_list = ["DUT_GX400_MC8705_OSM",
-               "DUT_GX400_MC8705_ATT",
-               "DUT_GX400_MC8705_BEL",
-               "DUT_GX400_MC8705_TLS",
-               "DUT_GX400_MC8705_OSM"]
-		self.device_choice = wx.Choice(sdtPanel, -1, (110, 27), choices=Device_list)
+		
+		self.device_choice = wx.Choice(sdtPanel, -1, (110, 27), choices=self.device_list)
 		self.device_choice.SetSelection(0)
 		
 		#Test Method
@@ -124,9 +183,9 @@ class ConfigFrame(wx.Frame):
 		self.method_choice.SetSelection(0)
 		
 		#ALEOS Choices
-		ALEOS_list = ["4.3.3a.014","4.3.4.009","4.3.5.008","4.3.5.009","4.3.5.010"]
-		self.aleos_from_choice = wx.Choice(sdtPanel, -1, (110, 87), choices=ALEOS_list,)
-		self.aleos_to_choice = wx.Choice(sdtPanel, -1, (110, 117), choices=ALEOS_list)
+		
+		self.aleos_from_choice = wx.Choice(sdtPanel, -1, (110, 87), choices=self.aleos_list,)
+		self.aleos_to_choice = wx.Choice(sdtPanel, -1, (110, 117), choices=self.aleos_list)
 		self.aleos_from_choice.SetSelection(0)
 		self.aleos_to_choice.SetSelection(0)
 		
@@ -158,11 +217,11 @@ class ConfigFrame(wx.Frame):
                "DUT_GX400_MC8705_TLS",
                "DUT_GX400_MC8705_OSM"]
 		
-		self.device1_choice = wx.Choice(mdtPanel, -1, (110, 57), choices=Device_list)
-		self.device2_choice = wx.Choice(mdtPanel, -1, (110, 87), choices=Device_list)
-		self.device3_choice = wx.Choice(mdtPanel, -1, (110, 117), choices=Device_list)
-		self.device4_choice = wx.Choice(mdtPanel, -1, (110, 147), choices=Device_list)
-		self.device5_choice = wx.Choice(mdtPanel, -1, (110, 177), choices=Device_list)
+		self.device1_choice = wx.Choice(mdtPanel, -1, (110, 57), choices=self.device_list)
+		self.device2_choice = wx.Choice(mdtPanel, -1, (110, 87), choices=self.device_list)
+		self.device3_choice = wx.Choice(mdtPanel, -1, (110, 117), choices=self.device_list)
+		self.device4_choice = wx.Choice(mdtPanel, -1, (110, 147), choices=self.device_list)
+		self.device5_choice = wx.Choice(mdtPanel, -1, (110, 177), choices=self.device_list)
 		self.device1_choice.SetSelection(0)
 #		self.device1_choice.Enable(False)
 		self.device2_choice.SetSelection(0)
@@ -193,6 +252,10 @@ class ConfigFrame(wx.Frame):
 		return ftpPanel
 	
 	def onClickOK(self,event):
+		fwupdate_map = fwupdate_ctr.loadGuiYmlFile()
+		
+		fwupdate_ctr.setMapData(fwupdate_map, key, value)
+		
 # 		str1 = self.device_choice.GetStringSelection()
 # 		str2 = self.aleos_from_choice.GetStringSelection()
 # 		str3 = self.aleos_to_choice.GetStringSelection()		

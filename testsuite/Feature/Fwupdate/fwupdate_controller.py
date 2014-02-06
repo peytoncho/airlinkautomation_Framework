@@ -6,57 +6,33 @@ class FwupdateController():
     
     def __init__(self):
         pass
-    
-    #get info from config files
-    def getDeviceName(self):
-        pass
        
-    def getAleosFrom(self):
-        pass
+    def loadGuiYmlFile(self):
+        with open('fwupdate_GUI.yml','r') as stream:
+            fwupdate_map = yaml.load(stream)
+        return fwupdate_map
+    
+    def loadInfoYmlFile(self):
+        with open('fwupdate_info.yml','r') as stream:
+            fwupdate_info_map = yaml.load(stream)
+        return fwupdate_info_map
+    
+    def dumpYmlFile(self, fwupdate_map):    
+        stream = open('fwupdate_GUI.yml','w')
+        yaml.dump(fwupdate_map, stream, default_flow_style=False)
+        stream.close()
+    
+    def getMapData(self, fwupdate_map, key):
+        value = fwupdate_map[key]
+        return value
+    
+    def setMapData(self, fwupdate_map, key, value):
+        fwupdate_map[key] = value
         
-    def getAleosTo(self):
-        pass
-    
-    def getTestMethod(self):
-        pass
-    
-    def getUpgradeType(self):
-        pass
-    
-    def getRoundTripTimes(self):
-        pass
-    
-    def getMdtSwitch(self):
-        pass
-    
-    def getMdtDevices(self):
-        pass
-    
-    #set methods
-    def setDeviceName(self):
-        pass
-    
-    def setAleosFrom(self):
-        pass
-
-    def setAleosTo(self):
-        pass
-    
-    def setTestMethod(self):
-        pass
-
-    def setUpgradeType(self):
-        pass   
-
-    def setRoundTripTimes(self):
-        pass
-    
-    def setMdtSwitch(self):
-        pass
-    
-    def setMdtDevices(self):
-        pass
+    def getInfoData(self):
     
     
-    
+if __name__ == '__main__':
+    obj = FwupdateController()
+    obj.setDeviceName()   
     
