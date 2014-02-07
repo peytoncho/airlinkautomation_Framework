@@ -194,16 +194,14 @@ def _colorlog(msg, fgcolor = None, bgcolor = None):
                     bgcolor_num= str(bgcolor_map[bgcolor])+'m'
         
         if ft_fail_flag or bg_fail_flag:
-            logging.debug('\n'+ msg)
-            slog('\n'+'\x1b[0m'+msg+"   (Please pass the correct color)")
+			sys.__stdout__.write('\n'+'\x1b[0m'+msg+"   (Please pass the correct color)")
         else:
             if ftcolor_num == "0m":
                 ftcolor_num = str(fgcolor_map["BLACK"])+'m'
-            logging.debug('\n'+ msg)         
-            slog('\n'+'\x1b[' + bgcolor_num + '\x1b[' + ftcolor_num + msg)
+            sys.__stdout__.write('\n'+'\x1b[' + bgcolor_num + '\x1b[' + ftcolor_num + msg)
     else:
-        logging.debug('\n'+ msg)
-        slog('\n'+'\x1b[0m'+msg)
+        sys.__stdout__.write('\n'+'\x1b[0m'+msg)
+    sys.__stdout__.flush()
     
 def clog(msg, fgcolor = None, bgcolor = None):
     '''
@@ -216,9 +214,7 @@ def clog(msg, fgcolor = None, bgcolor = None):
         None
     
     '''
-    p = Process(target = _colorlog, args = (msg, fgcolor, bgcolor,))
-    p.start()
-    p.join()
+    _colorlog(msg, fgcolor,bgcolor)
 
 def cslog(msg, fgcolor = None, bgcolor = None):
     '''
@@ -231,9 +227,7 @@ def cslog(msg, fgcolor = None, bgcolor = None):
         None
     '''    
     slog('\n'+msg)
-    p = Process(target = _colorlog, args = (msg, fgcolor, bgcolor,))
-    p.start()
-    p.join() 
+    _colorlog(msg, fgcolor,bgcolor) 
     
 def test_report(filename, msg):
     ''' Print out results/messages to test report file  and console

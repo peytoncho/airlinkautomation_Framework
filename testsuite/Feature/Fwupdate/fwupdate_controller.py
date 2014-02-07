@@ -29,10 +29,8 @@ class FwupdateController():
     def setMapData(self, fwupdate_map, key, value):
         fwupdate_map[key] = value
         
-    def getInfoData(self):
     
-    
-if __name__ == '__main__':
-    obj = FwupdateController()
-    obj.setDeviceName()   
+# if __name__ == '__main__':
+#     obj = FwupdateController()
+#     obj.setDeviceName()   
     

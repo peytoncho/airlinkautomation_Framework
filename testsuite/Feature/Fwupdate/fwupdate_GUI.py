@@ -139,6 +139,10 @@ class MainFrame(wx.Frame):
 
 class ConfigFrame(wx.Frame):
 	def __init__(self,title,pos,size):
+		self.fwupdate_info_map = fwupdate_ctr.loadInfoYmlFile()
+		self.device_list = self.fwupdate_info_map['DEVICE_LIST']
+		self.aleos_list = self.fwupdate_info_map['ALEOS_LIST']
+
 		wx.Frame.__init__(self, None, -1, title, pos, size)
 		panel = wx.Panel(self)
 		tabNB = wx.Notebook(panel,-1,size=(680, 320), style=wx.BK_DEFAULT)
@@ -156,9 +160,7 @@ class ConfigFrame(wx.Frame):
 		self.Bind(wx.EVT_BUTTON, self.onClickOK, self.okButton)
 		self.Bind(wx.EVT_BUTTON,self.onClickCancel, self.cancleButton)
 		
-		self.fwupdate_info_map = fwupdate_ctr.getInfoData()
-		self.device_list = self.fwupdate_info_map['DEVICE_LIST']
-		self.aleos_list = self.fwupdate_info_map['ALEOS_LIST']
+
 		
 	def makeSdtConfigPage(self,parent):
 		sdtPanel = wx.Panel(parent)
@@ -172,8 +174,7 @@ class ConfigFrame(wx.Frame):
 		
 		#Control components
 		
-		#Devices name
-		
+		#Devices name		
 		self.device_choice = wx.Choice(sdtPanel, -1, (110, 27), choices=self.device_list)
 		self.device_choice.SetSelection(0)
 		
@@ -182,9 +183,8 @@ class ConfigFrame(wx.Frame):
 		self.method_choice = wx.Choice(sdtPanel, -1, (110, 57), choices=method_list)
 		self.method_choice.SetSelection(0)
 		
-		#ALEOS Choices
-		
-		self.aleos_from_choice = wx.Choice(sdtPanel, -1, (110, 87), choices=self.aleos_list,)
+		#ALEOS Choices		
+		self.aleos_from_choice = wx.Choice(sdtPanel, -1, (110, 87), choices=self.aleos_list)
 		self.aleos_to_choice = wx.Choice(sdtPanel, -1, (110, 117), choices=self.aleos_list)
 		self.aleos_from_choice.SetSelection(0)
 		self.aleos_to_choice.SetSelection(0)
@@ -209,14 +209,9 @@ class ConfigFrame(wx.Frame):
 		mdt_switch = ["NO","YES"]
 		self.mdtCheckBox = wx.Choice(mdtPanel, -1, (110, 27), choices=mdt_switch)
 		self.mdtCheckBox.SetSelection(0)
+		self.Bind(wx.EVT_CHOICE,self.onToggleMdt,self.mdtCheckBox)
 		
-		#Devices name
-		Device_list = ["DUT_GX400_MC8705_OSM",
-               "DUT_GX400_MC8705_ATT",
-               "DUT_GX400_MC8705_BEL",
-               "DUT_GX400_MC8705_TLS",
-               "DUT_GX400_MC8705_OSM"]
-		
+		#Devices name		
 		self.device1_choice = wx.Choice(mdtPanel, -1, (110, 57), choices=self.device_list)
 		self.device2_choice = wx.Choice(mdtPanel, -1, (110, 87), choices=self.device_list)
 		self.device3_choice = wx.Choice(mdtPanel, -1, (110, 117), choices=self.device_list)
@@ -230,9 +225,8 @@ class ConfigFrame(wx.Frame):
 		self.device5_choice.SetSelection(0)
 		 
 		#ALEOS Choices
-		ALEOS_list = ["4.3.3a.014","4.3.4.009","4.3.5.008","4.3.5.009","4.3.5.010"]
-		self.aleos_from_choice = wx.Choice(mdtPanel, -1, (400, 27), choices=ALEOS_list,)
-		self.aleos_to_choice = wx.Choice(mdtPanel, -1, (400, 57), choices=ALEOS_list)
+		self.aleos_from_choice = wx.Choice(mdtPanel, -1, (400, 27), choices=self.aleos_list)
+		self.aleos_to_choice = wx.Choice(mdtPanel, -1, (400, 57), choices=self.aleos_list)
 		self.aleos_from_choice.SetSelection(0)
 		self.aleos_to_choice.SetSelection(0)
 				
@@ -251,10 +245,30 @@ class ConfigFrame(wx.Frame):
 			
 		return ftpPanel
 	
+	
+	def onToggleMdt(self,event):
+		choice = self.mdtCheckBox.GetCurrentSelection()
+		if choice is 0:
+			self.device1_choice.Enable(False)
+			self.device2_choice.Enable(False)
+			self.device3_choice.Enable(False)
+			self.device4_choice.Enable(False)
+			self.device5_choice.Enable(False)
+		else:
+			self.device1_choice.Enable(True)
+			self.device2_choice.Enable(True)
+			self.device3_choice.Enable(True)
+			self.device4_choice.Enable(True)
+			self.device5_choice.Enable(True)			
+		
 	def onClickOK(self,event):
 		fwupdate_map = fwupdate_ctr.loadGuiYmlFile()
 		
-		fwupdate_ctr.setMapData(fwupdate_map, key, value)
+		for field in self.fwupdate_info_map['GUI_FIELD_LIST']:
+			fwupdate_ctr.setMapData(fwupdate_map, field, value)
+		
+		fwupdate_ctr.dumpYmlFile(fwupdate_map)
+#		fwupdate_ctr.setMapData(fwupdate_map, key, value)
 		
 # 		str1 = self.device_choice.GetStringSelection()
 # 		str2 = self.aleos_from_choice.GetStringSelection()

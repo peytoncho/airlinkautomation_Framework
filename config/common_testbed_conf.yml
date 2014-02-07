@@ -37,14 +37,15 @@ ACE_URL:
 #DUTS : ["DUT_ES440_MC7750_VZW"] 
 
 #DUTS : ["DUT_GX440_MC7700_ATT"] 
-#DUTS : ["DUT_GX440_MC7750_VZW"] 
+#DUTS : ["DUT_GX440_MC7750_VZW"]
+#DUTS : ["DUT_GX440_MC7700_BEL"] 
 
 #DUTS : ["DUT_GX400_MC8705_ATT"] 
-DUTS :  ["DUT_GX400_MC8705_ROW"]   
+#DUTS :  ["DUT_GX400_MC8705_ROW"]   
 #DUTS : ["DUT_GX400_MC5728_VZW"]
 #DUTS : ["DUT_GX400_MC5728_SPT"]
 
-#DUTS : ["DUT_LS300_SL8090_ATT"] 
+DUTS : ["DUT_LS300_SL8090_ATT"] 
 #DUTS : ["DUT_LS300_SL5011_VZW"]
 #DUTS : ["DUT_LS300_SL5011_SPT"]
 #DUTS : ["DUT_LS300_SL8092_OSM"]
@@ -202,6 +203,45 @@ DUT_GX440_MC7750_VZW:
     MODEL           :    GX440
     RM_TYPE         :    MC7750
     NET_OPERATOR    :    Verizon    
+    NET_SERVICE_TYPE:    "EV-DO Rev.A, Roaming"     
+    ACE_URL         :    "HTTP://192.168.13.31:9191/"
+    ACE_LOGIN_WAIT  :    7                  #seconds
+    ETH_DEVICE_IP   :    192.168.13.31
+    ETH_SUBNET_MASK :    255.255.255.0
+    ETH_MAC         :    00:14:3e:11:2b:01
+    ETH2_MAC        :    00:14:3e:11:2b:01
+    ETH3_MAC        :    00:14:3e:11:2b:01
+    ETHERNET_IP     :    192.168.13.100
+    USBNET_IP       :    192.168.14.100
+    APN             :    "vzwinternet"
+    WAN_IP          :    192.168.13.15
+    WAN_MASK        :    255.255.255.0
+    WAN_MAC         :    00:0A:0A:00:00:01
+    WAN_NAT_IP      :    192.168.13.15
+    WIFI_DEVICE_IP  :    192.168.17.31
+    WIFI_IP         :    192.168.17.100
+    USB_DEVICE_IP   :    192.168.14.31
+    USB_SUBNET_MASK :    255.255.255.0
+    USERNAME        :    "user"
+    PASSWORD        :    "12345"
+    INTERFACE       :    ETHERNET      # OTA/ETHERNET/SERIAL/USB/WIFI INTERFACE 
+    CONNECTION_TYPE :    TELNET             # TELNET/SSH/SERIAL
+    CONNECTION_PORT :    2332
+    COM_PORT        :    COM1
+    REBOOT_TIMEOUT  :    180             #180sec = 3min
+    TELNET_TIMEOUT  :    3                
+    TELNET_DEBUGMODE:    YES                
+    SSH_TIMEOUT     :    3
+    SERIAL_TIMEOUT  :    3
+    ALEOS_FW_VER    :    "4.3.4.009"
+    RADIO_FW_VER    :    "SWI9600M_03.05.10.06ap r5595 carmd-en-10527 2012/11/12 15:07:45" 
+    MODEM_NAME      :    "CA1256107161002"
+    RM_TIMEOUT      :    400
+
+DUT_GX440_MC7700_BEL: 
+    MODEL           :    GX440
+    RM_TYPE         :    MC7700
+    NET_OPERATOR    :    Bell    
     NET_SERVICE_TYPE:    "EV-DO Rev.A, Roaming"     
     ACE_URL         :    "HTTP://192.168.13.31:9191/"
     ACE_LOGIN_WAIT  :    7                  #seconds
