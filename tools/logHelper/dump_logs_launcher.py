@@ -1,21 +1,21 @@
 from ssh_airlink import SshAirlink 
 import io
-import os
+import glob, os
 import time
 import sys, getopt
 
 def dump_log_file():
+    
     time_range = 0
     time_flag = False
     all_flag  = False
     word_flag = False
     file_flag = False
     word = None
-    filename = None
     i = 0
     msg = "Done"
     try:
-      opts, args = getopt.getopt(sys.argv[1:],"at:w:f:",["time=","word=","file="])
+      opts, args = getopt.getopt(sys.argv[1:],"at:w:f",["time=","word="])
     except getopt.GetoptError:
       print 'get arguments error'
       sys.exit(2)
@@ -30,10 +30,11 @@ def dump_log_file():
             word = arg
             word_flag = True
         elif opt == '-f':
-            filename = arg
             file_flag = True
                
     if time_flag:
+        if not cleanup_files():
+            return 
         while time_flag:
             i+=1
             sys.stdout.write("Check ALEOS log after: "+time_range+" minute(s)\n")
@@ -47,23 +48,58 @@ def dump_log_file():
             
     else:
         if all_flag:
+            if not cleanup_files():
+                return
             write_logs()
             msg = "Dump all log message"
         elif word_flag and not word is None and (not file_flag):
+            if not cleanup_files():
+                return
             write_logs(word=word)
             msg = "Dump log message contains word :"+word
-        elif word_flag and not word is None and file_flag and not filename is None:
-            get_info(filename,word=word) 
+        elif word_flag and not word is None and file_flag:
+            get_info(word=word) 
         elif file_flag and not word_flag:
             msg = "Please pass the key word you want to find in log message"
+        else:
+            msg = "Help:\n\
+            -a: Dump all log message from ACEManager\n\
+            -f: Dump the log file with keyword (need to work with -w)\n\
+            -t: Define time range to dump the log (in minute)\n\
+            -w: Define keyword when dumping the log or in dumped txt log file"
     print msg
 
-def write_logs(word=None):
-    ssh = SshAirlink(hostname='192.168.13.3')
+def cleanup_files():
+    clean_flag = False
+    confirm = raw_input("Continue to clean log file? (Y/N)")
+    confirm_lst = ['Y','N','y','n']    
+    while not confirm in confirm_lst:
+        print "Please input Y or N..."
+        confirm = raw_input("Continue to clean log file? (Y/N)")
+   
+    if confirm is "Y" or confirm is "y":
+        os.chdir("./dump_data/dump_log/")
+        filelist = glob.glob("*.txt")
+        for f in filelist:
+            os.remove(f)
+        print "Clean up the folder..."
+        clean_flag = True
+    elif confirm is "N" or confirm is "n":
+        print "Cancelled clean up..."
+    
+    return clean_flag
+
+def write_logs(word=None):    
+    ssh = SshAirlink(hostname='192.168.13.31')
+#    cleanup_files()
     messages = ['messages','messages.0','messages.1','messages.2','messages.3','messages.4']
     
-    if not ssh.connect():
-        return None
+    
+    for i in range(3):
+        if ssh.connect():
+            break
+        else:
+            time.sleep(60)
     
     file_exist_flag = False
         
@@ -77,11 +113,11 @@ def write_logs(word=None):
                 time_stamp_str = time_stamp()
                 log_filename = time_stamp_str+'_logmsg.txt'
                 print time_stamp_str+": File created, Please Check"
-                os.chdir("./dump_data/dump_log/")
+#                os.chdir("./dump_data/dump_log/")
                 fp = file(log_filename,'a')
                 file_exist_flag = True
             for line in output:                               
-                fp.write(filename+" :"+line)
+                fp.write(line)
     if file_exist_flag:
         fp.close()
     
@@ -92,26 +128,29 @@ def time_stamp():
     time_stamp = time_stamp = time.strftime("%Y-%b-%d_%H-%M-%S")
     return time_stamp
 
-def get_info(logfile, word=None):
-    print "Find \""+word+"\" in the dumped log file \""+logfile+"\""
+def get_info(word=None):
+#    print "Find \""+word+"\" in the dumped log file \""+logfile+"\""
+    getinfo_filename = time_stamp()+'_getinfo.txt'
     pick_lst = []
     os.chdir('./dump_data/dump_log/')
-    with open(logfile) as f:
-        content = f.readlines()
-       
-    os.chdir('../parsed_logmsg/')
-    if not word is None: 
-        for i in content:
-            if word in i:
-                pick_lst.append(i)
-        
-        if len(pick_lst) == 0:
-            msg = "Not found the word in the log file"        
-        else:
-            with open(time_stamp()+'_getinfo.txt', 'a') as f1:
-                f1.writelines(pick_lst)
-            msg = "File is created"
+    filelist = glob.glob("*.txt")
+    for logfile in filelist:
+        with open(logfile) as f:
+            content = f.readlines()        
+        if not word is None: 
+            for i in content:
+                if word in i:
+                    if not i in pick_lst:
+                        pick_lst.append(i)
     
+    os.chdir('../parsed_logmsg/')   
+    if len(pick_lst) == 0:
+        msg = "Not found the word in the log file"        
+    else:
+        with open(getinfo_filename, 'a') as f1:
+            f1.writelines(pick_lst)
+        msg = "File is created"
+
     print msg
 
  
