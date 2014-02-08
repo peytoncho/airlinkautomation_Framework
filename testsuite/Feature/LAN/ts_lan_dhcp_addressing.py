@@ -6,30 +6,26 @@
 # 
 #################################################################################
 
-import os
-import sys
+from selenium import webdriver   
+from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.by import By
+import selenium.webdriver.remote.webdriver
 import time
 import unittest
-
-from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException, \
-    WebDriverException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-import selenium.webdriver.remote.webdriver
-from selenium.webdriver.support.ui import Select
-import yaml
-
-import basic_airlink
-import connectivity
 import selenium_utilities
-
+import sys,os
+import yaml
 
 airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME'] 
 sys.path.append(airlinkautomation_home_dirname+"/lib/common")
 sys.path.append(".")
 
+import basic_airlink
 basic_airlink.append_sys_path()
+import connectivity
 
 tbd_config_map, lan_config_map = basic_airlink.get_config_data("LAN","")
     

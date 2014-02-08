@@ -17,327 +17,313 @@
 # ALL_TASECASE_NUMBER        :    26
 
 LIST_TESTCASES:   
-            1  : 
-              TC_ID       : "/Feature/VPN/AT_Commands/tc_ipsec_vpn1_commands"
+            0  : 
+              TC_ID       : "/Feature/VPN/tc_dummy"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
+              PRIORIY     : HIGH
+              TEST_AREA   : VPN     
+            1  : 
+              TC_ID       : "/Feature/VPN/GRE/tc_gre_vpn_default_case"
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
               TEST_AREA   : VPN     
             2  : 
-              TC_ID       : "/Feature/VPN/AT_Commands/tc_ipsec_vpn2_commands"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_ike_encryption_mismatch"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
               TEST_AREA   : VPN
             3  : 
-              TC_ID       : "/Feature/VPN/AT_Commands/tc_ipsec_vpn3_commands"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_ike_authentication_mismatch"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
               TEST_AREA   : VPN     
             4  : 
-              TC_ID       : "/Feature/VPN/AT_Commands/tc_ipsec_vpn4_commands"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_ike_dh_group_mismatch"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
               TEST_AREA   : VPN
             5  : 
-              TC_ID       : "/Feature/VPN/AT_Commands/tc_ipsec_vpn5_commands"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_ipsec_encryption_mismatch"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
               TEST_AREA   : VPN     
             6  : 
-              TC_ID       : "/Feature/VPN/AT_Commands/nnn"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_ipsec_authentication_mismatch"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
               TEST_AREA   : VPN
             7  : 
-              TC_ID       : "/Feature/VPN/AT_Commands/nnn"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_ipsec_dh_group_mismatch"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
-              PRIORIY     : HIGH
-              TEST_AREA   : VPN     
-            8  : 
-              TC_ID       : "/Feature/VPN/AT_Commands/nnn"
-              PRODUCT_VER : ["4.3.3","4.3.4"]
-              OBSOLETE_VER: []
-              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
-              DESCRIPTION : ""
-              PRIORIY     : HIGH
-              TEST_AREA   : VPN
-            9  : 
-              TC_ID       : "/Feature/VPN/AT_Commands/nnn"
-              PRODUCT_VER : ["4.3.3","4.3.4"]
-              OBSOLETE_VER: []
-              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
-              DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
               TEST_AREA   : VPN     
             10  : 
-              TC_ID       : "/Feature/VPN/AT_Commands/nnn"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_30_bit_netmask"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
-              TEST_AREA   : VPN
+              TEST_AREA   : VPN     
             11  : 
-              TC_ID       : "/Feature/VPN/IPSec/nnn"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_29_bit_netmask"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
-              TEST_AREA   : VPN
+              TEST_AREA   : VPN     
             12  : 
-              TC_ID       : "/Feature/VPN/IPSec/nnn"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_28_bit_netmask"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
-              TEST_AREA   : VPN
+              TEST_AREA   : VPN     
             13  : 
-              TC_ID       : "/Feature/VPN/IPSec/nnn"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_27_bit_netmask"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
-              TEST_AREA   : VPN
+              TEST_AREA   : VPN     
             14  : 
-              TC_ID       : "/Feature/VPN/IPSec/nnn"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_26_bit_netmask"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
-              TEST_AREA   : VPN
+              TEST_AREA   : VPN     
             15  : 
-              TC_ID       : "/Feature/VPN/IPSec/nnn"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_25_bit_netmask"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
-              TEST_AREA   : VPN
+              TEST_AREA   : VPN     
             16  : 
-              TC_ID       : "/Feature/VPN/IPSec/nnn"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_24_bit_netmask"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
-              TEST_AREA   : VPN
+              TEST_AREA   : VPN     
             17  : 
-              TC_ID       : "/Feature/VPN/IPSec/nnn"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_23_bit_netmask"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
-              TEST_AREA   : VPN
+              TEST_AREA   : VPN     
             18  : 
-              TC_ID       : "/Feature/VPN/IPSec/nnn"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_22_bit_netmask"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
-              TEST_AREA   : VPN
+              TEST_AREA   : VPN     
             19  : 
-              TC_ID       : "/Feature/VPN/IPSec/nnn"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_21_bit_netmask"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
-              TEST_AREA   : VPN
+              TEST_AREA   : VPN     
             20  : 
-              TC_ID       : "/Feature/VPN/IPSec/nnn"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_20_bit_netmask"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
-              TEST_AREA   : VPN
+              TEST_AREA   : VPN     
             21  : 
-              TC_ID       : "/Feature/VPN/GRE/nnn"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_19_bit_netmask"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
-              TEST_AREA   : VPN
+              TEST_AREA   : VPN     
             22  : 
-              TC_ID       : "/Feature/VPN/GRE/nnn"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_18_bit_netmask"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
-              TEST_AREA   : VPN
+              TEST_AREA   : VPN     
             23  : 
-              TC_ID       : "/Feature/VPN/GRE/nnn"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_17_bit_netmask"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
-              TEST_AREA   : VPN
+              TEST_AREA   : VPN     
             24  : 
-              TC_ID       : "/Feature/VPN/GRE/nnn"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_16_bit_netmask"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
-              TEST_AREA   : VPN
+              TEST_AREA   : VPN     
             25  : 
-              TC_ID       : "/Feature/VPN/GRE/nnn"
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_15_bit_netmask"
               PRODUCT_VER : ["4.3.3","4.3.4"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
               DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
               PRIORIY     : HIGH
-              TEST_AREA   : VPN              
- 
-IPSEC_TUNNEL:   
-    VPN_TYPE:            #VPN1   VPN2   VPN3   VPN4   VPN5
-          MSCIID      : ["3151","3180","3206","3232","3258"]
-          VALUE       : ["1","1","1", "1", "1"]                                    #0:DISABLED, 1:_IPSEC, 2:GRE, 3:SSL, 5:L2TP+_IPSEC
-          VISIBLE_TEXT: ["IPsec Tunnel","IPsec Tunnel","IPsec Tunnel","IPsec Tunnel","IPsec Tunnel"]
-    VPN_STATUS:
-             MSCIID   : ["3152","3181","3207","3233","3259"]
-             VALUE    : ["Connected","Connected","Connected","Connected","Connected"]        
-    VPN_GATEWAY:
-             MSCIID   : ["3153","3182","3208","3234","3260"]
-             VALUE    : ["208.81.123.2","208.81.123.22","208.81.123.26","208.81.123.23","208.81.123.24"]
-    PSK1:
-             MSCIID   : ["3155","3184","3210","3236","3262"]
-             VALUE    : ["sierra123","SierraWireless","SierraWireless","SierraWireless","SierraWireless"]
-    MY_ID_TYPE:
-             MSCIID   : ["3157","3186","3212","3238","3264"]
-             VALUE    : ["1","1","1","1","1"]                #[1,2,3]                     
-             VISIBLE_TEXT : ["IP","IP","IP","IP","IP"]       #["IP","FQDN","USERFQDN"]
-    MY_ID:    #LOCAL ID = WAN IP
-             MSCIID   : ["3158","3187","3213","3239","3265"]
-             VALUE    : ["NOTSET","NOTSET","NOTSET","NOTSET","NOTSET"]
-    PEER_ID_TYPE:
-             MSCIID   : ["3159","3188","3214","3240","3266"]
-             VALUE    : ["1","1","1","1","1"]                #[1,2,3]                     
-             VISIBLE_TEXT : ["IP","IP","IP","IP","IP"]       #["IP","FQDN","USERFQDN"]
-    PEER_ID:   #public IP of VPN server
-             MSCIID   : ["3160","3189","3215","3241","3267"]
-             VALUE    : ["208.81.123.2","208.81.123.22","208.81.123.26","208.81.123.23","208.81.123.24"]
-    NEG_MODE:
-             MSCIID   : ["3161","3190","3216","3242","3268"]
-             VALUE    : ["1","1","1","1","1"]                      #[1,2]                     
-             VISIBLE_TEXT : ["Main","Main","Main","Main","Main"]   #["Main","Aggressive"]
-    IKE_ENCRYPT:
-             MSCIID   : ["3162","3191","3217","3243","3269"]
-             VALUE    : ["7","7","5","5","9"]                            
-             VISIBLE_TEXT : ["AES-128","AES-128","3DES","3DES","AES-256"]  #["DES","3DES", "AES-128", "AES-256"]
-    IKE_AUTH:                 
-             MSCIID   : ["3163","3192","3218","3244","3270"]
-             VALUE    : ["2","1","2","1","2"]                  #[1,2,3]   
-             VISIBLE_TEXT : ["SHA1","MD5","SHA1","MD5","SHA1"] #["MD5","SHA1", "SHA 256"]
-    IKE_KEY_GROUP:                
-             MSCIID   : ["3164","3193","3219","3245","3271"]
-             VALUE    : ["2","2","2","2","2"]                  #[1,2,5]   
-             VISIBLE_TEXT : ["DH2","DH2","DH2","DH2","DH2"]    #["DH1","DH2", "DH5"]
-    IKE_SA_TIME:
-             MSCIID   : ["3165","3194","3220","3246","3272"]
-             VALUE    : ["7200","7200","7200","7200","7200"]
-    IKE_DPD:
-             MSCIID   : ["","","","",""]
-             VALUE    : ["0","0","0","0","0"]
-    IKE_DPD_INTERVAL:
-             MSCIID   : ["","","","",""]
-             VALUE    : ["0","0","0","0","0"]
-    LOCAL_ADDR_TYPE:    
-             MSCIID   : ["3166","3195","3221","3247","3273"]
-             VALUE    : ["17","17","17","17","17"]                       #[1,5,17]         
-             VISIBLE_TEXT : ["Subnet Address","Subnet Address","Subnet Address","Subnet Address","Subnet Address"] #["Use the Host Subnet","Single Address", "Subnet Address"]
-    LOCAL_ADDR:   
-             MSCIID   : ["3167","3196","3222","3248","3274"]
-             VALUE    : ["192.168.13.0","192.168.13.0","192.168.13.0","192.168.13.0","192.168.13.0"]
-    LOCAL_ADDR_MASK :    
-             MSCIID   : ["3168","3197","3223","3249","3275"]
-             VALUE    : ["255.255.255.0","255.255.255.0","255.255.255.0","255.255.255.0","255.255.255.0"]
-    REMOTE_ADDR_TYPE:   
-             MSCIID   : ["3169","3198","3224","3250","3276"]
-             VALUE    : ["17","17","17","17","17"]                       #[1,5,17]         
-             VISIBLE_TEXT : ["Subnet Address","Subnet Address","Subnet Address","Subnet Address","Subnet Address"] #["Use the Host Subnet","Single Address", "Subnet Address"]
-    REMOTE_ADDR:   
-             MSCIID   : ["3170","3199","3225","3251","3277"]
-             VALUE    : ["10.11.12.0","10.11.13.0","10.11.14.0","10.11.15.0","10.11.16.0"]
-    REMOTE_ADDR_MASK :    
-             MSCIID   : ["3171","3200","3226","3252","3278"]
-             VALUE    : ["255.255.255.0","255.255.255.0","255.255.255.0","255.255.255.0","255.255.255.0"]
-    PFS:
-             MSCIID   : ["3289","3290","3291","3292","3293"]    
-             VALUE    : ["0","0","0","0","0"]
-    IPSEC_ENCRYPT :          
-             MSCIID   : ["3172","3201","3227","3253","3279"]
-             VALUE    : ["3","3","2","2","7"]                     
-             VISIBLE_TEXT : ["AES-128","AES-128","3DES","3DES","AES-256"]  #["DES","3DES", "AES-128", "AES-256"]         
-    IPSEC_AUTH:               
-             MSCIID   : ["3173","3202","3228","3254","3280"]
-             VALUE    : ["2","1","2","1","2"]                   #[1,2,3]    
-             VISIBLE_TEXT : ["SHA1","MD5","SHA1","MD5","SHA1"]  #["MD5","SHA1", "SHA 256"]
-    IPSEC_KEY_GROUP: 
-             MSCIID   : ["3174","3203","3229","3255","3281"]
-             VALUE    : ["2","2","2","2","2"]                   #[1,2,5]   
-             VISIBLE_TEXT : ["DH2","DH2","DH2","DH2","DH2"]     #["DH1","DH2", "DH5"]
-    IPSEC_SA_TIME:
-             MSCIID   : ["3175","3204","3230","3256","3282"]
-             VALUE    : ["7200","7200","7200","7200","7200"]  #s
-              
-GRE_TUNNEL:  
-    VPN_TYPE:            #VPN1   VPN2   VPN3   VPN4   VPN5
-          MSCIID      : ["3151","3180","3206","3232","3258"]
-          VALUE       : 2                                     #0:DISABLED, 1:_IPSEC, 2:GRE, 3:SSL, 5:L2TP+_IPSEC
-          VISIBLE_TEXT: "GRE Tunnel"
-    VPN_STATUS:
-             MSCIID   : ["3152","3181","3207","3233","3259"]
-             VALUE    : ["Not Connected","Connected"]        
-    VPN_GATEWAY:
-             MSCIID   : ["3153","3182","3208","3234","3260"]
-             VALUE    : "208.81.123.2"
-    REMOTE_ADDRESS_TYPE:   
-             MSCIID   : ["3169","3198","3224","3250","3276"]
-             VALUE    : [17,17,17,1,5]                       #[1,5,17]         
-             VISIBLE_TEXT : ["Subnet Address","Subnet Address","Subnet Address","Subnet Address","Subnet Address"] #["Use the Host Subnet","Single Address", "Subnet Address"]
-    REMOTE_ADDRESS :   
-             MSCIID   : ["3170","3199","3225","3251","3277"]
-             VALUE    : "10.11.12.0"
-    REMOTE_ADDRESS_MASK :    
-             MSCIID   : ["3171","3200","3226","3252","3278"]
-             VALUE    : "255.255.255.0"            
-    GRE_TTL:   
-             MSCIID   : ["5201","5202","5203","5204","5205"]   # MSCIID_CFG_VPN1/2/3/4/5_TTL
-             VALUE    : [255,255,200,300,400]                     
-             
-SSL_TUNNEL:  
-    VPN_TYPE:            #VPN1   VPN2   VPN3   VPN4   VPN5
-          MSCIID      : ["3151","3180","3206","3232","3258"]
-          VALUE       : 3                                     #0:DISABLED, 1:_IPSEC, 2:GRE, 3:SSL, 5:L2TP+_IPSEC
-          VISIBLE_TEXT: "SSL Tunnel"
-          
+              TEST_AREA   : VPN     
+            26  : 
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_14_bit_netmask"
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
+              PRIORIY     : HIGH
+              TEST_AREA   : VPN     
+            27  : 
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_13_bit_netmask"
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
+              PRIORIY     : HIGH
+              TEST_AREA   : VPN     
+            28  : 
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_12_bit_netmask"
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
+              PRIORIY     : HIGH
+              TEST_AREA   : VPN     
+            29  : 
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_11_bit_netmask"
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
+              PRIORIY     : HIGH
+              TEST_AREA   : VPN     
+            30  : 
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_10_bit_netmask"
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
+              PRIORIY     : HIGH
+              TEST_AREA   : VPN     
+            31  : 
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_9_bit_netmask"
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
+              PRIORIY     : HIGH
+              TEST_AREA   : VPN     
+            32  : 
+              TC_ID       : "/Feature/VPN/IPsec/tc_ipsec_vpn_cisco_subnet_8_bit_netmask"
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : ""
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
+              PRIORIY     : HIGH
+              TEST_AREA   : VPN     

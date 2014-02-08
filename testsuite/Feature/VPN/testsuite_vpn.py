@@ -1,17 +1,15 @@
 
-import datetime
-import logging
-import sys
-import time
-
 from selenium.webdriver.support.ui import Select
-import yaml
-
-import basic_airlink
-import cisco_config
-import ping_airlink
+import time
+import ping_airlink 
+import telnet_airlink 
 import selenium_utilities
-import telnet_airlink
+import sys
+import basic_airlink 
+import yaml
+import logging
+import cisco_config
+import datetime
 
 
 def yaml_include(loader,node):

@@ -1,0 +1,30 @@
+debug icmp trace
+debug crypto isakmp 150
+debug crypto ipsec 150
+debug ssh
+
+configure terminal
+
+no interface vlan 1
+no interface vlan 2
+
+
+interface vlan1
+nameif outside
+ip address 208.81.123.54 255.255.255.0
+exit
+
+interface Ethernet 0/0
+switchport access vlan 1
+exit
+
+route outside 0.0.0.0 0.0.0.0 208.81.123.254 1
+
+username airlink password airlink1
+crypto key generate rsa usage-keys
+yes
+
+aaa authentication ssh console LOCAL
+ssh 208.81.123.58 255.255.255.255 outside
+
+write memory

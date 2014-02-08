@@ -244,3 +244,13 @@ LIST_TESTCASES:
               DESCRIPTION : "LAN,"
               PRIORIY     : HIGH
               TEST_AREA   : LAN
+           26  :
+              TC_ID       : "/Feature/LAN/VRRP/tc_vrrp_basic"          
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400"]
+              RM_TYPE     : ["MC8705"]
+              TEST_TYPE   : ["Smoke","SMOKE","Functional","FUNCTIONAL"]
+              DESCRIPTION : "LAN,"
+              PRIORIY     : HIGH
+              TEST_AREA   : LAN

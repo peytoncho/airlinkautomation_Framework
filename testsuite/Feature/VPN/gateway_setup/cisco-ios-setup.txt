@@ -1,0 +1,29 @@
+enable
+debug crypto isakmp
+debug crypto ipsec
+debug ip icmp
+configure terminal
+no ip domain lookup
+ip classless
+ip route 0.0.0.0 0.0.0.0 208.81.123.254
+
+interface FastEthernet0
+ip address 208.81.123.95 255.255.255.0
+no shutdown
+exit
+
+username airlink password 12345
+enable password 12345
+
+line vty 0 4
+privilege level 15
+login local
+password 12345
+transport input telnet ssh
+exit
+
+config-register 0x2102
+exit
+write memory
+
+exit

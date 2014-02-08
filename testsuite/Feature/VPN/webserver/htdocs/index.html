@@ -1,0 +1,260 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+Name       : Wood Working   
+Description: A two-column, fixed-width design with dark color scheme.
+Version    : 1.0
+Released   : 20110708
+
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>IPsec VPN Test Case Manager</title>
+<link href="style.css" rel="stylesheet" type="text/css" media="screen" />
+<script type="text/javascript">
+function show_tab(which) {
+    var tabs = ["test_launcher", "list_parameters", "analyze_test_cases"];
+
+    for(var i = 0; i < tabs.length; i++) {
+        if(tabs[i] == which) {
+            document.getElementById(tabs[i]).style.display = "block";
+            document.getElementById("tab" + i).className = "current_page_item";
+        } else {
+            document.getElementById(tabs[i]).style.display = "none";
+            document.getElementById("tab" + i).className = "";
+        }
+    }
+}
+</script>
+</head>
+<body>
+<div id="wrapper">
+	<div id="wrapper-bgbtm">
+		<div id="header">
+			<div id="logo">
+				<h1><a href="#">IPsec VPN Test Case Manager</a></h1>
+			</div>
+		</div>
+		<!-- end #header -->
+		<div id="menu">
+			<ul>
+                <li id="tab0" class="current_page_item"><a href="javascript:show_tab('test_launcher')">Combo Picker</a></li>
+				<li id="tab1"><a href="javascript:show_tab('list_parameters');">List Parameters</a></li>
+				<li id="tab2"><a href="javascript:show_tab('analyze_test_cases');">Analyze Test Cases</a></li>
+			</ul>
+		</div>
+		<!-- end #menu -->
+		<div id="page">
+			<div id="page-bgtop">
+				<div id="page-bgbtm">
+					<div id="content">
+						<div class="post" id="test_launcher" style="display: block;">
+							<h2 class="title">Combo Picker</h2>
+							<div class="entry">
+                                <form action="/cgi-bin/ipsec_launcher.py" method="post">
+                                    <table width="100%">
+                                        <tr>
+                                            <col width="20%">
+                                            <col width="20%">
+                                            <col width="20%">
+                                            <col width="20%">
+                                            <col width="20%">
+                                            <td align="left">
+                                                Negotiation Mode<br>
+                                                <select name="negotiation_mode" multiple>
+                                                    <option selected="selected" value="Main">Main</option>
+                                                    <option selected="selected" value="Aggressive">Aggressive</option>
+                                                </select>
+
+                                                <select name="fl_negotiation_mode" style="display:none" multiple>
+                                                    <option selected="selected" value="Main">Main</option>
+                                                    <option selected="selected" value="Aggressive">Aggressive</option>
+                                                </select>
+                                            </td>
+                                            <td align="left">
+                                                IKE Encryption<br>
+                                                <select name="ike_encryption" multiple>
+                                                    <option selected="selected" value="AES-128">AES-128</option>
+                                                    <option selected="selected" value="AES-256">AES-256</option>
+                                                    <option selected="selected" value="DES">DES</option>
+                                                    <option selected="selected" value="3DES">3DES</option>
+                                                </select>
+
+                                                <select name="fl_ike_encryption" style="display:none" multiple>
+                                                    <option selected="selected" value="AES-128">AES-128</option>
+                                                    <option selected="selected" value="AES-256">AES2-56</option>
+                                                    <option selected="selected" value="DES">DES</option>
+                                                    <option selected="selected" value="3DES">3DES</option>
+                                                </select>
+                                            </td>
+                                            <td align="left">
+                                                IKE Authentication<br>
+                                                <select name="ike_authentication" multiple>
+                                                    <option selected="selected" value="MD5">MD5</option>
+                                                    <option selected="selected" value="SHA1">SHA1</option>
+                                                    <option selected="selected" value="SHA 256">SHA 256</option>
+                                                </select>
+
+                                                <select name="fl_ike_authentication" style="display:none" multiple>
+                                                    <option selected="selected" value="MD5">MD5</option>
+                                                    <option selected="selected" value="SHA1">SHA1</option>
+                                                    <option selected="selected" value="SHA 256">SHA 256</option>
+                                                </select>
+                                            </td>
+                                            <td align="left">
+                                                IKE DH Group<br>
+                                                <select name="ike_dh_group" multiple>
+                                                    <option selected="selected" value="DH1">DH1</option>
+                                                    <option selected="selected" value="DH2">DH2</option>
+                                                    <option selected="selected" value="DH5">DH5</option>
+                                                </select>
+
+                                                <select name="fl_ike_dh_group" style="display:none" multiple>
+                                                    <option selected="selected" value="DH1">DH1</option>
+                                                    <option selected="selected" value="DH2">DH2</option>
+                                                    <option selected="selected" value="DH5">DH5</option>
+                                                </select>
+                                            </td>
+                                            <td align="left">
+                                                Dead Peer Detection<br>
+                                                <select name="ike_dpd" multiple>
+                                                    <option selected="selected" value="Enable">Enable</option>
+                                                    <option selected="selected" value="Disable">Disable</option>
+                                                </select>
+
+                                                <select name="fl_ike_dpd" style="display:none" multiple>
+                                                    <option selected="selected" value="Enable">Enable</option>
+                                                    <option selected="selected" value="Disable">Disable</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr height="20"></tr>
+                                        <tr>
+                                            <col width="20%">
+                                            <col width="20%">
+                                            <col width="20%">
+                                            <col width="20%">
+                                            <col width="20%">
+                                            <td align="left">
+                                                PFS<br>
+                                                <select name="pfs" multiple>
+                                                    <option selected="selected" value="Yes">Yes</option>
+                                                    <option selected="selected" value="No">No</option>
+                                                </select>
+
+                                                <select name="fl_pfs" style="display:none" multiple>
+                                                    <option selected="selected" value="Yes">Yes</option>
+                                                    <option selected="selected" value="No">No</option>
+                                                </select>
+                                            </td>
+                                            <td align="left">
+                                                IPsec Encryption<br>
+                                                <select name="ipsec_encryption" multiple>
+                                                    <option selected="selected" value="None">None</option>
+                                                    <option selected="selected" value="AES-128">AES-128</option>
+                                                    <option selected="selected" value="AES-256">AES-256</option>
+                                                    <option selected="selected" value="DES">DES</option>
+                                                    <option selected="selected" value="3DES">3DES</option>
+                                                </select>
+
+                                                <select name="fl_ipsec_encryption" style="display:none" multiple>
+                                                    <option selected="selected" value="None">None</option>
+                                                    <option selected="selected" value="AES-128">AES-128</option>
+                                                    <option selected="selected" value="AES-256">AES-256</option>
+                                                    <option selected="selected" value="DES">DES</option>
+                                                    <option selected="selected" value="3DES">3DES</option>
+                                                </select>
+                                            </td>
+                                            <td align="left">
+                                                IPsec Authentication<br>
+                                                <select name="ipsec_authentication" multiple>
+                                                    <option selected="selected" value="None">None</option>
+                                                    <option selected="selected" value="MD5">MD5</option>
+                                                    <option selected="selected" value="SHA1">SHA1</option>
+                                                    <option selected="selected" value="SHA 256">SHA 256</option>
+                                                </select>
+
+                                                <select name="fl_ipsec_authentication" style="display:none" multiple>
+                                                    <option selected="selected" value="None">None</option>
+                                                    <option selected="selected" value="MD5">MD5</option>
+                                                    <option selected="selected" value="SHA1">SHA1</option>
+                                                    <option selected="selected" value="SHA 256">SHA 256</option>
+                                                </select>
+                                            </td>
+                                            <td align="left">
+                                                IPsec DH Group<br>
+                                                <select name="ipsec_dh_group" multiple>
+                                                    <option selected="selected" value="None">None</option>
+                                                    <option selected="selected" value="DH1">DH1</option>
+                                                    <option selected="selected" value="DH2">DH2</option>
+                                                    <option selected="selected" value="DH5">DH5</option>
+                                                </select>
+
+                                                <select name="fl_ipsec_dh_group" style="display:none" multiple>
+                                                    <option selected="selected" value="None">None</option>
+                                                    <option selected="selected" value="DH1">DH1</option>
+                                                    <option selected="selected" value="DH2">DH2</option>
+                                                    <option selected="selected" value="DH5">DH5</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr height="20"></tr>
+                                        <tr>
+                                            <col width="20%">
+                                            <col width="60%">
+                                            <col width="20%">
+                                            <td align="left">
+                                                Exclude these<br>test cases:
+                                            </td>
+                                            <td colspan="2">
+                                                <input type="text" name="excluded_tc" size="40%" />
+                                            </td>
+                                            <td valign="bottom">
+                                                <input type="submit" value="Start" />
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </form>
+
+							</div>
+						</div>
+						<div class="post" id="list_parameters" style="display:none;" >
+							<h2 class="title">Show Test Parameters</h2>
+							<div class="entry">
+                                <form action="/cgi-bin/retrieve_parameters.py" method="post">
+	                                Test Case Number:<br>
+	                                <input type="text" name="show_parameters" size="80%" placeholder="Example: [1-10, 12-56, 100-100, 101-110]"/>
+	                                <input type="submit" value="Go" />
+                                </form>
+
+
+							</div>
+						</div>
+						<div class="post" id="analyze_test_cases" style="display:none;">
+							<h2 class="title">Test Case Analysis</h2>
+							<div class="entry">
+                                <form action="/cgi-bin/analyze_parameters.py" method="post">
+	                                Test Case Number:<br>
+	                                <input type="text" name="analyze_parameters" size="80%" placeholder="Example: [1-10, 12-56, 100-100, 101-110]"/>
+	                                <input type="submit" value="Go" />
+                                </form>
+							</div>
+						</div>
+					</div>
+					<!-- end #content -->
+					<div style="clear: both;">&nbsp;</div>
+				</div>
+			</div>
+		</div>
+		<!-- end #page -->
+	</div>
+</div>
+</body>
+</html>

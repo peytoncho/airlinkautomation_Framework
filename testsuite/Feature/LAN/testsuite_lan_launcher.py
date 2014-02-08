@@ -6,27 +6,28 @@
 # Author: Airlink
 # 
 #################################################################################
-
-import logging
-import os
 import sys
+sys.dont_write_bytecode = True
+
 import time
-
-import htmlreport
-
-import basic_airlink
-import ts_lan_at_commands
-import ts_lan_dhcp_addressing
-
+import os
+import logging
 
 test_area = "LAN"
 test_sub_area=""
 airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME'] 
 sys.path.append(airlinkautomation_home_dirname+"/lib/common")
+sys.path.append(airlinkautomation_home_dirname+"/lib/common/UI")
+sys.path.append(airlinkautomation_home_dirname+"/lib/site-packages")
 
+import basic_airlink
 basic_airlink.append_sys_path()
 tbd_config_map, lan_config_map = basic_airlink.get_config_data(test_area,"")
 
+import ts_lan_dhcp_addressing
+import ts_lan_at_commands
+import ts_lan_vrrp
+import htmlreport
 
 # mapping info about test case/test module/testsuite class/selection
 #             test module . test class       test case          flag of  test case selected 
@@ -55,8 +56,8 @@ tc_ts_map = {
     22:     [ts_lan_dhcp_addressing.TsLanDhcpAddressing,"tc_ethernet_uses_public_ip",0],
     23:     [ts_lan_dhcp_addressing.TsLanDhcpAddressing,"tc_usb_uses_public_ip",0],
     24:     [ts_lan_dhcp_addressing.TsLanDhcpAddressing,"tc_ethernet_display_disable",0],
-    25:     [ts_lan_dhcp_addressing.TsLanDhcpAddressing,"tc_dummy",0],
-
+    25:     [ts_lan_dhcp_addressing.TsLanDhcpAddressing,"tc_dummp",0],
+    26:     [ts_lan_vrrp.TsLanVrrp,"tc_vrrp_basic",0],
 }
                    
 ####################################################
@@ -88,7 +89,7 @@ if __name__ == "__main__":
     
     result = None
 
-    mySuite=basic_airlink.setup_suite(lan_config_map, tc_ts_map) 
+    mySuite=basic_airlink.setup_suite(tbd_config_map, lan_config_map, tc_ts_map) 
     
     test_cases = mySuite.countTestCases()
     

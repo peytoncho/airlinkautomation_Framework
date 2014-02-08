@@ -7,21 +7,19 @@
 # 
 ################################################################################
 
-import os
-import sys
-import time
 import unittest
-
-import at_utilities
-import basic_airlink
-import connectivity
-
+import sys
+import os
+import time
 
 airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME'] 
 sys.path.append(airlinkautomation_home_dirname+"/lib/common")
 sys.path.append(".")
 
+import basic_airlink
 basic_airlink.append_sys_path()
+import at_utilities
+import connectivity
 #import ping_airlink
 
 tbd_config_map, vpn_config_map = basic_airlink.get_config_data("VPN","")
