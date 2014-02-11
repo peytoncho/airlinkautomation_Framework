@@ -10,7 +10,6 @@ def dump_log_file():
     time_flag = False
     all_flag  = False
     word_flag = False
-    file_flag = False
     word = None
     i = 0
     msg = "Done"
@@ -29,8 +28,6 @@ def dump_log_file():
         elif opt == '-w':
             word = arg
             word_flag = True
-        elif opt == '-f':
-            file_flag = True
                
     if time_flag:
         if not cleanup_files():
@@ -39,12 +36,12 @@ def dump_log_file():
             i+=1
             sys.stdout.write("Check ALEOS log after: "+time_range+" minute(s)\n")
             time.sleep(float(time_range)*60)
-            if all_flag:
-                write_logs()
-                print "Dump all log message"
-            elif word_flag and not word is None:
+            if word_flag and not word is None:
                 write_logs(word=word)
                 print "Dump log message contains word :"+word
+            else:
+                write_logs()
+                print "Dump all log message"                
             
     else:
         if all_flag:
@@ -52,19 +49,12 @@ def dump_log_file():
                 return
             write_logs()
             msg = "Dump all log message"
-        elif word_flag and not word is None and (not file_flag):
-            if not cleanup_files():
-                return
-            write_logs(word=word)
-            msg = "Dump log message contains word :"+word
-        elif word_flag and not word is None and file_flag:
-            get_info(word=word) 
-        elif file_flag and not word_flag:
-            msg = "Please pass the key word you want to find in log message"
+        elif word_flag and not word is None:
+            get_info(word=word)
+#            msg = "Dump log message contains word :"+word
         else:
             msg = "Help:\n\
             -a: Dump all log message from ACEManager\n\
-            -f: Dump the log file with keyword (need to work with -w)\n\
             -t: Define time range to dump the log (in minute)\n\
             -w: Define keyword when dumping the log or in dumped txt log file"
     print msg
