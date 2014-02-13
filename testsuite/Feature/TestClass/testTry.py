@@ -49,6 +49,14 @@ def change_device_ip(func):
         time.sleep(10)    
         
 
+def get_device_ip_list():
+    at_ins = at_utilities.AtCommands()
+    for i in range(5):
+        change_ip = "192.168.13."+str(i+1)
+        telnet_ins = telnet_airlink.TelnetAirlink(hostname = curr_ip)
+        
+        
+        
 
 def getcsvHeader(csvfile):
     header = ""
