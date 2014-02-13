@@ -70,7 +70,8 @@ tc_ts_map={
     43:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_LS300_SL5011_SPT",0],
     44:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_LS300_SL8090_ATT",0],
     45:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_LS300_SL8090_BEL",0],
-    46:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_LS300_SL8092_OSM",0],            
+    46:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_LS300_SL8092_OSM",0],
+    47:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_sp_LS300",0],           
 }
 
 testing_combo = fwupdate_config_map["TESTING_COMBO"]

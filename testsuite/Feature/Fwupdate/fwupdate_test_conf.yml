@@ -95,6 +95,12 @@ DEVICE_COMBO5: [DUT_LS300_SL5011_VZW,
    DUT_GX440_MC7700_OSM: 
 
 
+PATH_LIST : [PATH1,]
+
+PATH1 : [4.3.4.009,
+         4.3.4.010-I,
+         4.3.5.010,]
+
    
 LIST_TESTCASES:
            1  : 
@@ -289,6 +295,16 @@ LIST_TESTCASES:
               DESCRIPTION : "Test firmware update by AT commands"
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
+           47  :
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_434008_434009"     
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090","SL5011"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
            
    
 # TODO these range values need to confirm
@@ -297,7 +313,7 @@ UPDATE_TYPE : ALEOS_Software
 
 ALEOS_VERSION_LIST: ["4.3.2","4.3.3","4.3.4","4.3.5"]
 
-ALEOS_BUILD_FROM : "4.3.5.009"
+ALEOS_BUILD_FROM : "4.3.4.010"
 ALEOS_BUILD_TO : "4.3.5.010"
 
 RM_VERSION_FROM : "SL5011_VZW003_156"
@@ -305,7 +321,7 @@ RM_VERSION_TO : "SL5011_VZW003_11301"
 
 RM_VERSION : "MC8705_OSM001_3552"
 
-ROUNDTRIP_TIMES : 10
+ROUNDTRIP_TIMES : 2
 
 FTP_SERVER_ADDRESS: "192.168.13.100"
 USERNAME: user
@@ -323,4 +339,6 @@ TIMER:
        
     GX  :
        WAIT_PROCESS_F        : 150
-       WAIT_PROCESS_I        : 100 
+       WAIT_PROCESS_I        : 100
+
+STEP_TIMER : 3  

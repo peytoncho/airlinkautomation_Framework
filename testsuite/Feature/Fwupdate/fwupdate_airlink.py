@@ -210,12 +210,13 @@ class FwupdateAirlink(unittest.TestCase):
             connect_instance = conn_ins.connection_types()
         attempt_count = 1
 
-        if not connect_instance.connect():
+        while not connect_instance.connect():
             aleos_version = "connection fail"
-            basic_airlink.clog(time.ctime(time.time())+" ===>> aleos_check: Connection Failed, try again")          
-        else:
-            aleos_version = at_ins.get_fw_version(connect_instance)
-            connect_instance.close()
+            basic_airlink.clog(time.ctime(time.time())+" ===>> aleos_check: Connection Failed, retry after 30 seconds")
+            time.sleep(30)          
+        
+        aleos_version = at_ins.get_fw_version(connect_instance)
+        connect_instance.close()
         
         return aleos_version
     
@@ -234,16 +235,17 @@ class FwupdateAirlink(unittest.TestCase):
             connect_instance = conn_ins.connection_types(test_type="mdt")
         else:
             connect_instance = conn_ins.connection_types()
-        if not connect_instance.connect():
+        while not connect_instance.connect():
             result = False
-            basic_airlink.clog(time.ctime(time.time())+" ===>> device_check: Connection Failed")
-        else:
-            current_device_name = at_ins.get_device_model(connect_instance)
-            current_device_rm = at_ins.get_rm_name(connect_instance)
-            current_device_str = "DUT_"+current_device_name+"_"+current_device_rm
-            basic_airlink.clog(time.ctime(time.time())+" ===>>"+current_device_str)
-            if not current_device_str in self.device_name:
-                result = False
+            basic_airlink.clog(time.ctime(time.time())+" ===>> device_check: Connection Failed, retry after 30 seconds")
+            time.sleep(30)
+        
+        current_device_name = at_ins.get_device_model(connect_instance)
+        current_device_rm = at_ins.get_rm_name(connect_instance)
+        current_device_str = "DUT_"+current_device_name+"_"+current_device_rm
+        basic_airlink.clog(time.ctime(time.time())+" ===>>"+current_device_str)
+        if not current_device_str in self.device_name:
+            result = False
         connect_instance.close()
         return result
 
@@ -269,13 +271,14 @@ class FwupdateAirlink(unittest.TestCase):
         conn_ins = connectivity.Connectivity()
         connect_instance = conn_ins.connection_types()
         network_state = ""
-        if not connect_instance.connect():
+        while not connect_instance.connect():
             network_state = "Error"
-            basic_airlink.clog(time.ctime(time.time())+" ===>> network_ready_ckeck: Connection Failed")
-        else:
-            network_state = at_ins.get_net_state(connect_instance)
-            basic_airlink.cslog(network_state)
-            connect_instance.close()
+            basic_airlink.clog(time.ctime(time.time())+" ===>> network_ready_ckeck: Connection Failed, retry after 30 seconds")
+            time.sleep(30)
+
+        network_state = at_ins.get_net_state(connect_instance)
+        basic_airlink.cslog(network_state)
+        connect_instance.close()
         return network_state
     
     def _get_aleos_path(self, device_prefix, fw_version):
@@ -521,7 +524,7 @@ class FwupdateAirlink(unittest.TestCase):
         Returns: None
         '''
         attempt_time = fwupdate_config_map["ATTEMP_TIME"]
-        
+        step_timer = fwupdate_config_map["STEP_TIMER"]
         #Attempt count if the step is fail       
         attemp_count_click_fw_btn = 0
         attemp_count_switch_frame = 0 
@@ -534,6 +537,8 @@ class FwupdateAirlink(unittest.TestCase):
             self._startUp()
             
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Clicking firmware update button")
+            
+            time.sleep(step_timer)
             if self._fw_btn_click(self.driver) != True:
                 if attemp_count_click_fw_btn >= attempt_time:
                     result = "err_fw_btn_click"
@@ -543,6 +548,7 @@ class FwupdateAirlink(unittest.TestCase):
                     self.driver.close()
                     continue
             
+            time.sleep(step_timer)
             if self._fw_frame_switch(self.driver) != True:
                 if attemp_count_switch_frame >= attempt_time:
                     result = "err_switch_frame"
@@ -552,7 +558,7 @@ class FwupdateAirlink(unittest.TestCase):
                     self.driver.close()
                     continue  
                 
-            
+            time.sleep(step_timer)
             if update_type != "":
                 basic_airlink.cslog(time.ctime(time.time())+" ===>> Getting update type") 
             type_flag = self._get_update_type(self.driver, update_type)        
@@ -564,7 +570,8 @@ class FwupdateAirlink(unittest.TestCase):
                     attemp_count_get_type+=1
                     self.driver.close()
                     continue                    
-                       
+            
+            time.sleep(step_timer)           
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Browsing ALEOS Build file")        
             if self._browse_fw_file(self.driver, aleos_build_path) != True:
                 if attemp_count_browse_file >= attempt_time:
@@ -574,7 +581,8 @@ class FwupdateAirlink(unittest.TestCase):
                     attemp_count_browse_file+=1
                     self.driver.close()
                     continue 
-                       
+            
+            time.sleep(step_timer)           
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Clicking Go")
             if self._fw_go_click(self.driver) != True:
                 if attemp_count_click_go >= attempt_time:
@@ -585,6 +593,7 @@ class FwupdateAirlink(unittest.TestCase):
                     self.driver.close()
                     continue
             
+            time.sleep(step_timer)
             basic_airlink.clog(time.ctime(time.time())+" ===>> Waiting for updating process")                       
             if self._default_content_switch(self.driver) != True:
                 if attemp_count_switch_content >= attempt_time:
@@ -614,7 +623,8 @@ class FwupdateAirlink(unittest.TestCase):
                     quit_flag = True
                     break
             break
-                           
+        
+        time.sleep(step_timer)                   
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Done ALEOS Updating")
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Rebooting ...")
         reboot_time= tbd_config_map[self.device_name]["REBOOT_TIMEOUT"]

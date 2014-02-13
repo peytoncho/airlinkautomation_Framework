@@ -29,7 +29,7 @@ import linux_airlink
 
 class Connectivity:
     
-    def __init__(self, device_name, dut_ip = "", username="user", password="12345", debug_level = "0", verbose = False):
+    def __init__(self, device_name="", dut_ip = "", username="user", password="12345", debug_level = "0", verbose = False):
         
         ''' check all related items in testbed for testing '''
                 

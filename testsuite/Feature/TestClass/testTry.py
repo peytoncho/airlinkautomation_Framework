@@ -1,5 +1,54 @@
 from __future__ import print_function
 import csv
+import at_utilities
+import telnet_airlink
+import time
+
+
+def restore_device_ip():
+    
+    at_ins = at_utilities.AtCommands()
+    
+    for i in range(5):
+        print("Change"+str(i+1)+"device")
+        result = ""
+        curr_ip = "192.168.13."+str(i+1)
+        telnet_ins = telnet_airlink.TelnetAirlink(hostname = curr_ip)
+        while not telnet_ins.connect():
+            print('connection fail')
+        
+        print(at_ins.get_device_model(telnet_ins))
+        while not result is True:    
+            result = at_ins.set_ethernet_device_ip(telnet_ins, "192.168.13.31")
+        
+        at_ins.atz_reboot(telnet_ins)
+        print("Reboot...")
+        time.sleep(10)
+
+def change_device_ip(func):
+    at_ins = at_utilities.AtCommands()
+    
+    for i in range(5):
+        result = ""
+        if func == 'start':
+            curr_ip = "192.168.13.31"
+            change_ip = "192.168.13."+str(i+1)
+        else:
+            curr_ip = "192.168.13."+str(i+1)
+            change_ip = "192.168.13.31"
+        telnet_ins = telnet_airlink.TelnetAirlink(hostname = curr_ip)
+        while not telnet_ins.connect():
+            print('connection fail')
+        
+        print(at_ins.get_device_model(telnet_ins))
+        while not result is True:    
+            result = at_ins.set_ethernet_device_ip(telnet_ins, change_ip)
+        
+        at_ins.atz_reboot(telnet_ins)
+        print("Reboot...")
+        time.sleep(10)    
+        
+
 
 def getcsvHeader(csvfile):
     header = ""
@@ -52,20 +101,7 @@ def writecsv(dics):
     csv1file.close()
 
 if __name__ == "__main__":
-    dics = readcsv()
-    key1 = "LinALEOS/ACEmanager_functions/FF_XP/LAN_Access_by_Interface/Ethernet_in_Public_mode"
-    key2 = "LinALEOS/ACEmanager_functions/FF_XP/ACEmanager_local_access-IPv6"
-    key3 = "LinALEOS/ACEmanager_functions/FF_XP/Templates/Download_a_comprehensive_Template"
-    val1 = "pass"
-    val2 = "pass"
-    val3 = "pass"
-     
-    changeResult(dics,key1,val1)
-    changeResult(dics,key2,val2)
-    changeResult(dics,key3,val3)
-     
-    writecsv(dics)
-    
+    restore_device_ip()
 
     
     

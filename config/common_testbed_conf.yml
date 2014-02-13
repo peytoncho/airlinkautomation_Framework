@@ -45,8 +45,8 @@ ACE_URL:
 #DUTS : ["DUT_GX400_MC5728_VZW"]
 #DUTS : ["DUT_GX400_MC5728_SPT"]
 
-DUTS : ["DUT_LS300_SL8090_ATT"] 
-#DUTS : ["DUT_LS300_SL5011_VZW"]
+#DUTS : ["DUT_LS300_SL8090_ATT"] 
+DUTS : ["DUT_LS300_SL5011_VZW"]
 #DUTS : ["DUT_LS300_SL5011_SPT"]
 #DUTS : ["DUT_LS300_SL8092_OSM"]
 
@@ -497,7 +497,7 @@ DUT_LS300_SL5011_VZW:
     CONNECTION_TYPE :    TELNET         # TELNET/SSH/SERIAL
     CONNECTION_PORT :    2332
     COM_PORT        :    COM1
-    REBOOT_TIMEOUT  :    210             # 150sec = 2.5min
+    REBOOT_TIMEOUT  :    260             # 150sec = 2.5min
     TELNET_TIMEOUT  :    3                
     TELNET_DEBUGMODE:    YES                
     SSH_TIMEOUT     :    3
@@ -506,7 +506,7 @@ DUT_LS300_SL5011_VZW:
     RADIO_FW_VER    :    "p3110506,52992 [Oct 30 2011 22:54:02]"   
     MODEM_NAME      :    "CA719220179100F"       # Modem name/Global ID
     HW_CONFIG       :    "161B0A06000700000000000000000000"
-    RM_TIMEOUT      :    400
+    RM_TIMEOUT      :    500
 
 DUT_LS300_SL5011_SPT:      
     MODEL           :    LS300

@@ -164,34 +164,31 @@ class TsFwupdateUi(unittest.TestCase):
             ssh_ins.command(cmd2)
             ssh_ins.close()
             return result
-       
+       # specific path upgrade
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware Roundtrip upgrade ", "BLUE", "YELLOW")      
-        fw1 = fwupdate_config_map["ALEOS_BUILD_FROM"]
-        fw2 = fwupdate_config_map["ALEOS_BUILD_TO"]       
+#        fw1 = fwupdate_config_map["ALEOS_BUILD_FROM"]
+#        fw2 = fwupdate_config_map["ALEOS_BUILD_TO"]
+
+        fw_path_lst =  fwupdate_config_map["PATH1"]     
         times_count = fwupdate_config_map["ROUNDTRIP_TIMES"]
+        
         for round in range(times_count):
-            
-            remove_file()
+
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Round: "+str(round+1)+" Started", "BLUE")
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Upgrade to: "+fw2, "BLUE")
-            result = self.fw_ins.fwupdate_ui(fw2)
-            if result != "True":
-                self.fail("Test failed. Reason: "+result)
-            else:
-                basic_airlink.cslog(time.ctime(time.time())+" ===>> Firmware version Verify: Pass", "GREEN")
-            
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Downgrade to: "+fw1, "BLUE")
-            remove_file()
-            result = self.fw_ins.fwupdate_ui(fw1)
-            if result != "True":
-                self.fail("Test failed. Reason: "+result)
-            else:
-                basic_airlink.cslog(time.ctime(time.time())+" ===>> Firmware version Verify: Pass", "GREEN")
+            for fw_ver in fw_path_lst:
+                if self.fw_ins._aleos_check() == '4.3.4.009':
+                    remove_file()                    
+                basic_airlink.cslog(time.ctime(time.time())+" ===>> Upgrade to: "+fw_ver, "BLUE")
+                result = self.fw_ins.fwupdate_ui(fw_ver)
+                if not "True" in result:
+                    self.fail(result)
+                else:
+                    basic_airlink.cslog(time.ctime(time.time())+" ===>>"+result, "GREEN")
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Round: "+str(round+1)+" Completed", "BLUE")
                               
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")        
-        
-
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE")
+              
+    
     def tc_fwupdate_GX400_MC8705_OSM(self):
         basic_airlink.cslog(self.dut_ip, "GREEN")
         basic_airlink.cslog("tc_fwupdate_GX400_MC8705_OSM", "RED")
