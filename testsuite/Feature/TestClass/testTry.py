@@ -5,55 +5,83 @@ import telnet_airlink
 import time
 
 
-def restore_device_ip():
+def retrive_global_ip():
     
     at_ins = at_utilities.AtCommands()
+    globalid_lst = []
     
-    for i in range(5):
-        print("Change"+str(i+1)+"device")
+    while len(globalid_lst)<5:
         result = ""
-        curr_ip = "192.168.13."+str(i+1)
+        curr_ip = "192.168.13.31"
         telnet_ins = telnet_airlink.TelnetAirlink(hostname = curr_ip)
-        while not telnet_ins.connect():
-            print('connection fail')
-        
-        print(at_ins.get_device_model(telnet_ins))
-        while not result is True:    
-            result = at_ins.set_ethernet_device_ip(telnet_ins, "192.168.13.31")
-        
-        at_ins.atz_reboot(telnet_ins)
-        print("Reboot...")
-        time.sleep(10)
+        while True:
+            try:
+                while not telnet_ins.connect():
+                    print('connection fail')
+                 
+                global_id = at_ins.get_global_id(telnet_ins)
+                if not global_id in globalid_lst: 
+                    globalid_lst.append(global_id)
+                 
+                lst_index = globalid_lst.index(global_id)
+                change_ip = '192.168.13.'+str(lst_index+1)
+                     
+                at_ins.set_ethernet_device_ip(telnet_ins, change_ip)
+                at_ins.atz_reboot(telnet_ins)
+                 
+#                telnet_ins.close()
+                time.sleep(15)
+            except:               
+                continue
+             
+            break
 
-def change_device_ip(func):
+        print(globalid_lst)
+        
+def repeat_reboot():
     at_ins = at_utilities.AtCommands()
-    
-    for i in range(5):
-        result = ""
-        if func == 'start':
-            curr_ip = "192.168.13.31"
-            change_ip = "192.168.13."+str(i+1)
-        else:
-            curr_ip = "192.168.13."+str(i+1)
-            change_ip = "192.168.13.31"
+    i=20
+    while i>0:
+        curr_ip = "192.168.13.31"
         telnet_ins = telnet_airlink.TelnetAirlink(hostname = curr_ip)
-        while not telnet_ins.connect():
-            print('connection fail')
-        
-        print(at_ins.get_device_model(telnet_ins))
-        while not result is True:    
-            result = at_ins.set_ethernet_device_ip(telnet_ins, change_ip)
-        
-        at_ins.atz_reboot(telnet_ins)
-        print("Reboot...")
-        time.sleep(10)    
+        i=i-1
+        while True:
+            try:
+                while not telnet_ins.connect():
+                    print('connection fail')
+                time.sleep(20)
+                at_ins.atz_reboot(telnet_ins)
+                
+                time.sleep(30)
+                
+            except:               
+                continue
+            break        
         
 
 def get_device_ip_list():
     at_ins = at_utilities.AtCommands()
+    info_lst = []
     for i in range(5):
         change_ip = "192.168.13."+str(i+1)
-        telnet_ins = telnet_airlink.TelnetAirlink(hostname = curr_ip)
+        telnet_ins = telnet_airlink.TelnetAirlink(hostname = change_ip)
+        
+        while not telnet_ins.connect():
+            print("connection fail, retry...")
+        
+        device_name = at_ins.get_device_model(telnet_ins)
+        device_rm = at_ins.get_rm_name(telnet_ins)
+        device_info = device_name+'_'+device_rm
+        
+        info_lst.append(change_ip+' : '+device_info)
+        telnet_ins.close()
+        
+    
+    for line in info_lst:
+        print(line)
+        
+        
+        
         
         
         
@@ -109,10 +137,10 @@ def writecsv(dics):
     csv1file.close()
 
 if __name__ == "__main__":
-    restore_device_ip()
-
-    
-    
+#     get_device_ip_list()
+#    retrive_global_ip()
+#   repeat_reboot()  
+    get_device_ip_list()
     
     
     

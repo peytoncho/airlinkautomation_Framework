@@ -1977,7 +1977,12 @@ class AtCommands(object):
         
         basic_airlink.slog("Step:  get global ID by AT command")
         cmd="AT*GLOBALID?"
-        return self.assign(instance,cmd)       
+        ret_lst = self.query_new(instance,cmd).split("\n")
+        lst = []
+        for i in ret_lst:
+            if i!="":
+                lst.append(i)
+        return lst[0]       
         
     def get_gps_data(self, instance):
         ''' Get GPS data by AT command  AT*GPSDATA?
