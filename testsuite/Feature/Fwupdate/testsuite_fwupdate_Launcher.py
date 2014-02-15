@@ -103,8 +103,7 @@ if __name__ == "__main__":
         mySuite = basic_airlink.setup_suite_mdt(tc_ts_map, pick_list)
     else:
         mySuite = basic_airlink.setup_suite(tbd_config_map,fwupdate_config_map, tc_ts_map)
-    
-            
+                
     log_filename=basic_airlink.get_log_filename(tbd_config_map, test_area,"")
     FORMAT ='%(asctime)-15s => %(levelname)-8s => %(message)s'
     if tbd_config_map["LOG_LEVEL"]=="DEBUG":
@@ -123,8 +122,7 @@ if __name__ == "__main__":
                 title = 'Firmware Update Test Report', 
                 description = description_text
                 )       
-
-       
+   
     test_cases = mySuite.countTestCases()
     basic_airlink.slog("\x1b[0mTotal test cases: %d" % test_cases)
      

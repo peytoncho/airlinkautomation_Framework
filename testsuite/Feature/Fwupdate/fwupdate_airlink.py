@@ -27,7 +27,7 @@ airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME']
 basic_airlink.append_sys_path()
 tbd_config_map, fwupdate_config_map = basic_airlink.get_config_data(test_area,"")
 
-class FwupdateAirlink(unittest.TestCase):
+class FwupdateAirlink(selenium_utilities):
     def __init__(self, dut_name, dut_ip="192.168.13.31"):
         self.device_name = dut_name
         self.dut_ip = dut_ip
@@ -162,20 +162,20 @@ class FwupdateAirlink(unittest.TestCase):
         Returns: None
         '''
                        
-        self.se_ins = selenium_utilities.SeleniumAcemanager()              
+#        self.se_ins = selenium_utilities.SeleniumAcemanager()              
                 
         # step: login to Ace Manager 
         basic_airlink.cslog("step: login to ACEmanager") 
-        self.driver = self.se_ins.login(self.url, self.username, self.password)
+        self.driver = login(self.url, self.username, self.password)
 
         login_attemp_count = 0               
-        while self.se_ins.error_flag == 1:
+        while error_flag == 1:
             login_attemp_count+=1
             logging.info("Can not Login, attemp: " + str(login_attemp_count))
             basic_airlink.cslog("Can not Login, attemp: " + str(login_attemp_count), "RED")
-            self.se_ins.error_flag = 0
+            error_flag = 0
             self.driver.close()
-            self.driver = self.se_ins.login(self.url, self.username, self.password)
+            self.driver = login(self.url, self.username, self.password)
             
     
     def _verify_aleos(self, fw_version):
