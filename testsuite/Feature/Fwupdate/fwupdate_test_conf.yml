@@ -308,8 +308,7 @@ LIST_TESTCASES:
            
    
 # TODO these range values need to confirm
-UPDATE_TYPE : ALEOS_Software
-#UPDATE_TYPE : Radio_Module_Firmware
+UPDATE_TYPE : ["ALEOS_Software","Radio_Module_Firmware"]
 
 ALEOS_VERSION_LIST: ["4.3.2","4.3.3","4.3.4","4.3.5"]
 

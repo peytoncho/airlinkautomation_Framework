@@ -323,6 +323,10 @@ class FwupdateAirlink(selenium_utilities):
             update_type = ""
         result = self._fw_update(aleos_build_path, rm_build_path, update_type, fw_version)
         return result
+    
+    def _choose_update_type(self, update_type):
+        pass
+        
 
   
     def _fw_btn_click(self, driver):

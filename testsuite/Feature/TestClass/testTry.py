@@ -29,8 +29,8 @@ def retrive_global_ip():
                      
                 at_ins.set_ethernet_device_ip(telnet_ins, change_ip)
                 
-                at_ins.atz_reboot(telnet_ins)
-                 
+                #at_ins.atz_reboot(telnet_ins)
+                print(str(at_ins.atz_reboot(telnet_ins))) 
 #                telnet_ins.close()
                 time.sleep(15)
             except:               
@@ -155,7 +155,7 @@ def writecsv(dics):
 
 if __name__ == "__main__":
 #     get_device_ip_list()
-#     retrive_global_ip()
+#   retrive_global_ip()
 #     time.sleep(50)
 #   repeat_reboot()
     restore_device_ip()  

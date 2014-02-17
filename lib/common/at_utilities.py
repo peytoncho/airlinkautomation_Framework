@@ -124,8 +124,15 @@ class AtCommands(object):
             True/False 
         '''
         cmd = "atz"
+        result = False
         basic_airlink.slog("Step:  reboot by AT command")
-        return self.assign(instance,cmd)
+        ret = instance.command(cmd)
+        ret_str = ''.join(ret)
+        if 'atz' in ret_str:
+            result = True
+        
+        return result
+ 
 
     def get_block_reset_config(self, instance): 
         '''  Block reset config by AT command
