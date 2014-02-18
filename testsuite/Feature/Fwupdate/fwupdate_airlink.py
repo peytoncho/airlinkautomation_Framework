@@ -537,11 +537,12 @@ class FwupdateAirlink(selenium_utilities):
         attemp_count_click_go = 0
         attemp_count_switch_content = 0 
                  
-        while True:      
+        while True:
+            #Set everything up, login to ACEManager      
             self._startUp()
             
+            #Click firmware update button
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Clicking firmware update button")
-            
             time.sleep(step_timer)
             if self._fw_btn_click(self.driver) != True:
                 if attemp_count_click_fw_btn >= attempt_time:
