@@ -334,10 +334,11 @@ ATTEMP_TIME: 100
 TIMER:
     LS  :
        WAIT_PROCESS_F        : 240
-       WAIT_PROCESS_I        : 100
-       
+       WAIT_PROCESS_I        : 100       
     GX  :
        WAIT_PROCESS_F        : 150
        WAIT_PROCESS_I        : 100
+    RM  : 1000
+       
 
 STEP_TIMER : 3  

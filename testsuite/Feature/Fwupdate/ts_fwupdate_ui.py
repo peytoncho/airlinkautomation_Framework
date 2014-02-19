@@ -169,25 +169,45 @@ class TsFwupdateUi(unittest.TestCase):
 #        fw1 = fwupdate_config_map["ALEOS_BUILD_FROM"]
 #        fw2 = fwupdate_config_map["ALEOS_BUILD_TO"]
 
-        fw_path_lst =  fwupdate_config_map["PATH1"]     
-        times_count = fwupdate_config_map["ROUNDTRIP_TIMES"]
+#         fw_path_lst =  fwupdate_config_map["PATH1"]     
+#         times_count = fwupdate_config_map["ROUNDTRIP_TIMES"]
+#         
+#         for round in range(times_count):
+# 
+#             basic_airlink.cslog(time.ctime(time.time())+" ===>> Round: "+str(round+1)+" Started", "BLUE")
+#             for fw_ver in fw_path_lst:
+#                 if self.fw_ins._aleos_check() == '4.3.4.009':
+#                     remove_file()                    
+#                 basic_airlink.cslog(time.ctime(time.time())+" ===>> Upgrade to: "+fw_ver, "BLUE")
+#                 result = self.fw_ins.fwupdate_ui(fw_ver)
+#                 if not "True" in result:
+#                     self.fail(result)
+#                 else:
+#                     basic_airlink.cslog(time.ctime(time.time())+" ===>>"+result, "GREEN")
+#             basic_airlink.cslog(time.ctime(time.time())+" ===>> Round: "+str(round+1)+" Completed", "BLUE")
+#                               
+#         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE")
         
+        
+#1      
         for round in range(times_count):
-
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Round: "+str(round+1)+" Started", "BLUE")
-            for fw_ver in fw_path_lst:
-                if self.fw_ins._aleos_check() == '4.3.4.009':
-                    remove_file()                    
-                basic_airlink.cslog(time.ctime(time.time())+" ===>> Upgrade to: "+fw_ver, "BLUE")
-                result = self.fw_ins.fwupdate_ui(fw_ver)
-                if not "True" in result:
-                    self.fail(result)
-                else:
-                    basic_airlink.cslog(time.ctime(time.time())+" ===>>"+result, "GREEN")
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Round: "+str(round+1)+" Completed", "BLUE")
-                              
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE")
-              
+            #check start point, if not at the 
+            check_start_point('4.3.4.009')
+            
+            #update path        
+            self.fw_ins.fwupdate_ui("RM", "SL5011_VZW_11301")
+            remove_file()
+            self.fw_ins.fwupdate_ui('ALEOS', '4.3.5.010')
+            
+            #downgrade path
+            self.fw_ins.fwupdate_ui('ALEOS', '4.3.4.009')
+        
+        
+#2
+        check_start_point('4.3.3a.014')
+        self.fw_ins.fwupdate_ui("ALEOS", "4.3.4.009")
+        self.fw_ins.fwupdate_ui('RM', 'SL5011_VZW_11301')
+                      
     
     def tc_fwupdate_GX400_MC8705_OSM(self):
         basic_airlink.cslog(self.dut_ip, "GREEN")
