@@ -19,12 +19,15 @@ import argparse
 from multiprocessing import Process
 import time
 import ftplib
+import msciids
+import re
 
 airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_FRAMEWORK'] 
 
 slash = "\\" if sys.platform == 'win32' else "/"
 
 lib_common_path         = slash+'lib'+slash+'common'
+lib_common_ui_path      = slash+'lib'+slash+'common'+slash+'UI'
 lib_packages_path       = slash+'lib'+slash+'site-packages'
 feature_admin_path      = slash+'testsuite'+slash+'Feature'+slash+'Admin' 
 feature_status_path     = slash+'testsuite'+slash+'Feature'+slash+'Status'   
@@ -59,6 +62,8 @@ NOK  = -1
 PASS = 1
 FAIL = -1 
 ERR  = "ERROR"
+ENABLE  = 1
+DISABLE = 0
 
 FEATURE_AREA =["WAN","LAN","Security","VPN","GPS","Template","FWupdate","Services","Serial", "Admin"]
 FEATUTE_SUB_AREA = ["LPM", "Telnet","SNMP","SMS"]
@@ -157,8 +162,8 @@ def slog(msg):
     Returns: None
     ''' 
     
-    logging.debug('\n'+ msg)   
-    print '\n'+ msg  
+    logging.debug(msg+'\n')   
+    print msg+'\n' 
 
 
 def _colorlog(msg, fgcolor = None, bgcolor = None):
@@ -226,7 +231,7 @@ def cslog(msg, fgcolor = None, bgcolor = None):
     Returns: 
         None
     '''    
-    slog('\n'+msg)
+    slog(msg + '\n')
     _colorlog(msg, fgcolor,bgcolor) 
     
 def test_report(filename, msg):
@@ -500,8 +505,8 @@ def get_config_data(area_name, sub_area_name):
         fo=open(airlinkautomation_home_dirname+feature_apps_path+slash+\
         'applications_test_conf.yml','r')
     elif area_name == "Admin":
-        fo=open(airlinkautomation_home_dirname+\
-                '/testsuite/Feature/Admin/admin_test_conf.yml','r')
+        fo=open(airlinkautomation_home_dirname+feature_admin_path+slash+\
+                'admin_test_conf.yml','r')
     elif area_name == "Status":
         fo=open(airlinkautomation_home_dirname+feature_status_path+slash+\
                 'status_test_conf.yml','r')
@@ -560,11 +565,28 @@ def get_tbd_config_data():
     return tbd_config_data
 
 
+def get_ace_config_data():
+    ''' 
+    read ACEmanager page yaml file
+    Args: 
+        None
+        
+    Returns: 
+        tbd_config_data : list, main configuration data from testbed yaml file 
+    '''
+            
+    stream = open(airlinkautomation_home_dirname+slash+'lib'+slash+\
+                  'common'+slash+'UI'+slash+'acemanager_pages.yml', 'r')
+    ace_config_data = yaml.load(stream)
+    stream.close()   
+    
+    return ace_config_data
 def append_sys_path():
     ''' Append path to system
     '''
 
     sys.path.append(airlinkautomation_home_dirname+lib_common_path)
+    sys.path.append(airlinkautomation_home_dirname+lib_common_ui_path)
     sys.path.append(airlinkautomation_home_dirname+lib_packages_path)
     sys.path.append(airlinkautomation_home_dirname+throughput_path)
     sys.path.append(airlinkautomation_home_dirname+performance_path)
@@ -591,7 +613,7 @@ def append_sys_path():
     
 
 def setup_suite_v2(area_config_map, tc_ts_map):
-    """  Gather all the tests from this test module into a test suite.  
+    """ TO BE REMOVED  Gather all the tests from this test module into a test suite.  
     Handle the different arguments from test suite launcher command line:
         -n <test case # range>
         -t <test type>
@@ -762,8 +784,6 @@ def setup_suite_mdt(tc_ts_map, tc_pick_list):
         test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
         tc_ts_map[i][2]=1
     return test_suite
-
-
 
 def setup_suite(tbd_config_map, area_config_map, tc_ts_map):
     """  Gather all the tests from this test module into a test suite.  
@@ -1082,3 +1102,19 @@ def make_csv(csv_file_path, test_result, area_config_map):
         result = False
     
     return result
+def get_msciid_name(msciid):
+    ''' Get msciid name given value
+    ARGS: 
+        msciid: value 
+    RETURNS:
+        msciid's key: string
+    '''    
+    ret = [key for key, val in msciids.__dict__.iteritems() if val == int(msciid) and "MSCIID" in key]
+    if len(ret) == 0:
+        logging.debug("No Key found for MSCIID:" + str(msciid))
+        return "?"
+    elif len(ret) == 1:
+        return ret[0]
+    else:  
+        txt = "".join(ret)
+        return '/'.join(re.findall('.', txt))
