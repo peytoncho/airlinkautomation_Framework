@@ -2521,7 +2521,7 @@ class SeleniumAcemanager(unittest.TestCase):
         
         '''
         ret = True
-        basic_airlink.cslog( "Begins navigating tab "+ tab)
+#        basic_airlink.cslog( "Begins navigating tab "+ tab)
         
         try:
             
@@ -2577,7 +2577,7 @@ class SeleniumAcemanager(unittest.TestCase):
         '''
 
         ret = True
-        basic_airlink.cslog( "Begins navigating subtab "+ tab +"/"+subtab)
+#        basic_airlink.cslog( "Begins navigating subtab "+ tab +"/"+subtab)
                  
         try:
             cur_page = self.get_current_tab(driver,2)

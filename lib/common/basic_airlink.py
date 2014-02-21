@@ -572,7 +572,7 @@ def get_ace_config_data():
         None
         
     Returns: 
-        tbd_config_data : list, main configuration data from testbed yaml file 
+        ace_config_data : list, main configuration data from testbed yaml file 
     '''
             
     stream = open(airlinkautomation_home_dirname+slash+'lib'+slash+\
@@ -581,6 +581,22 @@ def get_ace_config_data():
     stream.close()   
     
     return ace_config_data
+def get_ele_config_data(aleos_version):
+    ''' 
+    read ACEmanager page yaml file
+    Args: 
+        aleos_version   ALEOS release version
+        
+    Returns: 
+        ele_config_data : list, all elements' msciids from testbed yaml file 
+    '''
+            
+    stream = open(airlinkautomation_home_dirname+slash+'lib'+slash+\
+                  'common'+slash+'UI'+slash+'acemanager_elements_'+aleos_version+'.yml', 'r')
+    ele_config_data = yaml.load(stream)
+    stream.close()   
+    
+    return ele_config_data
 def append_sys_path():
     ''' Append path to system
     '''
@@ -977,6 +993,209 @@ def setup_suite(tbd_config_map, area_config_map, tc_ts_map):
         
     return test_suite   
 
+def setup_suite(tbd_config_map, area_config_map, tc_ts_map):
+    """  Gather all the tests from this test module into a test suite.  
+    Handle the different arguments from test suite launcher command line:
+        -n <test case # range>
+        -t <test type>
+        -v <product version>
+        -d <device type>
+        -r <radio module type>
+    
+    Args: 
+        tbd_config_map : list, testbed configuration
+        area_config_map: list, test area configuration
+        tc_ts_map: list, test case/testmodule/testsuite mapping info
+        
+    Returns: 
+        test suite, including the selected testcases
+        
+    """
+    
+    device_name = tbd_config_map["DUTS"][0]
+    aleos_sw_ver= tbd_config_map[device_name]["ALEOS_FW_VER"][:6]
+    if aleos_sw_ver[5]==' ' or aleos_sw_ver[5]=='.': 
+        aleos_sw_ver=aleos_sw_ver[:5]
+    device_model= tbd_config_map[device_name]["MODEL"]
+    
+    cslog(device_name +", " +device_model +", " +aleos_sw_ver)
+    
+    test_suite = unittest.TestSuite()
+    
+    if not device_model in tbd_config_map["ALEOS_SW_HW"][aleos_sw_ver]:
+        cslog("setup_suite(): This DUT is not applying for ALEOS FW version!", "BLUE","WHITE")
+        return  test_suite  #empty
+  
+    total_tc = len(area_config_map["LIST_TESTCASES"])
+  
+    # run selective test case
+    parser = argparse.ArgumentParser(description="testsuite launcher")
+    
+    parser.add_argument("-n", "--tc_no", dest = "tc_no_range_arg",
+        help = "test case number range", default = "")
+        
+    parser.add_argument("-v", "--prd_ver", dest = "prd_ver_arg",
+        help = "Production version", default = "")
+        
+    parser.add_argument("-t", "--tc_type", dest = "tc_type_arg",
+        help = "test cycle type SMOKE/REGERSSION/PERFORMANCE", default = "")
+
+    parser.add_argument("-d", "--dut_type", dest = "dut_type_arg",
+        help = "device type GX400/GX440/ES440/LS300", default = "")
+    
+    parser.add_argument("-r", "--rm_type", dest = "rm_type_arg",
+    help = "radio module type MC7750/MC7700/MC8705/SL8090", default = "")
+            
+    args = parser.parse_args()
+
+    if not (args.prd_ver_arg  or args.tc_no_range_arg or args.tc_type_arg  or args.dut_type_arg or args.rm_type_arg): 
+                
+        # run all default test cases 
+        for i in range(1,total_tc+1):
+            
+            dut_type_list = area_config_map["LIST_TESTCASES"][i]["DEVICE_TYPE"] 
+            if not dut_type_list:    #empty
+                dut_type_list = tbd_config_map["DUT_MODELS"]["ALL"]
+              
+            if tc_ts_map[i][2]==0 \
+                and (device_model in dut_type_list) \
+                and (not aleos_sw_ver in area_config_map["LIST_TESTCASES"][i]["OBSOLETE_VER"]):
+                    test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
+                    tc_ts_map[i][2]=1
+                    print i, tc_ts_map[i][1] 
+                    
+        return test_suite   
+                    
+    if args.tc_no_range_arg:
+        ll = len(args.tc_no_range_arg)
+        tc_no_range_arg = args.tc_no_range_arg[1:ll-1]
+        tc_range_pairs = tc_no_range_arg.split(',')
+        for tc_no_pair in tc_range_pairs :
+            para = tc_no_pair.split('-')
+          
+            r0 = int(para[0])
+            r1 = int(para[1])+1
+            for i in range(r0,r1):
+                
+                prd_ver_list  = area_config_map["LIST_TESTCASES"][i]["PRODUCT_VER"]
+                abso_ver_list = area_config_map["LIST_TESTCASES"][i]["OBSOLETE_VER"]
+                if args.prd_ver_arg: 
+                    if args.prd_ver_arg in abso_ver_list or args.prd_ver_arg < prd_ver_list[0]:
+                        tc_ts_map[i][2]=1   #skip flag                        
+                
+                tc_type_list  = area_config_map["LIST_TESTCASES"][i]["TEST_TYPE"]  
+                dut_type_list = area_config_map["LIST_TESTCASES"][i]["DEVICE_TYPE"] 
+                rm_type_list  = area_config_map["LIST_TESTCASES"][i]["RM_TYPE"]   
+                
+                if not dut_type_list:    #empty
+                    dut_type_list = tbd_config_map["DUT_MODELS"]["ALL"]
+                if not rm_type_list:     #empty
+                    rm_type_list  = tbd_config_map["RM_TYPES"]["ALL"]
+                           
+                if tc_ts_map[i][2]==0 \
+                            and (device_model in dut_type_list) \
+                            and (not aleos_sw_ver in area_config_map["LIST_TESTCASES"][i]["OBSOLETE_VER"]) \
+                            and (not args.tc_type_arg  or args.tc_type_arg  in tc_type_list) \
+                            and (not args.dut_type_arg or args.dut_type_arg in dut_type_list)\
+                            and (not args.rm_type_arg  or args.rm_type_arg  in rm_type_list):
+                     
+                    test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
+                    tc_ts_map[i][2]=1
+                    print i, tc_ts_map[i][1]
+
+    elif args.prd_ver_arg:
+        
+        for i in range(1,total_tc+1):
+
+            prd_ver_list  = area_config_map["LIST_TESTCASES"][i]["PRODUCT_VER"]
+            tc_type_list  = area_config_map["LIST_TESTCASES"][i]["TEST_TYPE"]
+            dut_type_list = area_config_map["LIST_TESTCASES"][i]["DEVICE_TYPE"]     
+            rm_type_list  = area_config_map["LIST_TESTCASES"][i]["RM_TYPE"]
+            
+            if not dut_type_list:    #empty
+                dut_type_list = tbd_config_map["DUT_MODELS"]["ALL"]
+            if not rm_type_list:     #empty
+                rm_type_list  = tbd_config_map["RM_TYPES"]["ALL"]  
+            
+            if tc_ts_map[i][2]==0 \
+                and (device_model in dut_type_list) \
+                and (not aleos_sw_ver in area_config_map["LIST_TESTCASES"][i]["OBSOLETE_VER"])\
+                and args.prd_ver_arg in prd_ver_list \
+                and (not args.tc_type_arg  or args.tc_type_arg  in tc_type_list)  \
+                and (not args.dut_type_arg or args.dut_type_arg in dut_type_list) \
+                and (not args.rm_type_arg  or args.rm_type_arg  in rm_type_list) :
+            
+                test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
+                tc_ts_map[i][2]=1
+                print i, tc_ts_map[i][1]
+
+
+    elif args.tc_type_arg:
+       
+        for i in range(1,total_tc+1):
+            
+            tc_type_list  = area_config_map["LIST_TESTCASES"][i]["TEST_TYPE"]
+            dut_type_list = area_config_map["LIST_TESTCASES"][i]["DEVICE_TYPE"]     
+            rm_type_list  = area_config_map["LIST_TESTCASES"][i]["RM_TYPE"]  
+
+            if not dut_type_list:    #empty
+                dut_type_list = tbd_config_map["DUT_MODELS"]["ALL"]
+            if not rm_type_list:     #empty
+                rm_type_list  = tbd_config_map["RM_TYPES"]["ALL"]
+            
+            if tc_ts_map[i][2]==0 \
+                and (device_model in dut_type_list) \
+                and (not aleos_sw_ver in area_config_map["LIST_TESTCASES"][i]["OBSOLETE_VER"])\
+                and args.tc_type_arg in tc_type_list\
+                and (not args.dut_type_arg or args.dut_type_arg in dut_type_list)\
+                and (not args.rm_type_arg  or args.rm_type_arg  in rm_type_list) :
+                
+                test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
+                tc_ts_map[i][2]=1
+                print i, tc_ts_map[i][1]
+
+    elif args.dut_type_arg:
+       
+        for i in range(1,total_tc+1):
+            
+            dut_type_list = area_config_map["LIST_TESTCASES"][i]["DEVICE_TYPE"]     
+            rm_type_list  = area_config_map["LIST_TESTCASES"][i]["RM_TYPE"] 
+            if not dut_type_list:    #empty
+                dut_type_list = tbd_config_map["DUT_MODELS"]["ALL"]
+            if not rm_type_list:     #empty
+                rm_type_list  = tbd_config_map["RM_TYPES"]["ALL"] 
+            
+            if tc_ts_map[i][2]==0 \
+                and (device_model in dut_type_list) \
+                and (not aleos_sw_ver in area_config_map["LIST_TESTCASES"][i]["OBSOLETE_VER"])\
+                and args.dut_type_arg in dut_type_list\
+                and (not args.rm_type_arg  or args.rm_type_arg in rm_type_list) :
+                
+                test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
+                tc_ts_map[i][2]=1
+                print i, tc_ts_map[i][1]
+                
+    elif args.rm_type_arg:
+       
+        for i in range(1,total_tc+1):
+            
+            dut_type_list = area_config_map["LIST_TESTCASES"][i]["DEVICE_TYPE"]     
+            rm_type_list  = area_config_map["LIST_TESTCASES"][i]["RM_TYPE"] 
+            if not dut_type_list:    #empty
+                dut_type_list = tbd_config_map["DUT_MODELS"]["ALL"]
+            if not rm_type_list:     #empty
+                rm_type_list  = tbd_config_map["RM_TYPES"]["ALL"] 
+            
+            if tc_ts_map[i][2]==0 \
+                and (device_model in dut_type_list) \
+                and (not aleos_sw_ver in area_config_map["LIST_TESTCASES"][i]["OBSOLETE_VER"])\
+                and args.rm_type_arg in rm_type_list:
+                
+                test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
+                tc_ts_map[i][2]=1
+                print i, tc_ts_map[i][1]
+                
+    return test_suite 
 def cmd_stdout(command, argument, timeout=3):
     ''' TODO: can we not use text file?
     ARGS: 
