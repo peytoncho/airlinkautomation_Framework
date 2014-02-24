@@ -17,7 +17,7 @@ def get_element_common(driver,page,subtab,element_id):
         result = False
     return element_txt, result
 
-def run():
+def run(target_id):
     driver = se_ins.login(tbd_config_data[se_ins.device_name]['ACE_URL'], \
                           tbd_config_data[se_ins.device_name]['USERNAME'], \
                           tbd_config_data[se_ins.device_name]['PASSWORD'])
@@ -27,8 +27,11 @@ def run():
     for page,v1 in ace_element_data.iteritems():
         for subtab,v2 in ace_element_data[page].iteritems():
             for element,v3 in ace_element_data[page][subtab].iteritems():
-                sys.stdout.write("Checking===> Page: \'"+page+"\' | Subtab: \'"+subtab+"\' | Element: \'"+element+"\' ...")
-                element_value, result = get_element_common(driver,page,subtab,v3[0])
+#                sys.stdout.write("Checking===> Page: \'"+page+"\' | Subtab: \'"+subtab+"\' | Element: \'"+element+"\' ...")
+#                element_value, result = get_element_common(driver,page,subtab,v3[0])
+                if target_id == v3[0]:
+                    print page
+                    print subtab
                 if result == True:
                     msg = "Pass"
                 else:

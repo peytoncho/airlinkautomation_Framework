@@ -98,8 +98,7 @@ class TsFwupdateUi(unittest.TestCase):
         else:
             basic_airlink.clog(time.ctime(time.time())+" ===>> "+result, "GREEN")
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE")            
-
-    
+  
     def tc_fwupdate_local_roundtrip(self):
         '''  This method will run the round trip update
         
@@ -198,7 +197,57 @@ class TsFwupdateUi(unittest.TestCase):
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE")
     
     def tc_fwupdate_custom_path_example(self):
-        #define all
+        #This example is simulating the path:
+        #4.3.4.009 -> delete UBOOT file in ALEOS linux 
+        #-> do RM update only -> do ALEOS update only(4.3.5.010)
+        
+        #internal method for this test case
+        def remove_file():
+            pass
+               
+        #define the version, file which the test case needed.
+        times_count = fwupdate_config_map["ROUNDTRIP_TIMES"]
+        fw1 = "4.3.4.009"
+        rm1 = "SL5011_VZW003_11301"
+        fw2 = "4.3.5.010"
+        
+        for round in range(times_count):
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Round: "+str(round+1)+" Started", "BLUE")
+            #Upgrade path
+            #Step 1:
+            #for this case step 1 is the downgrade step                   
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Upgrade to: "+fw1, "BLUE")
+            result = self.fw_ins.fwupdate_ui_aleos(fw1)
+            if not "True" in result:
+                self.fail(result)
+            else:
+                basic_airlink.cslog(time.ctime(time.time())+" ===>>"+result, "GREEN")
+            
+            #Step 2:
+            remove_file()
+
+            #Step 3:
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Upgrade to: "+rm1, "BLUE")                
+            result = self.fw_ins.fwupdate_ui_rm(rm1)
+            if not "True" in result:
+                self.fail(result)
+            else:
+                basic_airlink.cslog(time.ctime(time.time())+" ===>>"+result, "GREEN")
+            
+            #Step 4:
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Upgrade to: "+rm1, "BLUE")                
+            result = self.fw_ins.fwupdate_ui_rm(rm1)
+            if not "True" in result:
+                self.fail(result)
+            else:
+                basic_airlink.cslog(time.ctime(time.time())+" ===>>"+result, "GREEN")            
+            
+            
+            #Downgrade path, built by tester, it depense on the downgrade process
+            
+            
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Round: "+str(round+1)+" Completed", "BLUE")
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE")
         pass       
     
     

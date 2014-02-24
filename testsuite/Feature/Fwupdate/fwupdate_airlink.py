@@ -41,10 +41,9 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         self.rm_update_flag = False
 
     def fwupdate_ui_rm(self, update_rm_version):
-        '''
-        This method will update ALEOS with the version in parameter
+        '''This method will update RM with the version in parameter
         
-        Args:fw_version
+        Args:update_rm_version
         
         Return:result, If there are any issues during the update process, 
         the result will return the error code from the specific point
@@ -62,10 +61,9 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
             
         
     def fwupdate_ui_aleos(self,update_fw_version):
-        '''
-        This method will update ALEOS with the version in parameter
+        '''This method will update ALEOS with the version in parameter
         
-        Args:fw_version
+        Args:update_fw_version
         
         Return:result, If there are any issues during the update process, 
         the result will return the error code from the specific point
@@ -87,8 +85,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         return result
     
     def fwrmupdate_ui_roundtrip(self, fw_from, fw_to):
-        '''
-        This method will update ALEOS with the version in parameter
+        '''This method will update ALEOS with the version in parameter
         
         Args:fw_version
         
@@ -120,8 +117,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                    
 
     def fw_update_at_command(self, update_fw_version):
-        '''
-        This method will update ALEOS with the version in parameter
+        '''This method will update ALEOS with the version in parameter
         
         Args: update_fw_version
         
@@ -135,8 +131,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         return result
     
     def rm_update_at_command(self, update_rm_version):
-        '''
-        This method will update Radio Module with the version in parameter
+        '''This method will update Radio Module with the version in parameter
         
         Args:fw_version
         
@@ -151,8 +146,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         return result
     
     def fw_rm_update_at_command(self, update_fw_version, update_rm_version):
-        '''
-        This method will update ALEOS and Radio Module with the version in parameters
+        '''This method will update ALEOS and Radio Module with the version in parameters
         
         Args:fw_version
         
@@ -174,7 +168,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
 #Helper functions UI
 #===========================================================================
     def _startUp(self):
-        ''' the test runner will run that method prior to each test
+        ''' The test runner will run that method prior to each test
         
         Args: None
         
@@ -199,6 +193,12 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
             
     
     def _verify_aleos(self, fw_version):
+        '''Verify the expected version and current version in device
+        
+        Args: fw_version: expected fw version
+        
+        return:result str: True/False 
+        '''
         result = True
         attempt_verify_times = 100
         while attempt_verify_times > 0:
@@ -214,8 +214,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         return result_str
     
     def _aleos_check(self):
-        '''
-        To check current aleos firmware version
+        '''To check current aleos firmware version
         
         Args: None
         
@@ -241,8 +240,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         return aleos_version
     
     def _device_check(self):
-        '''
-        To check whether the device model matches the one configured in testbed yml file or not
+        '''To check whether the device model matches the one configured in testbed yml file or not
         
         Args: device_name
         
@@ -270,8 +268,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         return result
 
     def _get_device_prefix(self):
-        '''
-        To get the device model prefix from configure yml file
+        '''To get the device model prefix from configure yml file
         
         Args: None
         
@@ -302,8 +299,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         return network_state
     
     def _get_aleos_path(self, device_prefix, fw_version):
-        '''
-        To get aleos firmware file path in local PC
+        '''To get aleos firmware file path in local PC
         
         Args: device_prefix
               firmwareVersion
@@ -315,12 +311,25 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         return aleos_build_path
     
     def _get_rm_path(self, rm_version):
+        '''Get the RM file path on the PC
+        
+        Args: rm version
+        
+        Return: the rm path string
+        '''
         rm_build_filename = rm_version+'.bin'
         rm_build_path = airlinkautomation_home_dirname + '\\data\\builds\\RmFwImages\\'+ rm_build_filename
         return rm_build_path
 
     def _pre_fwupdate_rm(self,rm_version):
+        '''Pre-actions for update operation
+        
+        Args: rm_version
+        
+        Return: update result
+        '''
         self.current_fw_version = self._aleos_check()
+        basic_airlink.clog(time.ctime(time.time())+" ===>> Current Firmware Version: "+self.current_fw_version)
         rm_build_path = self._get_rm_path(rm_version)
         basic_airlink.cslog(time.ctime(time.time())+" ===>> RM Build: "+rm_build_path)
         path_list = [rm_build_path]
@@ -544,13 +553,18 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
             return result
             
     def _get_step_pic_name(self, driver, step_num):
+        '''Get the picture name showing in the update process
+        
+        Args: driver, step number
+        
+        Return: picture name
+        '''
         pic_elem = driver.find_element_by_xpath(".//div[@id='file_upload']/center[2]/div/div["+str(step_num)+"]/img")
         pic_name = pic_elem.get_attribute("src").split('/')[-1]
         return pic_name
         
     def _fw_update(self, path_list, fw_version=""):
-        ''' 
-        This method will operate the update process in UI
+        ''' This method will operate the update process in UI
         
         Args: ALEOSBuild
               RMBuild
@@ -685,8 +699,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
 #Helper functions AT Command
 #===========================================================================
     def _execute_at_fw_update(self, update_fw_version):
-        ''' 
-        This method will call the firmware update function in the library
+        ''' This method will call the firmware update function in the library
         
         Args: None
         
@@ -724,6 +737,12 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         time.sleep(tbd_config_map[self.device_name]["REBOOT_TIMEOUT"])
         
     def _match_rm(self, fw_version):
+        '''Match the RM according ALEOS version and device
+        
+        Args: fw_version
+        
+        Return: rm_name 
+        '''
         fw1_version = ""
         fw_lst = fwupdate_config_map["ALEOS_VERSION_LIST"]
         for version in fw_lst:
@@ -736,7 +755,14 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         return rm1_name
         
     def _verify_rm(self, rm_version):
-       
+        '''
+        Verify the RM if is expected version in current device
+        
+        Args: rm_version
+        
+        Return: result string Ture/False
+        '''
+
         rm_version_rear = rm_version.split("_")[2]
 #        basic_airlink.clog(time.ctime(time.time())+" ===>> rm_version_rear: "+rm_version_rear)
         rm_ver_dict = {

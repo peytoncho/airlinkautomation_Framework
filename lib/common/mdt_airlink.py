@@ -1,17 +1,15 @@
-from __future__ import print_function
-import csv
 import at_utilities
 import telnet_airlink
-import time
+
+DEVICE_NUMBER = 5
 
 def retrive_global_ip():
     
     at_ins = at_utilities.AtCommands()
     globalid_lst = []
     reboot_fail_lst = []
-    
-    
-    while len(globalid_lst)<5:
+        
+    while len(globalid_lst)<DEVICE_NUMBER:
         result = ""
         curr_ip = "192.168.13.31"
         telnet_ins = telnet_airlink.TelnetAirlink(hostname = curr_ip)
@@ -46,7 +44,9 @@ def retrive_global_ip():
             break
 
         print(globalid_lst)
-        
+
+
+
 def restore_device_ip():
     at_ins = at_utilities.AtCommands()
     
@@ -61,32 +61,9 @@ def restore_device_ip():
         
         time.sleep(15)
      
-    print("DONE!")   
-      
-            
-        
+    print("DONE!")
     
-
     
-def repeat_reboot():
-    at_ins = at_utilities.AtCommands()
-    i=20
-    while i>0:
-        curr_ip = "192.168.13.31"
-        telnet_ins = telnet_airlink.TelnetAirlink(hostname = curr_ip)
-        i=i-1
-        while True:
-            try:
-                while not telnet_ins.connect():
-                    print('connection fail')
-                at_ins.atz_reboot(telnet_ins)
-                
-                time.sleep(15)               
-            except:               
-                continue
-            break        
-        
-
 def get_device_ip_list():
     at_ins = at_utilities.AtCommands()
     info_lst = []
@@ -106,70 +83,3 @@ def get_device_ip_list():
            
     for line in info_lst:
         print(line)
-        
-        
-        
-
-def getcsvHeader(csvfile):
-    header = ""
-    fp = open(csvfile)
-    for i, line in enumerate(fp):
-        if i < 12:
-            header = header+str(line)
-    fp.close()
-    return header
-
-def readcsv():
-    with open('test.csv', 'rb') as csvfile:
-        reader = csv.reader(csvfile, delimiter = ",")
-        flag = False
-        mydict = dict()
-        for row in reader:
-            if len(row)>=10:
-                for i in range(0,len(row)-1):
-                    if row[i] == 'Test Case':
-                        flag = True
-                if flag == True:
-                    mydict[row[0]] = row[1:]
-
-    return mydict
-
-
-def changeResult(dics,key,value):
-    dics[key][0] = value
-    return dics
-
-
-
-
-def writecsv(dics):
-    csv1file = open('test1.csv','wb')
-    header = getcsvHeader('test.csv')
-    print(header, file=csv1file)
-    content = ""
-    item_lst = dics.items()
-    for i in range(0,len(item_lst)):
-        nextline = ''
-        content = content+'"'+item_lst[i][0]+'"'
-        for j in range(0,len(item_lst[i][1])):
-            if j == 8:
-                nextline = '\n'
-            content = content+','+'"'+item_lst[i][1][j]+'"'+nextline
-    
-    print(content, file=csv1file)
-     
-    csv1file.close()
-
-if __name__ == "__main__":
-#     get_device_ip_list()
-    retrive_global_ip()
-#     time.sleep(50)
-#   repeat_reboot()
-#    restore_device_ip()
-    time.sleep(60) 
-    get_device_ip_list()
-    
-    
-    
-    
-    
