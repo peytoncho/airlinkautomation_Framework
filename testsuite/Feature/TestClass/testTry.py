@@ -63,7 +63,9 @@ def restore_device_ip():
      
     print("DONE!")   
       
-            
+def form_device_name():
+    
+    pass            
         
     
 
@@ -166,8 +168,8 @@ if __name__ == "__main__":
 #     time.sleep(50)
 #   repeat_reboot()
 #    restore_device_ip()
-    time.sleep(60) 
-    get_device_ip_list()
+#    time.sleep(60) 
+#    get_device_ip_list()
     
     
     

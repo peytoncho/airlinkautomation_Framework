@@ -33,8 +33,10 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         self.device_name = dut_name
         self.dut_ip = dut_ip
         self.url = "HTTP://"+self.dut_ip+":9191/" 
-        self.username = tbd_config_map[self.device_name]["USERNAME"]
-        self.password = tbd_config_map[self.device_name]["PASSWORD"]
+#         self.username = tbd_config_map[self.device_name]["USERNAME"]
+#         self.password = tbd_config_map[self.device_name]["PASSWORD"]
+        self.username = tbd_config_map['USERNAME']
+        self.password = tbd_config_map['PASSWORD']
         self.ftp_server_ip = fwupdate_config_map["FTP_SERVER_ADDRESS"]
         self.ftp_username = fwupdate_config_map["FTP_USERNAME"]
         self.ftp_password = fwupdate_config_map["FTP_PASSWORD"]

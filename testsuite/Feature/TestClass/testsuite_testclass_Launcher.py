@@ -19,8 +19,8 @@ import shutil
 import ftp_sender
 
 #Import ts file here
-#import ts_testClass1
-import mdt_ts
+import ts_testClass1
+#import mdt_ts
 
 
 test_area = "TestClass"
@@ -31,38 +31,38 @@ sys.path.append(airlinkautomation_home_dirname+"/lib/common")
 basic_airlink.append_sys_path()
 tbd_config_map, testclass_config_map = basic_airlink.get_config_data(test_area,"")
 
-# tc_ts_map={
-#     1:   [ts_testClass1.TsTestClass1,"test_1",0],
-#     2:   [ts_testClass1.TsTestClass1,"test_2",0],
-#     3:   [ts_testClass1.TsTestClass1,"test_3",0],
-#     4:   [ts_testClass1.TsTestClass1,"test_4",0],
-#     5:   [ts_testClass1.TsTestClass1,"test_5",0],
-#     6:   [ts_testClass1.TsTestClass1,"test_6",0],
-#               
-# }
-
-tc_ts_map = {
-    1:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX400_MC8705_OSM",0],
-    2:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX400_MC8705_ATT",0],
-    3:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX400_MC8705_BEL",0],
-    4:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX400_MC8705_TLS",0],
-    5:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX410_MC8705_OSM",0],
-    6:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX400_MC5728_VZW",0],
-    7:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX440_MC7750_VZW",0],
-    8:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX440_MC7700_ATT",0],
-    9:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX400_MC5728_SPT",0],
-    10:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX440_MC7700_OSM",0],
-    11:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_ES440_MC7750_VZW",0],
-    12:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_ES440_MC7700_ATT",0],
-    13:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_ES440_MC7710_EMEA",0],
-    14:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_ES440_MC7700_OSM",0],
-    15:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX440_MC7700_OSM",0],
-    16:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_LS300_SL5011_VZW",0],
-    17:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_LS300_SL5011_SPT",0],
-    18:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_LS300_SL8090_ATT",0],
-    19:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_LS300_SL8090_BEL",0],
-    20:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_LS300_SL8092_OSM",0],
+tc_ts_map={
+    1:   [ts_testClass1.TsTestClass1,"test_1",0],
+    2:   [ts_testClass1.TsTestClass1,"test_2",0],
+    3:   [ts_testClass1.TsTestClass1,"test_3",0],
+    4:   [ts_testClass1.TsTestClass1,"test_4",0],
+    5:   [ts_testClass1.TsTestClass1,"test_5",0],
+    6:   [ts_testClass1.TsTestClass1,"test_6",0],
+               
 }
+
+# tc_ts_map = {
+#     1:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX400_MC8705_OSM",0],
+#     2:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX400_MC8705_ATT",0],
+#     3:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX400_MC8705_BEL",0],
+#     4:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX400_MC8705_TLS",0],
+#     5:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX410_MC8705_OSM",0],
+#     6:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX400_MC5728_VZW",0],
+#     7:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX440_MC7750_VZW",0],
+#     8:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX440_MC7700_ATT",0],
+#     9:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX400_MC5728_SPT",0],
+#     10:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX440_MC7700_OSM",0],
+#     11:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_ES440_MC7750_VZW",0],
+#     12:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_ES440_MC7700_ATT",0],
+#     13:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_ES440_MC7710_EMEA",0],
+#     14:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_ES440_MC7700_OSM",0],
+#     15:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_GX440_MC7700_OSM",0],
+#     16:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_LS300_SL5011_VZW",0],
+#     17:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_LS300_SL5011_SPT",0],
+#     18:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_LS300_SL8090_ATT",0],
+#     19:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_LS300_SL8090_BEL",0],
+#     20:[mdt_ts.MultipleDeviceTest,"tc_fwupdate_LS300_SL8092_OSM",0],
+# }
 
 testing_combo = testclass_config_map["TESTING_COMBO"]
 

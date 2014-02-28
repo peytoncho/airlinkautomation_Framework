@@ -2703,3 +2703,31 @@ class SeleniumAcemanager(unittest.TestCase):
         config_elements.append({'tab':tab,'subtab':subtab,'byhow':byhow,'field':field,'flag':flag,'value':value})
         return config_elements
     
+    def get_device_rmid(self,driver):
+        ''' get RMID by ACEmanager Web UI Status/About page
+        Args: 
+            driver FF/IE web driver 
+        Returns: 
+            device model
+        '''
+
+        msciid_str = str(msciids.MSCIID_STS_RMID)
+            
+        ret=self.get_element_by_id(driver, msciid_str)
+        
+        basic_airlink.cslog("device rmid: "+ret)
+        
+        return ret        
+    
+    def form_device_name(self, driver):
+        self.navigate_subtab(driver, "Status", "About")
+        device_model = self.get_device_model(driver)
+        device_rm = self.get_radio_module_type(driver)
+        device_rmid = self.get_device_rmid(driver)
+        device_name = "DUT_"+device_model+"_"+device_rm+"_"+device_rmid[0:3]
+        basic_airlink.cslog(device_name, 'RED')
+        return device_name
+        
+        
+        
+    

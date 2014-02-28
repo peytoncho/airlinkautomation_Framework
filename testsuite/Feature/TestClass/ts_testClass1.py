@@ -31,6 +31,7 @@ import ssh_airlink
 import telnet_airlink
 import fwupdate_airlink
 import datetime
+import ping_airlink
 
 #must define the test area here
 test_area = "TestClass"
@@ -58,7 +59,7 @@ def listening_clog(queue):
             sys.stdout.writelines(m) 
         else:
             time.sleep(0.1)
-device_name = tbd_config_map["DUTS"][0]
+#device_name = tbd_config_map["DUTS"][0]
 test_case_num = 0
 
 
@@ -110,20 +111,25 @@ class TsTestClass1 (unittest.TestCase):
 #         try:
 #             self.assertEqual(self.conn_ins.testbed_ready(), True, "DUT NOT READY")
 #         except Exception:
-#             self.skipTest("DUT not ready")               
+#             self.skipTest("DUT not ready")
+                     
         self.se_ins = selenium_utilities.SeleniumAcemanager()
 #         self.at_ins = at_utilities.AtCommands()
 #         self.ssh_ins = ssh_airlink.SshAirlink()
         
-        self.url = tbd_config_map[device_name]["ACE_URL"]
-        self.username = tbd_config_map[device_name]["USERNAME"]
-        self.password = tbd_config_map[device_name]["PASSWORD"]
+        
+#         self.url = tbd_config_map[device_name]["ACE_URL"]
+#         self.username = tbd_config_map[device_name]["USERNAME"]
+#         self.password = tbd_config_map[device_name]["PASSWORD"]
+        self.url = 'http://192.168.13.31:9191'
+        self.username = 'user'
+        self.password = '12345'
         
 #         self.connect_instance = self.conn_ins.connection_types()
 #         if not self.connect_instance.connect(): 
 #             basic_airlink.slog("Problem: testbed not ready yet")
         self.driver = self.se_ins.login(self.url, self.username, self.password)
-            
+        self.device_name = self.se_ins.form_device_name(self.driver)   
         return
     def tearDown(self):
         self.driver.quit()
@@ -131,67 +137,12 @@ class TsTestClass1 (unittest.TestCase):
 
        
     def test_1(self):
-        def check_pic(pic_src):
-            result = True
-            if not "check.gif" in pic_src:
-                result = False
-            return result
-               
-        basic_airlink.cslog("This is tc_test 1")
-#         basic_airlink.cslog("Network State: "+self._network_state_ckeck())
-        self.driver.find_element_by_id("btn_fw").click()
-        time.sleep(2)
+        ping_airlink.PingAirlink().ping_test('192.168.13.31')
+        model = tbd_config_map[self.device_name]["MODEL"]
+        rm_type = tbd_config_map[self.device_name]["RM_TYPE"]
         
-        #switch to fw update window
-        xmlFrame =self.driver.find_element_by_xpath("//*[@id='xmlPage']")
-        self.driver.switch_to_frame(xmlFrame)
-        
-        #switch to type choose and browse fw file frame
-        fileFrame= self.driver.find_element_by_xpath(".//div[@id='file_upload']/center/div/div/iframe")   
-        self.driver.switch_to_frame(fileFrame)
-        
-        #choose update type
-        time.sleep(2)
-        self.driver.find_elements_by_name("update_type")[1].click()
-        self.driver.find_elements_by_name("update_type")[0].click()
-        #browse file
-        time.sleep(2)
-        fw_ins = fwupdate_airlink.FwupdateAirlink()
-        aleos_path = fw_ins._get_aleos_path("GX", "4.3.4.009")
-        self.driver.find_element_by_name("image").send_keys(aleos_path)
-        
-        #click go
-        time.sleep(2)
-        fw_ins._fw_go_click(self.driver)
-        
-        #switch back to fw window
-#         self.driver.switch_to_default_content()
-#         xmlFrame =self.driver.find_element_by_xpath("//*[@id='xmlPage']")
-#         self.driver.switch_to_frame(xmlFrame)
-        
-        #check step pic
-        def verify_step(step_num, timeout):
-            start_time = time.time()
-#            pic_elem = self.driver.find_element_by_id(".//div[@id='file_upload']/center[2]/div/div["+str(step_num)+"]/img")
-            pic_elem = self.driver.find_element_by_css_selector(".step")        
-            pic_src = str(pic_elem.get_attribute("src"))
-#             while not check_pic(pic_src):
-#                 run_time = time.time()- start_time
-#                 basic_airlink.clog(str(run_time), "BLUE")
-#                 if timeout <= run_time:
-#                     basic_airlink.clog("TIME OUT", "BLUE")
-#                     break
-#                pic_elem = self.driver.find_element_by_xpath(".//div[@id='file_upload']/center[2]/div/div["+str(step_num)+"]/img")
-#           pic_elem = self.driver.find_elements_by_css_selector(".step")        
-#                 pic_src = str(pic_elem.get_attribute("src"))
-            basic_airlink.cslog("Step"+str(step_num)+": "+str(pic_elem), "RED")
-            basic_airlink.cslog("Step"+str(step_num)+": "+str(pic_src), "RED")
-        
-        verify_step(1, 1000)
-#        verify_step(2, 1000)
-#        verify_step(3, 1000)
-        
-        time.sleep(200)
+        basic_airlink.cslog("Model: "+model)
+        basic_airlink.cslog("RM_TYPE: "+rm_type)
               
     def test_2(self):
         basic_airlink.cslog("This is tc_test 2")

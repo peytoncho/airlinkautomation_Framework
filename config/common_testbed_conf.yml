@@ -50,6 +50,9 @@ DUTS : ["DUT_LS300_SL5011_VZW"]
 #DUTS : ["DUT_LS300_SL5011_SPT"]
 #DUTS : ["DUT_LS300_SL8092_OSM"]
 
+ACE_URL         :    "HTTP://192.168.13.31:9191/"
+USERNAME        :    "user"
+PASSWORD        :    "12345"
 # DUTs' basic configuration  ###################################################
 
 DUT_ES440_MC7750_VZW: 

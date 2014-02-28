@@ -15,6 +15,7 @@ import time
 import shutil
 import htmlreport
 import basic_airlink
+import mdt_airlink
 
 
 import ts_fwupdate_ui
@@ -98,8 +99,21 @@ def pickTestcase(combo_list):
 if __name__ == "__main__":
   
     if fwupdate_config_map["MDT"] == "YES":
-        combo_list = readCombo(testing_combo)
+        #1, change all connected devices IP
+        device_number =  mdt_airlink.change_global_ip()
+        
+        #2, check devices connection
+        check_connection_flag = mdt_airlink.check_connection(device_number)
+        if not check_connection_flag:
+            sys.exit(2)
+        #3, form the devices list 
+        combo_list = mdt_airlink.form_device_name(device_number)
+        
+        #4, pick the test case
         pick_list = pickTestcase(combo_list)
+        
+#         combo_list = readCombo(testing_combo)
+#         pick_list = pickTestcase(combo_list)
         mySuite = basic_airlink.setup_suite_mdt(tc_ts_map, pick_list)
     else:
         mySuite = basic_airlink.setup_suite(tbd_config_map,fwupdate_config_map, tc_ts_map)
