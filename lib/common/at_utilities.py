@@ -10,62 +10,42 @@
 import basic_airlink
 
 class AtCommands(object):
-    ''' This class includes AT commands implementation
+    ''' This class includes AT commands implementation in ALEOS
     '''
     
-    def __init__(self): 
+    def __init__(self):
+        ''' TODO: to think if we really need error_flag variable.
         '''
-        '''
-        pass
-    
+        self.error_flag = 0
 
-    def query(self, instance, cmd):
+    def query(self, instance, at_cmd, keep_lf= False):
         ''' common method to execute AT command, and return result
         
         Args: 
             instance: Telnet/SSH/Serial connection instance 
-            cmd:  AT command string
+            at_cmd:  AT command string
+            keep_lf: flag to judge if keep '\n' in return result
             
         Returns: 
             string, the results of executing AT query command
         '''
-        #len_cmd = len(cmd)
-        ret = instance.command(cmd)
+        ret = instance.command(at_cmd)
+#        if not ret:     #empty list
+#            return "\n"
+        
         ret_str = ''.join(ret)
         basic_airlink.slog(ret_str)
         if ret_str.find("OK",0) == -1: 
             return basic_airlink.ERR
         else:
-            #ret_str = ret_str[len_cmd:]
-            ret_str = ret_str.replace(cmd,"")
+            ret_str = ret_str.replace(at_cmd,"")
             ret_str = ret_str.replace("OK","")
-            ret_str = ret_str.replace("\n","")
+            if not keep_lf:
+                ret_str = ret_str.replace("\n","")
             ret_str = ret_str.replace("\r","")
-            return ret_str
-    def query_new(self, instance, cmd):
-        ''' common method to execute AT command, and return result
-        
-        Args: 
-            instance: Telnet/SSH/Serial connection instance 
-            cmd:  AT command string
-            
-        Returns: 
-            string, the results of executing AT query command
-        '''
-        #len_cmd = len(cmd)
-        ret = instance.command(cmd)
-        ret_str = ''.join(ret)
-        basic_airlink.slog(ret_str)
-        if not "OK" in ret_str: 
-            return basic_airlink.ERR
-        else:
-            #ret_str = ret_str[len_cmd:]
-            ret_str = ret_str.replace(cmd,"")
-            ret_str = ret_str.replace("OK","")
-            ret_str = ret_str.replace("\r","")
-            return ret_str   
- 
-    def assign(self, instance, cmd):
+            return ret_str  
+         
+    def assign(self, instance, at_cmd):
         ''' common method to execute AT assignment command
         
         Args: 
@@ -75,15 +55,15 @@ class AtCommands(object):
         Return: 
             True/False
         '''
-        ret = instance.command(cmd)
+        ret = instance.command(at_cmd)
         ret_str = ''.join(ret)
         basic_airlink.slog(ret_str)
-        if not "OK" in ret_str:
+        if ret_str.find("OK",0) == -1:
             return False
         else:
             return True 
  
-    def execute(self, instance, cmd):
+    def execute(self, instance, at_cmd):
         ''' common method to execute AT command without '?','='
         no OK return
         Args: 
@@ -93,7 +73,7 @@ class AtCommands(object):
         Return: 
             True/False
         '''
-        ret = instance.command(cmd)
+        ret = instance.command(at_cmd)
         ret_str = ''.join(ret)
         basic_airlink.slog(ret_str)
         if ret_str.find("ERROR",0) >= 0:
@@ -124,15 +104,14 @@ class AtCommands(object):
             True/False 
         '''
         cmd = "atz"
-        result = False
         basic_airlink.slog("Step:  reboot by AT command")
         ret = instance.command(cmd)
         ret_str = ''.join(ret)
-        if 'atz' in ret_str:
-            result = True
-        
-        return result
- 
+        basic_airlink.slog(ret_str)
+        if ret_str.find(cmd,0) >= 0:
+            return True  
+        else:
+            return False
 
     def get_block_reset_config(self, instance): 
         '''  Block reset config by AT command
@@ -211,45 +190,27 @@ class AtCommands(object):
         cmd = "ATPING"+address
         basic_airlink.slog("Step:  ping by AT command")
         return self.execute(instance,cmd)
-                           
+
     def gstatus(self, instance): 
-        ''' use modem_util to get the status, this is radio AT command
+        ''' use modem_util to get the status, this is radio module's AT command,
+        need to login as root first.
         TODO
         Args: 
-            instance: Telnet/SSH/Serial connection instance 
             
         Returns:
-            status 
+            status (string)
         '''
-        basic_airlink.slog("Step:  get status by AT command for root user")
-        ret = instance.command("modem_util $ALEOS_ATDEV 115200 \'at!gstatus?\'")
+        basic_airlink.slog("Step: get status by radio AT command for root user")
+        ret = \
+        instance.command("modem_util \$ALEOS_ATDEV 115200 \'at!gstatus?\'")
         ret_str = ''.join(ret)                
-        basic_airlink.clog(ret_str)         
+        basic_airlink.slog( ret_str)         
         if ret_str.find("OK",0) == -1 : 
             basic_airlink.slog(' device reboot not OK   \n')
             return basic_airlink.ERR
         else:    
             return ret_str
-    
-    def get_ecio(self, instance): 
-        ''' use modem_util to get the Ec/Io value, this is radio AT command
-        TODO
-        Args: 
-            instance: Telnet/SSH/Serial connection instance 
             
-        Returns:
-            status 
-        '''
-        basic_airlink.slog("Step: Status using AT command for root user")
-        ret = instance.command("modem_util $ALEOS_ATDEV 115200 \'at+ecio?\'")
-        ret_str = ''.join(ret)               
-        basic_airlink.clog(ret_str)         
-        if ret_str.find("OK",0) == -1 : 
-            basic_airlink.slog(' get ECIO not OK   \n')
-            return basic_airlink.ERR
-        else:    
-            return ret_str
-    
     def get_system_reset_number(self, instance):
         ''' To get the number of system reset 
         
@@ -863,6 +824,22 @@ class AtCommands(object):
         basic_airlink.slog("Step:  get DNS State by AT command")
         return self.query(instance,cmd)                                  
 
+    def get_dns_v6_state(self, instance, dns_no):
+        '''Query DNS V6 state by AT command 
+            AT*DNS1V6?
+            AT*DNS2V6?
+            
+        Args: 
+            instance: Telnet/SSH/Serial connection instance 
+            dns_no : "1" - primary DNS, "2" - secondary DNS
+            
+        Returns:
+            DNS V6 State
+        '''
+        cmd="AT*DNS"+dns_no+"V6?"
+        basic_airlink.slog("Step:  get DNS V6 State by AT command")
+        return self.query(instance,cmd)  
+    
     def get_dns_user(self, instance):
         '''Get DNS user IP by AT command AT*DNSUSER?
 
@@ -1886,7 +1863,7 @@ class AtCommands(object):
         cmd="AT*EVDODIVERSITY="+flag
         return self.assign(instance,cmd)    
 
-    def fw_update(self, instance, ftp_server_ip, username, password, fw_filename=""):
+    def fw_update(self, instance, ftp_server_ip, username, password):
         ''' FW update by internal AT command AT*FWUPDATA=<server_ip>,<username>,<password>
         need to rename build *.bin file to fw.bin in FTP server shared folder
         
@@ -1901,13 +1878,10 @@ class AtCommands(object):
         '''
         
         basic_airlink.slog("Step:  Update FW by AT command")
-        cmd="AT*FWUPDATE= "+ftp_server_ip +","+username+","+password+","+fw_filename
-        ret = instance.command(cmd)
-        ret_str = ''.join(ret)
-        basic_airlink.slog(ret_str)
-        return ret_str   
+        cmd="AT*FWUPDATE= "+ftp_server_ip +","+username+","+password
+        return self.assign(instance,cmd)    
  
-    def fw_rm_update(self, instance, ftp_server_ip, username, password, fw_filename="", rm_filename=""):
+    def fw_rm_update(self, instance, ftp_server_ip, username, password, fw_filename, rm_filename):
         ''' Update FW and RM by internal new AT command 
             AT*FWRMUPDATA=<server_ip>,<username>,<password>,<fw_filename>,<rm_filename>
             
@@ -1925,10 +1899,7 @@ class AtCommands(object):
         
         basic_airlink.slog("Step:  Update FW and RM by AT command")
         cmd="AT*FWRMUPDATE="+ftp_server_ip +","+username+","+password +"," +fw_filename+","+rm_filename
-        ret = instance.command(cmd)
-        ret_str = ''.join(ret)
-        basic_airlink.slog(ret_str)
-        return ret_str      
+        return self.assign(instance,cmd)      
     
     def rm_update(self, instance, ftp_server_ip, username, password, rm_filename):
         ''' RM update by internal new AT command 
@@ -1946,12 +1917,8 @@ class AtCommands(object):
         '''
         
         basic_airlink.slog("Step:  Update RM by AT command")
-        cmd="AT*RMUPDATE="+ftp_server_ip +","+username+","+password +"," +rm_filename       
-        ret = instance.command(cmd)
-        ret_str = ''.join(ret)
-        basic_airlink.slog(ret_str)
-        
-        return ret_str
+        cmd="AT*RMUPDATE="+ftp_server_ip +","+username+","+password +"," +rm_filename
+        return self.assign(instance,cmd)      
 
     def template_upload(self, instance, ftp_server_ip, username, password, template_filename):
         ''' RM update by internal new AT command 
@@ -1984,12 +1951,7 @@ class AtCommands(object):
         
         basic_airlink.slog("Step:  get global ID by AT command")
         cmd="AT*GLOBALID?"
-        ret_lst = self.query_new(instance,cmd).split("\n")
-        lst = []
-        for i in ret_lst:
-            if i!="":
-                lst.append(i)
-        return lst[0]       
+        return self.assign(instance,cmd)       
         
     def get_gps_data(self, instance):
         ''' Get GPS data by AT command  AT*GPSDATA?
@@ -3321,6 +3283,23 @@ class AtCommands(object):
         basic_airlink.slog("Step: set APN  by AT command")
         return self.assign(instance,cmd)  
 
+    def verify_apn(self, instance, apn):
+        '''Verify APN = get by AT commands  AT*APN=[apn] + compare
+        TO DEBUG
+        Args: 
+            instance: Telnet/SSH/Serial connection instance 
+            
+        Returns:
+            True/False
+        '''
+        cmd = "AT*NETAPN?"
+        basic_airlink.slog("Step:  get APN by AT command")
+        ret = self.query(instance,cmd) 
+        if ret.find(apn,0)>=0:
+            return True 
+        else: 
+            return False
+        
     def get_net_channel(self, instance):
         '''Query net channel AT commands  AT*NETCHAN?
 
@@ -3359,7 +3338,59 @@ class AtCommands(object):
         cmd = "AT*NETIP?"
         basic_airlink.slog("Step:  get NET IP by AT command")
         return self.query(instance,cmd)
-    
+
+    def get_net_ipv6(self, instance):
+        '''Query NET IPV6  by AT commands  AT*NETIPV6?
+
+        Args: 
+            instance: Telnet/SSH/Serial connection instance 
+            
+        Returns:
+            Net IP V6
+        '''
+        cmd = "AT*NETIPV6?"
+        basic_airlink.slog("Step:  get NET IPV6 by AT command")
+        return self.query(instance,cmd)
+
+    def get_net_ipv6_prefix_len(self, instance):
+        '''Query NET IPV6 Prefix length  by AT commands  AT*NETIPV6PREFIXLEN?
+
+        Args: 
+            instance: Telnet/SSH/Serial connection instance 
+            
+        Returns:
+            Net IP V6 Prefix Length
+        '''
+        cmd = "AT*NETIPV6PREFIXLEN?"
+        basic_airlink.slog("Step:  get NET IPV6 Prefix Length by AT command")
+        return self.query(instance,cmd)
+
+    def get_net_conn_type(self, instance):
+        '''Query NET connection type  by AT commands  AT*NETCONNTYPE?
+
+        Args: 
+            instance: Telnet/SSH/Serial connection instance 
+            
+        Returns:
+            Net Conenction type
+        '''
+        cmd = "AT*NETCONNTYPE?"
+        basic_airlink.slog("Step:  get Network connection type by AT command")
+        return self.query(instance,cmd)
+
+    def get_net_ip_pref(self, instance):
+        '''Query NET IP Pref  by AT commands  AT*NETIPPREF?
+
+        Args: 
+            instance: Telnet/SSH/Serial connection instance 
+            
+        Returns:
+            Net IP Pref
+        '''
+        cmd = "AT*NETIPPREF?"
+        basic_airlink.slog("Step:  get NET IP PREF by AT command")
+        return self.query(instance,cmd)
+                    
     def get_net_op(self, instance):
         '''Query NET operator  by AT commands  AT*NETOP?
 
@@ -3452,7 +3483,25 @@ class AtCommands(object):
         cmd = "AT*NETSTATE?"
         basic_airlink.slog("Step:  get network state by AT command")
         return self.query(instance,cmd)
-    
+ 
+    def verify_net_state(self, instance, net_state, timeout = 60):
+        '''Query network state by AT commands  AT*NETSTATE?
+        TO DEBUG
+        Args: 
+            instance: Telnet/SSH/Serial connection instance 
+            
+        Returns:
+            True/False
+        '''
+        cmd = "AT*NETSTATE?"
+        basic_airlink.slog("Step:  get network state by AT command")
+        
+        ret = self.query(instance,cmd)
+        if ret.find(net_state,0)>=0:
+            return True 
+        else:
+            return False
+        
     def get_net_state_raw(self, instance):
         '''Query network state raw by AT commands AT*NETSTATE_RAW?
 
@@ -5039,27 +5088,22 @@ class AtCommands(object):
             True/False
         '''
         cmd = "AT&W"
-        basic_airlink.slog("Step:  Write to non volatile memory by AT command  AT&W")
+        basic_airlink.slog("Step:  Write to non-volatile memory by AT command AT&W")
         return self.execute(instance,cmd)
     
     def get_device_model(self, instance): 
-        '''  get device mode by AT command  ATI[0]
+        '''  get device mode by AT command  ATI
         
         Args: 
             instance: Telnet/SSH/Serial connection instance 
             
         Returns:
-            device model 
+            device model (device type)
         '''
         cmd = "ATI"
-        basic_airlink.slog("Step:  Write to non volatile memory by AT command  AT&W")
-        ret_lst = self.query_new(instance,cmd).split("\n")
-        lst = []
-        for i in ret_lst:
-            if i!="":
-                lst.append(i)
-        return lst[0]
-    
+        basic_airlink.cslog("Step:  get device mode by AT command ATI")
+        return self.query(instance,cmd)
+        
     def get_device_model_i0(self, instance): 
         '''  get device mode by AT command  ATI0
         
@@ -5070,7 +5114,7 @@ class AtCommands(object):
             device model 
         '''
         cmd = "ATI0"
-        basic_airlink.slog("Step:  get device mode by AT command  ATI0")
+        basic_airlink.cslog("Step:  get device mode by AT command  ATI0")
         return self.query(instance,cmd)
  
     def get_fw_version(self, instance): 
@@ -5084,15 +5128,16 @@ class AtCommands(object):
         '''
         cmd = "ATI1"
         basic_airlink.slog("Step:  get ALEOS FW version by AT command  ATI1")
-        ret_lst = self.query_new(instance,cmd).split("\n")
+
+        ret_lst = self.query(instance,cmd,True).split("\n")
         lst = []
         for i in ret_lst:
             if i!="":
                 lst.append(i)
-        return lst[0]        
-
+        return lst[0]  
+    
     def get_rm_version(self, instance): 
-        '''  get radio version by AT command  ATI2
+        '''  get radio module version by AT command  ATI2
         
         Args: 
             instance: Telnet/SSH/Serial connection instance 
@@ -5102,32 +5147,32 @@ class AtCommands(object):
         '''
         cmd = "ATI2"
         basic_airlink.slog("Step:  get radio version by AT command  ATI2")
-        ret_lst = self.query_new(instance,cmd).split("\n")
+        
+        ret_lst = self.query(instance,cmd,True).split("\n")
         lst = []
         for i in ret_lst:
             if i!="":
                 lst.append(i)
-        return lst[0]        
-    
-    def get_rm_name(self, instance):
-        '''  get radio module by AT command  ATI2
+        return lst[0]  
+
+    def get_rm_type(self, instance):
+        '''  get radio module type by AT command  ATI2
         
         Args: 
             instance: Telnet/SSH/Serial connection instance 
             
         Returns:
-            Radio Module Name 
+            Radio Module Type 
         '''
         cmd = "ATI2"
         basic_airlink.slog("Step:  get radio version by AT command  ATI2")
-        ret_lst = self.query_new(instance,cmd).split("\n")        
+        ret_lst = self.query(instance,cmd,True).split("\n")        
         lst = []
         for i in ret_lst:
             if i!="":
                 lst.append(i)
         return lst[1]
-        
-    
+            
     def get_esn_imei_eid(self, instance): 
         '''  get ESN/IMEI/EID by AT command  ATI3
         
@@ -5170,4 +5215,105 @@ class AtCommands(object):
         
         basic_airlink.slog("Step:  set GSM/HSPA  diversity  AT command")
         cmd="AT*RXDIVERSITY="+flag
-        return self.assign(instance,cmd)       
+        return self.assign(instance,cmd)  
+
+    def get_ecio(self, instance):
+        ''' set GSM/HSPA diversity by AT command AT+ECIO?
+        
+        Args: 
+            instance: Telnet/SSH/Serial connection instance 
+            flag:
+                1 - Enable support for diversity anntenna (default)
+                0 - Disable
+                
+        Returns:
+            True/False
+        '''
+        
+        basic_airlink.slog("Step:  get ecio by  AT command")
+        cmd="AT+ECIO?"
+        return self.query(instance,cmd)
+
+    def smsm2m(self, instance, phone_num, msg, _type="BASIC"):
+        ''' send SMS message by AT commands
+        
+        AT*SMSM2M=[destination number][message]
+        AT*SMSM2M_U=[destination number][message]
+        AT*SMSM2M_8=[destination number][message]
+         
+        Args: 
+            instance:  SSH/Telnet/Serial connection instance 
+            phone_num: destination phone number 
+            msg: message string
+            _type: string - UNICODE/8BIT/BASIC
+            
+        Returns: 
+            True/False
+        '''          
+        if _type == "UNICODE":
+            cmd = 'AT*SMSM2M_U="' + phone_num + " " + msg + '"' 
+        elif _type == "8BIT":
+            cmd = 'AT*SMSM2M_8="' + phone_num + " " + msg + '"' 
+        elif _type == "SPECIAL":
+            cmd = 'AT*SMSM2M="' + msg
+        elif _type == "SPECIAL_1":
+            cmd = 'AT*SMSM2M=' +  msg              
+        else: # BASIC
+            cmd = 'AT*SMSM2M="' + phone_num + " " + msg + '"'         
+        
+        basic_airlink.cslog(cmd)
+                
+        ret = self.assign(instance, cmd)
+        
+        if _type == "SPECIAL" or _type == "SPECIAL_1":
+            return ret == False 
+        else: return ret
+    
+    def get_device_config(self, instance):
+        '''
+        Queries DUT info
+        Args: 
+            instance connection instance
+        Returns: 
+            device_model e.g. GX440 or "ERROR'
+            device_rm    e.g. MC7700 or "ERROR'
+            device_fw    e.g. 4.3.5.001 or "ERROR'
+            
+        '''   
+        
+        device_model = self.get_device_model_i0(instance)
+        device_rm = self.get_rm_type(instance)
+        device_fw = self.get_fw_version(instance)
+        
+        if device_model == basic_airlink.ERR or device_rm == basic_airlink.ERR or device_fw == basic_airlink.ERR:
+            return device_model, device_rm, device_fw     
+        
+        return device_model, device_rm, device_fw
+    
+    def verify_device(self, instance, tbd_config_map):
+        '''
+        Queries DUT info and check that against yaml config
+        Args: 
+            instance    connect_instance
+            tbd_config_map: common_testbed_conf.yml 
+            
+            e.g. DUT_GX440_MC7700_ATT
+        Returns: 
+            True/False
+        ''' 
+
+        device_model, device_rm, device_fw = self.get_device_config(instance)
+        if device_model == basic_airlink.ERR or device_rm == basic_airlink.ERR or device_fw == basic_airlink.ERR:
+            return False
+        
+        yaml_name = tbd_config_map["DUTS"][0]
+        yaml_fw = tbd_config_map[yaml_name]["ALEOS_FW_VER"]
+        
+        if (device_model not in yaml_name) or (device_rm not in yaml_name):
+            basic_airlink.cslog("-- :ATTENTION: DUT name/rm_version doesn't match that in yaml config")
+            return False
+        elif device_fw not in yaml_fw:            
+            basic_airlink.cslog("-- :ATTENTION: DUT fw_version doesn't that in match yaml config")
+            return False
+        
+        return True

@@ -19,6 +19,7 @@ import sys
 import unittest
 import logging
 import basic_airlink
+#from msciids import *
 import msciids
 
 sys.path.append(basic_airlink.airlinkautomation_home_dirname+basic_airlink.lib_common_path)
@@ -47,15 +48,20 @@ class SeleniumAcemanager(unittest.TestCase):
     common_testbed_conf.yml.
     ''' 
     
-    def __init__(self):
+    def __init__(self, device_name=tbd_config_map["DUTS"][0]):
         ''' TODO: to think to read these initials from DUT dynamically.
         to think if we really need error_flag variable.
+        to think multiple DUTs
         '''
         self.error_flag = 0
         
-        self.device_name  = tbd_config_map["DUTS"][0]
+        self.device_name  = device_name
         self.device_model = tbd_config_map[self.device_name]["MODEL"]
         self.aleos_sw_ver = tbd_config_map[self.device_name]["ALEOS_FW_VER"][:-4]  #long -> short
+        self.aleos_sw_ver_format = self.aleos_sw_ver.replace('.','_')
+        
+        self.ele_config_map = basic_airlink.get_ele_config_data(self.aleos_sw_ver)
+        self.short_time = 3
         
     def get_element_by_id(self, driver, msciid, flag=1):
         '''
@@ -68,6 +74,8 @@ class SeleniumAcemanager(unittest.TestCase):
             the text that read from web
             
         '''
+        tab,subtab = self.get_parents(msciid)
+        self.navigate_subtab(driver, tab, subtab)
         
         txt = ""
         try:
@@ -99,7 +107,10 @@ class SeleniumAcemanager(unittest.TestCase):
             the value that read from web
             
         '''
-        
+
+        tab,subtab = self.get_parents(name)
+        self.navigate_subtab(driver, tab, subtab)
+                
         val = ""
         try:
             if flag == 1:
@@ -217,115 +228,6 @@ class SeleniumAcemanager(unittest.TestCase):
         finally: 
             return txt          
 
-               
-    def get_by_id(self, driver, tab, subtab, msciid, flag=1):
-        '''
-         generally get element by id and location in Selenium/ACEmanager UI. 
-         Args: 
-             driver: FF/IE web driver 
-             tab: each tab name on top of ACEmanager UI 
-             subtab: each subtab under tab in ACEmanager UI 
-             msciid: string id
-             flag: 
-             
-         Returns: 
-             value of the found element
-             
-        '''
-        
-        self.navigate_subtab(driver, tab, subtab)
-        
-        return self.get_element_by_id(driver, msciid, flag)
-    
-
-    def get_by_name(self, driver, tab, subtab, name, flag=1):
-        '''
-         generally get element by name and location in Selenium/ACEmanager UI. 
-         Args: 
-             driver: FF/IE web driver 
-             tab: each tab name on top of ACEmanager UI 
-             subtab: each subtab under tab in ACEmanager UI 
-             name: string element name 
-             flag: "value" or "tiile"
-             
-         Returns: 
-             value of the found element
-             
-        '''        
-        self.navigate_subtab(driver, tab, subtab)
-        return self.get_element_by_name(driver, name, flag)
-        
-
-    def get_by_xpath(self, driver, tab, subtab, xpath, flag=1):
-        '''
-         generally get element by xpath and location in Selenium/ACEmanager UI. 
-         Args: 
-             driver: FF/IE web driver 
-             tab: each tab name on top of ACEmanager UI 
-             subtab: each subtab under tab in ACEmanager UI 
-             name: string element name 
-             flag: to get "value" or "title"
-             
-         Returns: 
-             value of the found element
-             
-        '''        
-        self.navigate_subtab(driver, tab, subtab)
-                   
-        return self.get_element_by_xpath(driver, xpath, flag)
-        
-        
-    def set_by_id(self, driver, tab, subtab, msciid, value):
-        '''
-         generally set element by id and location in Selenium/ACEmanager UI. 
-         Args: 
-             driver: FF/IE web driver 
-             tab: each tab name on top of ACEmanager UI 
-             subtab: each subtab under tab in ACEmanager UI 
-             msciid: string, element id 
-             value: string, value to set
-         Returns: 
-             True/False
-             
-        '''
-        
-        self.navigate_subtab(driver, tab, subtab)
-        
-        return self.set_element_by_id(driver, msciid, value)
-            
-    def set_by_name(self, driver, tab, subtab, name, value):
-        '''
-         generally set element by name and location in Selenium/ACEmanager UI. 
-         Args: 
-             driver: FF/IE web driver 
-             tab:  tab name on top of ACEmanager UI 
-             subtab: subtab name under each tab in ACEmanager UI 
-             name: string element name 
-             value:  string, value to set 
-         Returns: 
-             True/False
-             
-        '''        
-        self.navigate_subtab(driver, tab, subtab)        
-            
-        return self.set_element_by_name(driver, name, value)
-
-    def set_by_xpath(self, driver, tab, subtab, xpath):
-        '''
-         generally set element by xpath and location in Selenium/ACEmanager UI. 
-         Args: 
-             driver: FF/IE web driver 
-             tab:  tab name on top of ACEmanager UI 
-             subtab: subtab name under each tab in ACEmanager UI 
-             name: string element name 
-             value:  string, value to set 
-         Returns: 
-             True/False
-             
-        '''        
-        self.navigate_subtab(driver, tab, subtab)        
-            
-        return self.set_element_by_xpath(driver, xpath)
         
     def get_element(self, driver, element):
         ''' generally read one parameter from ACEmanager UI based on the element
@@ -407,6 +309,33 @@ class SeleniumAcemanager(unittest.TestCase):
             basic_airlink.cslog("wrong by_type paramter")
             return False
         
+#    def get_subtab_elements(self, driver, tab, subtab):  
+#        elems= ""
+#                                         
+#        try:
+#            
+#            if ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][0] == "BY_CSS_SELECTOR":
+#                elems=driver.find_elements_by_css_selector(ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][1])
+#                
+#            elif ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][0] == "BY_ID":
+#                elems=driver.find_elements_by_id(ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][1])
+#    
+#            elif ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][0] == "BY_XPATH":
+#                elems=driver.find_elements_by_xpath(ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][1])
+#            else:
+#                basic_airlink.cslog( "Incorrect byhow parameter or NA subtab")
+#                        
+#            time.sleep(10)               
+#            
+#        except: 
+#            self.error_flag +=1
+#            basic_airlink.cslog(" Exception occurred", "RED", "WHITE")
+#            
+#            ret = ""
+#            
+#        finally:
+#            return elems
+#        
 #    def get_config(self, driver, tab, subtab):
 #        ''' Get all parameters on the specified subtab page, and put onto 
 #        config_elements stack.
@@ -415,19 +344,21 @@ class SeleniumAcemanager(unittest.TestCase):
 #        config_elements = []       
 #        
 #        self.navigate_subtab(driver, tab, subtab)
-#        xpath = self.get_subtab_xpath(driver, tab, subtab)
-#        page_elems = driver.find_elements_by_xpath(xpath)
+##        xpath = self.get_subtab_xpath(driver, tab, subtab)
+##        page_elems = driver.find_elements_by_xpath(xpath)
+#        page_elems = self.get_subtab_elements(driver, tab, subtab)
+#        print (str(page_elems))
 #        
 #        for elem in page_elems:
 #            id1 = str(elem.get_attribute("id"))
 #            
-#            byid = self.get_element_by_id(driver, id1)
-#            byname = self.get_element_by_name(driver, id1)
+##            byid = self.get_element_by_id(driver, id1)
+##            byname = self.get_element_by_name(driver, id1)
 #            bytitle = str(elem.get_attribute("title"))
 #            text1 = str(elem.text)
 #            #config_elements.append({'tab':tab,'subtab':subtab,'byhow':'by_id','field':field,'value':value})
 #            
-#            basic_airlink.cslog("id="+id1+ ",byid="+byid+",byname="+byname+",bytitle="+bytitle+",text="+text1)
+#            basic_airlink.cslog("id="+id1+",title="+bytitle+",text="+text1)
 #            
 #        return config_elements
     
@@ -487,6 +418,9 @@ class SeleniumAcemanager(unittest.TestCase):
         '''
         find item by id and set the value
         '''
+        tab,subtab = self.get_parents(id_str)
+        self.navigate_subtab(driver, tab, subtab)
+        
         val = True
 
         try:
@@ -506,6 +440,9 @@ class SeleniumAcemanager(unittest.TestCase):
         '''
         find item by name and set the value
         '''   
+        tab,subtab = self.get_parents(name_str)
+        self.navigate_subtab(driver, tab, subtab)
+        
         val = True
      
         try:
@@ -520,24 +457,50 @@ class SeleniumAcemanager(unittest.TestCase):
         finally: 
             return val
                 
-    def select_item_by_visible_text(self, driver, name_str, select_str):
+    def select_item_by_visible_text(self, driver, id_str, option_visible_text):
         '''
         select item by visible text
         
         '''   
+        tab,subtab = self.get_parents(id_str)
+        self.navigate_subtab(driver, tab,subtab)
+        
         val = True
      
-        basic_airlink.slog("select_item_by_text: name="+name_str+",select="+select_str+"\n")
+        basic_airlink.cslog("select_item_by_visible_text: msciid="+id_str+",option="+option_visible_text+"\n")
         try: 
-            Select(driver.find_element_by_name(name_str)).select_by_visible_text(select_str)
-        except:
-            basic_airlink.slog("select_item_by_text: cannot find " + name_str)
+            Select(driver.find_element_by_name(id_str)).select_by_visible_text(option_visible_text)
+            time.sleep(self.short_time)
+        except Exception as inst:
+            basic_airlink.cslog("select_item_by_visible_text exception: "+str(inst))
             self.error_flag+=1
             val = False
                 
         finally: 
             return val
+
+    def select_item_by_value(self, driver, id_str, option_str):
+        '''
+        select item by value
         
+        '''   
+        tab,subtab = self.get_parents(id_str)
+        self.navigate_subtab(driver, tab, subtab)
+        
+        val = True
+     
+        basic_airlink.cslog("select_option_by_value: msciid="+id_str+",option="+option_str+"\n")
+        try: 
+            Select(driver.find_element_by_name(id_str)).select_by_value(option_str)
+            time.sleep(self.short_time)
+        except Exception as inst:
+            basic_airlink.cslog("select_option_by_value exception: "+str(inst))
+            self.error_flag+=1
+            val = False
+                
+        finally: 
+            return val
+                
     def se_close_alert_and_get_its_text(self, driver):
         '''
         TODO
@@ -681,6 +644,9 @@ class SeleniumAcemanager(unittest.TestCase):
         try: 
             if tbd_config_map["BROWSER"] == "FF":
                 driver = webdriver.Firefox()                # Get local session of firefox
+                #driver.set_window_position(200, 200)
+                #driver.set_window_size(800, 600)
+                #driver.maximize_window()
             else:
                 driver = webdriver.Ie()                     # Get local session of IE
 
@@ -762,7 +728,6 @@ class SeleniumAcemanager(unittest.TestCase):
 
 ###############Status/Home suntab page read#####################################
 
-
     def get_phone_num(self, driver):
         ''' get phone number by ACEmanager Web UI Status/Home page
         Args: 
@@ -770,7 +735,7 @@ class SeleniumAcemanager(unittest.TestCase):
         Returns: 
             phone number
         '''
-
+        
         msciid_str = str(msciids.MSCIID_INF_PHONE_NUM)
 
         ret=self.get_element_by_id(driver, msciid_str)
@@ -778,7 +743,7 @@ class SeleniumAcemanager(unittest.TestCase):
         basic_airlink.cslog("phone number: "+ret)   
                 
         return ret
-    
+        
     def get_network_ip(self, driver):
         ''' get network IP by ACEmanager Web UI Status/Home page
         Args: 
@@ -2457,6 +2422,7 @@ class SeleniumAcemanager(unittest.TestCase):
              
          Return: string the current tab page
         '''
+        self.error_flag+=1
         
         txt = ""
         try:
@@ -2521,8 +2487,10 @@ class SeleniumAcemanager(unittest.TestCase):
         
         '''
         ret = True
-#        basic_airlink.cslog( "Begins navigating tab "+ tab)
-        
+        cur_page = self.get_current_tab(driver,2)
+        if cur_page == tab: 
+            return ret   
+                
         try:
             
 
@@ -2577,7 +2545,12 @@ class SeleniumAcemanager(unittest.TestCase):
         '''
 
         ret = True
-#        basic_airlink.cslog( "Begins navigating subtab "+ tab +"/"+subtab)
+        
+        cur_subtab = self.get_current_subtab(driver,2)
+        if cur_subtab == subtab: 
+            return ret              
+                
+        basic_airlink.cslog( "Begins navigating subtab "+ tab +"/"+subtab)
                  
         try:
             cur_page = self.get_current_tab(driver,2)
@@ -2703,31 +2676,12 @@ class SeleniumAcemanager(unittest.TestCase):
         config_elements.append({'tab':tab,'subtab':subtab,'byhow':byhow,'field':field,'flag':flag,'value':value})
         return config_elements
     
-    def get_device_rmid(self,driver):
-        ''' get RMID by ACEmanager Web UI Status/About page
-        Args: 
-            driver FF/IE web driver 
+    def get_parents(self, msciid):
+        ''' find TAB/SUBTAB based on msciid and acemanager_msciids_x.y.z.yml
+        x.y.x is ALEOS version short format.
         Returns: 
-            device model
+            TAB
+            SUBTAB
         '''
-
-        msciid_str = str(msciids.MSCIID_STS_RMID)
-            
-        ret=self.get_element_by_id(driver, msciid_str)
-        
-        basic_airlink.cslog("device rmid: "+ret)
-        
-        return ret        
-    
-    def form_device_name(self, driver):
-        self.navigate_subtab(driver, "Status", "About")
-        device_model = self.get_device_model(driver)
-        device_rm = self.get_radio_module_type(driver)
-        device_rmid = self.get_device_rmid(driver)
-        device_name = "DUT_"+device_model+"_"+device_rm+"_"+device_rmid[0:3]
-        basic_airlink.cslog(device_name, 'RED')
-        return device_name
-        
-        
-        
+        return self.ele_config_map[msciid][0],self.ele_config_map[msciid][1]
     

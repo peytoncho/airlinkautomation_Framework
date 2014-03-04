@@ -2,6 +2,7 @@ import logging
 import paramiko
 from paramiko.ssh_exception import SSHException
 import inspect
+import time
 
 class SshAirlink:
     """SshAirlink provides a SSH connection with default connection parameters.
@@ -9,19 +10,19 @@ class SshAirlink:
     Attributes:
     hostname: Host ip address. Default ip is 192.168.13.31.
     port: Port connection number. Default port number is 22.
-    username: Host username. Default username is root.
-    password: Connection password. Default is v3r1fym3.
+    username: Host username. Default username is user.
+    password: Connection password. Default is 12345.
     """
 
     def __init__(self, hostname="192.168.13.31", port="22",\
-		username="root", password="v3r1fym3"):
+        username="user", password="12345"):
         """Initializes the connection parameters.
         
         Args:
         hostname: Host ip address. Default ip is 192.168.13.31.
         port: Port connection number. Default port number is 22.
-        username: Host username. Default username is root.
-        password: Connection password. Default is v3r1fym3.
+        username: Host username. Default username is user.
+        password: Connection password. Default is 12345.
         
         Returns:
         No returns.
@@ -29,8 +30,8 @@ class SshAirlink:
         self.hostname = hostname
         self.port = int(port)
         self.username = username
-        self.password = password
-        
+        self.password = password  
+              
     def connect(self):
         """Initiates a SSH connection by using parmiko.SSHClient module.
     
@@ -55,7 +56,6 @@ class SshAirlink:
             
         return True
 
-        
     def command(self, cmd):
         """ Sends a command to the host and returns the response.
         
@@ -67,27 +67,33 @@ class SshAirlink:
         It returns None if the command is not correct.
         Otherwise, it returns a list of strings that each string is
 		terminated with a newline character.
-        """
-        logging.info("executing " + cmd)
+        """     
+
         try:
-            stdin, stdout, stderr = self.ssh.exec_command(cmd)
+            rcved_list = []
             
-        except SSHException:
+            shell = self.ssh.invoke_shell()
+    
+            timeout = 10
+            start_time = time.time()
+    
+            while True:
+                if shell.recv_ready():
+                    buf1 = shell.recv(0xFFFF)
+                    shell.send(cmd+"\r")
+                    time.sleep(2)
+                    rcved_list = shell.recv(0xFFFF).split('\n')
+                    time.sleep(1)
+                    break
+    
+                if time.time() - start_time > timeout:
+                    self.error_flag+=1
+      
+        except Exception, e:
             logging.debug("unable to execute command")
             return None
-        
-        except:
-            logging.debug("unexpected exception in (" + inspect.stack()[0][3] + ")")
-            return None
-        
-        stdout_list = stdout.readlines()
-        stderr_list = stderr.readlines()
-        
-        if stderr_list:
-            logging.warning("bad command:" + "".join(stderr_list))
-            return None
 
-        return stdout_list
+        return rcved_list
         
     
     def close(self):

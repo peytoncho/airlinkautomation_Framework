@@ -4,19 +4,24 @@ import selenium_utilities
 import os
 import time
 
-DEVICE_NUMBER = 6
+DEVICE_NUMBER = 5
+RETRY_TIMES = 20
+
+se_ins = selenium_utilities.SeleniumAcemanager()
+globalid_lst = []
 
 def change_global_ip():
     se_ins = selenium_utilities.SeleniumAcemanager()
     at_ins = at_utilities.AtCommands()
     globalid_lst = []
     reboot_fail_lst = []
+    retry_counter = 0
         
     while len(globalid_lst)<DEVICE_NUMBER or len(reboot_fail_lst)>0:
         result = ""
         curr_ip = "192.168.13.31"
         telnet_ins = telnet_airlink.TelnetAirlink(hostname = curr_ip)
-        while True:
+        while retry_counter>RETRY_TIMES:
             try:
                 while not telnet_ins.connect():
                     print('connection fail')
@@ -26,13 +31,15 @@ def change_global_ip():
                  
                 lst_index = globalid_lst.index(global_id)
                 change_ip = '192.168.13.'+str(lst_index+1)
-                
-                
+                                
                 print "now change ip"     
                 at_ins.set_ethernet_device_ip(telnet_ins, change_ip)
                 print "finished changing ip"
-                
-                
+            except:
+                retry_counter+=1               
+                continue
+            
+            try:    
                 if not at_ins.atz_reboot(telnet_ins):
                     if not global_id in reboot_fail_lst:
                         reboot_fail_lst.append(global_id)
@@ -42,23 +49,27 @@ def change_global_ip():
                         reboot_fail_lst.remove(global_id)
                         print("Remove "+global_id+" to reboot list")
 
-#                telnet_ins.close()
-                time.sleep(15)
-            except:               
+                
+            except:
+                if not global_id in reboot_fail_lst:
+                        reboot_fail_lst.append(global_id)
+                        print("exp:Append "+global_id+" to reboot list")                              
                 continue
             
             break
-
-        print(globalid_lst)
         
+        
+        self.ui_change_ip(se_ins,globalid_lst)
+        
+        print(globalid_lst)
+        time.sleep(15)
     print "Change IP Done!!...Wait for device reboot..."
     return len(globalid_lst)
 
 
-
 def ping_devices():
 #    for i in range(device_number):
-    device_ip = '8.8.8.8'
+    device_ip = '192.168.13.31'
     ret = os.system('ping '+device_ip)
     print ret
 
@@ -78,10 +89,15 @@ def restore_device_ip():
      
     print("DONE!")
 
-# def ui_change_ip(selenium_instance,global_id_list):
-#     driver.
-#     pass    
-#     
+def ui_change_ip(selenium_instance,global_id_list):
+    driver = selenium_instance.login('http://192.168.13.31:9191','user','12345')
+    global_id = selenium_instance.get_global_id(driver)
+    if global_id in global_id_list:
+        global_id_list.append(global_id)
+        global_id_index = global_id_list.index(global_id)
+    selenium_instance.set_by_id(driver, 'LAN', 'Ethernet', 1084, '192.168.13.'+str(global_id_index+1))
+    selenium_instance.apply_reboot(driver)  
+     
 def get_device_ip_list():
     at_ins = at_utilities.AtCommands()
     info_lst = []
@@ -101,8 +117,9 @@ def get_device_ip_list():
     for line in info_lst:
         print(line)
 
+ui_change_ip(se_ins,globalid_lst)
 #restore_device_ip()
-# change_global_ip()
-# time.sleep(120)
-# get_device_ip_list()
-ping_devices()
+#change_global_ip()
+#time.sleep(120)
+#get_device_ip_list()
+#ping_devices()

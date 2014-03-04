@@ -19,39 +19,39 @@ import argparse
 from multiprocessing import Process
 import time
 import ftplib
-import msciids
+#import msciids
 import re
 
-airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_FRAMEWORK'] 
+airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME'] 
 
 slash = "\\" if sys.platform == 'win32' else "/"
 
-lib_common_path         = slash+'lib'+slash+'common'
-lib_common_ui_path      = slash+'lib'+slash+'common'+slash+'UI'
-lib_packages_path       = slash+'lib'+slash+'site-packages'
-feature_admin_path      = slash+'testsuite'+slash+'Feature'+slash+'Admin' 
-feature_status_path     = slash+'testsuite'+slash+'Feature'+slash+'Status'   
-feature_lan_path        = slash+'testsuite'+slash+'Feature'+slash+'LAN' 
-feature_wan_path        = slash+'testsuite'+slash+'Feature'+slash+'WAN' 
-feature_vpn_path        = slash+'testsuite'+slash+'Feature'+slash+'VPN' 
-feature_gps_path        = slash+'testsuite'+slash+'Feature'+slash+'GPS' 
-feature_er_path         = slash+'testsuite'+slash+'Feature'+slash+'Eventreporting' 
-feature_fwupdate_path   = slash+'testsuite'+slash+'Feature'+slash+'Fwupdate' 
-feature_template_path   = slash+'testsuite'+slash+'Feature'+slash+'Template' 
-feature_serial_path     = slash+'testsuite'+slash+'Feature'+slash+'Serial' 
-feature_security_path   = slash+'testsuite'+slash+'Feature'+slash+'Security' 
-feature_apps_path       = slash+'testsuite'+slash+'Feature'+slash+'Applications' 
-feature_datausage_path  = slash+'testsuite'+slash+'Feature'+slash+'Applications'+slash+'Data_Usage' 
-feature_services_path   = slash+'testsuite'+slash+'Feature'+slash+'Services' 
-feature_telnet_path     = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'Telnet' 
-feature_ssh_path        = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'SSH' 
-feature_snmp_path       = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'SNMP' 
-feature_sms_path        = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'SMS' 
-feature_lpm_path        = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'LPM' 
-testclass_path          = slash+'testsuite'+slash+'Feature'+slash+'TestClass' 
-smoke_path              = slash+'testsuite'+slash+'Smoke' 
-performance_path        = slash+'testsuite'+slash+'Performance'
-throughput_path         = slash+'testsuite'+slash+'Performance'+slash+'Throughput'
+lib_common_path        = slash+'lib'+slash+'common'
+lib_common_ui_path     = slash+'lib'+slash+'common'+slash+'UI'
+lib_packages_path      = slash+'lib'+slash+'site-packages'
+feature_admin_path     = slash+'testsuite'+slash+'Feature'+slash+'Admin' 
+feature_status_path    = slash+'testsuite'+slash+'Feature'+slash+'Status'   
+feature_lan_path       = slash+'testsuite'+slash+'Feature'+slash+'LAN' 
+feature_wan_path       = slash+'testsuite'+slash+'Feature'+slash+'WAN' 
+feature_vpn_path       = slash+'testsuite'+slash+'Feature'+slash+'VPN' 
+feature_gps_path       = slash+'testsuite'+slash+'Feature'+slash+'GPS' 
+feature_er_path        = slash+'testsuite'+slash+'Feature'+slash+'Eventreporting' 
+feature_fwupdate_path  = slash+'testsuite'+slash+'Feature'+slash+'Fwupdate' 
+feature_template_path  = slash+'testsuite'+slash+'Feature'+slash+'Template' 
+feature_serial_path    = slash+'testsuite'+slash+'Feature'+slash+'Serial' 
+feature_security_path  = slash+'testsuite'+slash+'Feature'+slash+'Security' 
+feature_apps_path      = slash+'testsuite'+slash+'Feature'+slash+'Applications' 
+feature_datausage_path = slash+'testsuite'+slash+'Feature'+slash+'Applications'+slash+'Data_Usage' 
+feature_services_path  = slash+'testsuite'+slash+'Feature'+slash+'Services' 
+feature_telnet_path    = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'Telnet' 
+feature_ssh_path       = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'SSH' 
+feature_snmp_path      = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'SNMP' 
+feature_sms_path       = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'SMS' 
+feature_lpm_path       = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'LPM' 
+testclass_path         = slash+'testsuite'+slash+'Feature'+slash+'TestClass' 
+smoke_path             = slash+'testsuite'+slash+'Smoke' 
+performance_path       = slash+'testsuite'+slash+'Performance'
+throughput_path        = slash+'testsuite'+slash+'Performance'+slash+'Throughput'
 
 def yaml_include(loader,node):
     with file(node.value) as inputfile:
@@ -65,7 +65,9 @@ ERR  = "ERROR"
 ENABLE  = 1
 DISABLE = 0
 
-FEATURE_AREA =["WAN","LAN","Security","VPN","GPS","Template","FWupdate","Services","Serial", "Admin"]
+TAB_ALL  = ["Status","WAN_Cellular","LAN","Security","VPN","Services","GPS","Events_Reporting", "Serial", "Applications", "I_O", "Admin"]
+
+FEATURE_AREA     = ["WAN","LAN","Security","VPN","GPS","Template","FWupdate","Services","Serial", "Admin"]
 FEATUTE_SUB_AREA = ["LPM", "Telnet","SNMP","SMS"]
 
 #Valid WnsRemoteEx Commands to control Anritsu callbox:
@@ -162,9 +164,8 @@ def slog(msg):
     Returns: None
     ''' 
     
-    logging.debug(msg+'\n')   
-    print msg+'\n' 
-
+    logging.debug('\n'+msg)   
+    print '\n'+msg
 
 def _colorlog(msg, fgcolor = None, bgcolor = None):
     '''   Print out the debug message on log file and console   
@@ -207,10 +208,10 @@ def _colorlog(msg, fgcolor = None, bgcolor = None):
     else:
         sys.__stdout__.write('\n'+'\x1b[0m'+msg)
     sys.__stdout__.flush()
-    
+
 def clog(msg, fgcolor = None, bgcolor = None):
-    '''
-    Output colour message by console.
+    ''' Absolete  19-Feb-2014 Peyton
+    Output colour message by console. 
     Args:
         msg    : message to print out 
         fgcolor: foreground colour 
@@ -223,7 +224,7 @@ def clog(msg, fgcolor = None, bgcolor = None):
 
 def cslog(msg, fgcolor = None, bgcolor = None):
     '''
-        Print out colour message by console and html report .
+        Print out colour message by console, html report and log file.
     Args:
         msg:     message to print out 
         fgcolor: foreground color 
@@ -291,7 +292,7 @@ def run_testcases(feature_config_map, featrue_testcases):
 
 
 def setup_suite_v1(area_config_map, tc_ts_map):
-    """  Gather all the tests from this module in a test suite.    
+    """ TO BE REMOVED  Gather all the tests from this module in a test suite.    
     
     Args: 
         area_config_map: list, test area configuration
@@ -389,7 +390,7 @@ def setup_suite_v1(area_config_map, tc_ts_map):
 
     
 def send_email():
-    ''' send notice email by gmail server
+    ''' TO BE REMOVED send notice email by gmail server
     Args   : None
     Returns: None
     '''
@@ -581,22 +582,27 @@ def get_ace_config_data():
     stream.close()   
     
     return ace_config_data
-def get_ele_config_data(aleos_version):
+
+
+def get_ele_config_data(aleos_version_short):
     ''' 
     read ACEmanager page yaml file
     Args: 
-        aleos_version   ALEOS release version
+        aleos_version_short   ALEOS release version short format,e.g 4.3.5
         
     Returns: 
         ele_config_data : list, all elements' msciids from testbed yaml file 
     '''
             
     stream = open(airlinkautomation_home_dirname+slash+'lib'+slash+\
-                  'common'+slash+'UI'+slash+'acemanager_elements_'+aleos_version+'.yml', 'r')
+                  'common'+slash+'UI'+slash+'acemanager_msciids_'+aleos_version_short+'.yml', 'r')
     ele_config_data = yaml.load(stream)
     stream.close()   
     
     return ele_config_data
+
+
+         
 def append_sys_path():
     ''' Append path to system
     '''
@@ -629,7 +635,7 @@ def append_sys_path():
     
 
 def setup_suite_v2(area_config_map, tc_ts_map):
-    """ TO BE REMOVED  Gather all the tests from this test module into a test suite.  
+    """  TO BE REMOVED Gather all the tests from this test module into a test suite.  
     Handle the different arguments from test suite launcher command line:
         -n <test case # range>
         -t <test type>
@@ -794,14 +800,7 @@ def setup_suite_v2(area_config_map, tc_ts_map):
         
     return test_suite    
 
-def setup_suite_mdt(tc_ts_map, tc_pick_list):
-    test_suite = unittest.TestSuite()
-    for i in tc_pick_list:
-        test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
-        tc_ts_map[i][2]=1
-    return test_suite
-
-def setup_suite(tbd_config_map, area_config_map, tc_ts_map):
+def setup_suite_v3(tbd_config_map, area_config_map, tc_ts_map):
     """  Gather all the tests from this test module into a test suite.  
     Handle the different arguments from test suite launcher command line:
         -n <test case # range>
@@ -901,6 +900,8 @@ def setup_suite(tbd_config_map, area_config_map, tc_ts_map):
                             and (not args.dut_type_arg or args.dut_type_arg in dut_type_list)\
                             and (not args.rm_type_arg  or args.rm_type_arg  in rm_type_list):
                      
+                    #cslog(str(tc_ts_map[i][0]), "RED","WHITE")
+                    #cslog(str(tc_ts_map[i][1]), "RED","WHITE")
                     test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
                     tc_ts_map[i][2]=1
                     print i, tc_ts_map[i][1]
@@ -1196,6 +1197,7 @@ def setup_suite(tbd_config_map, area_config_map, tc_ts_map):
                 print i, tc_ts_map[i][1]
                 
     return test_suite 
+
 def cmd_stdout(command, argument, timeout=3):
     ''' TODO: can we not use text file?
     ARGS: 
@@ -1321,19 +1323,23 @@ def make_csv(csv_file_path, test_result, area_config_map):
         result = False
     
     return result
-def get_msciid_name(msciid):
-    ''' Get msciid name given value
-    ARGS: 
-        msciid: value 
-    RETURNS:
-        msciid's key: string
-    '''    
-    ret = [key for key, val in msciids.__dict__.iteritems() if val == int(msciid) and "MSCIID" in key]
-    if len(ret) == 0:
-        logging.debug("No Key found for MSCIID:" + str(msciid))
-        return "?"
-    elif len(ret) == 1:
-        return ret[0]
-    else:  
-        txt = "".join(ret)
-        return '/'.join(re.findall('.', txt))
+
+#def get_msciid_name(msciid):
+#    ''' Get msciid name given value
+#    TODO
+#    ARGS: 
+#        msciid: value 
+#    RETURNS:
+#        msciid's key: string
+#    '''    
+#    ret = [key for key, val in msciids__dict__.iteritems() if val == int(msciid) and "MSCIID" in key]
+#    if len(ret) == 0:
+#        logging.debug("No Key found for MSCIID:" + str(msciid))
+#        return "?"
+#    elif len(ret) == 1:
+#        return ret[0]
+#    else:  
+#        txt = "".join(ret)
+#        return '/'.join(re.findall('.', txt))
+    
+
