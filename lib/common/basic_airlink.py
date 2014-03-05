@@ -22,7 +22,7 @@ import ftplib
 #import msciids
 import re
 
-airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME'] 
+airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_FRAMEWORK'] 
 
 slash = "\\" if sys.platform == 'win32' else "/"
 
@@ -232,7 +232,7 @@ def cslog(msg, fgcolor = None, bgcolor = None):
     Returns: 
         None
     '''    
-    slog(msg + '\n')
+#     slog(msg + '\n')
     _colorlog(msg, fgcolor,bgcolor) 
     
 def test_report(filename, msg):

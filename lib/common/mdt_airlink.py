@@ -67,6 +67,9 @@ def change_global_ip():
     return len(globalid_lst)
 
 
+    
+
+
 def ping_devices():
 #    for i in range(device_number):
     device_ip = '192.168.13.31'
@@ -90,13 +93,39 @@ def restore_device_ip():
     print("DONE!")
 
 def ui_change_ip(selenium_instance,global_id_list):
-    driver = selenium_instance.login('http://192.168.13.31:9191','user','12345')
-    global_id = selenium_instance.get_global_id(driver)
-    if global_id in global_id_list:
-        global_id_list.append(global_id)
-        global_id_index = global_id_list.index(global_id)
-    selenium_instance.set_by_id(driver, 'LAN', 'Ethernet', 1084, '192.168.13.'+str(global_id_index+1))
-    selenium_instance.apply_reboot(driver)  
+    reboot_fail_list = []
+    while len(globalid_lst)<DEVICE_NUMBER or len(reboot_fail_list) > 0:
+       
+        driver = selenium_instance.login('http://192.168.13.31:9191','user','12345')
+        global_id = selenium_instance.get_global_id(driver)
+        
+        if global_id == '':
+            continue
+        
+        if not global_id in global_id_list:
+            global_id_list.append(global_id)
+            global_id_index = global_id_list.index(global_id)
+        else:
+            global_id_index = global_id_list.index(global_id)
+        if not selenium_instance.set_device_ip(driver, "192.168.13."+str(global_id_index+1)):
+            if not global_id in reboot_fail_list:
+                reboot_fail_list.append(global_id)
+                driver.close()
+                continue           
+    #        selenium_instance.set_device_ip(driver, "192.168.13.31")
+        selenium_instance.apply_reboot(driver)
+            
+        if global_id in reboot_fail_list:
+            reboot_fail_list.remove(global_id)
+            
+        time.sleep(5)
+        driver.close()
+        
+        print "Global id list: "+ str(globalid_lst)
+        print "Reboot fail id list: "+ str(reboot_fail_list)
+        
+
+
      
 def get_device_ip_list():
     at_ins = at_utilities.AtCommands()
@@ -120,6 +149,6 @@ def get_device_ip_list():
 ui_change_ip(se_ins,globalid_lst)
 #restore_device_ip()
 #change_global_ip()
-#time.sleep(120)
-#get_device_ip_list()
+time.sleep(30)
+get_device_ip_list()
 #ping_devices()

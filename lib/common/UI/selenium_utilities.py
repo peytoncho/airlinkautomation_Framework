@@ -74,10 +74,13 @@ class SeleniumAcemanager(unittest.TestCase):
             the text that read from web
             
         '''
-        tab,subtab = self.get_parents(msciid)
-        self.navigate_subtab(driver, tab, subtab)
-        
         txt = ""
+        tab,subtab = self.get_parents(msciid)
+        ret = self.navigate_subtab(driver, tab, subtab)
+        
+        if not ret:
+            txt = ""
+        
         try:
             if flag == 1:
                 txt= driver.find_element_by_id(msciid).text
@@ -420,12 +423,12 @@ class SeleniumAcemanager(unittest.TestCase):
         '''
         tab,subtab = self.get_parents(id_str)
         self.navigate_subtab(driver, tab, subtab)
-        
+        element = driver.find_element_by_id(id_str)
         val = True
 
         try:
-            driver.find_element_by_id(id_str).clear()
-            driver.find_element_by_id(id_str).send_keys(val_str)
+            element.clear()
+            element.send_keys(val_str)
         
         except NoSuchElementException:
             basic_airlink.slog("set_element_by_id: cannot find " + id_str)
@@ -441,9 +444,8 @@ class SeleniumAcemanager(unittest.TestCase):
         find item by name and set the value
         '''   
         tab,subtab = self.get_parents(name_str)
-        self.navigate_subtab(driver, tab, subtab)
+        val = self.navigate_subtab(driver, tab, subtab)
         
-        val = True
      
         try:
             driver.find_element_by_name(name_str).clear()
@@ -2684,4 +2686,21 @@ class SeleniumAcemanager(unittest.TestCase):
             SUBTAB
         '''
         return self.ele_config_map[msciid][0],self.ele_config_map[msciid][1]
+    
+    def set_device_ip(self, driver, value):
+        '''Set device IP in ACEManager
+        
+        Args: driver
+              value
+        
+        Return: True/False
+        
+        '''
+        id = str(msciids.MSCIID_CFG_CMN_HOST_LOCAL_IP)
+        print "deviceIP:"+id
+        return self.set_element_by_name(driver, id, value)
+          
+         
+    
+    
     
