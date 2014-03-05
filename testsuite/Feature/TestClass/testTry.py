@@ -68,8 +68,6 @@ def form_device_name():
     pass            
         
     
-
-    
 def repeat_reboot():
     at_ins = at_utilities.AtCommands()
     i=20
