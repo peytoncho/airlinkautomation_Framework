@@ -155,25 +155,35 @@ def get_device_ip_list():
 
 def form_device_fullname():
     device_lst = []
+    retry_flag = 1
     for i in range(DEVICE_NUMBER):
-        ace_url = 'http://192.168.13.'+str(i+1)+':9191'
-        driver = se_ins.login(ace_url, 'user', '12345')
-        time.sleep(5)
-        device_model = se_ins.get_device_model(driver)
-        device_rm = se_ins.get_radio_module_type(driver)
-        device_rmid = se_ins.get_rmid(driver)
-        time.sleep(3)
-        driver.close()
         
-        device_fullname = "DUT_"+device_model+"_"+device_rm+"_"+device_rmid[0:3]
-        device_lst.append(str(device_fullname))
+        while retry_flag == 1 or retry_flag == 2:
+            ace_url = 'http://192.168.13.'+str(i+1)+':9191'
+            driver = se_ins.login(ace_url, 'user', '12345')
+            time.sleep(5)
+            device_model = se_ins.get_device_model(driver)
+        
+            if device_model == "":
+                retry_flag = 2
+                continue
+            
+            device_rm = se_ins.get_radio_module_type(driver)
+            device_rmid = se_ins.get_rmid(driver)
+            time.sleep(3)
+            driver.close()
+        
+            device_fullname = "DUT_"+device_model+"_"+device_rm+"_"+device_rmid[0:3]
+        
+            device_lst.append(str(device_fullname))
+            retry_flag = 0
         
     for device in device_lst:
         print device
     return device_lst
 
 #ui_change_ip(se_ins,globalid_lst)
-# restore_device_ip()
+#restore_device_ip()
 # time.sleep(40)
 # change_global_ip()
 # time.sleep(40)
