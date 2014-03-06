@@ -20,12 +20,18 @@ import connectivity
 import selenium_utilities
 import at_utilities
 import shutil
+import yaml
 
 test_area = "Fwupdate"
 test_sub_area=""
 airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME']
 basic_airlink.append_sys_path()
 tbd_config_map, fwupdate_config_map = basic_airlink.get_config_data(test_area,"")
+
+def load_temp_tc_map():
+    with open('temp_fwupdate_tc_info.yml','r') as stream:
+        combo_map = yaml.load(stream)
+    return combo_map
 
 class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
     def __init__(self, dut_name, dut_ip="192.168.13.31"):
@@ -165,6 +171,8 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                 result = "False"
 
         return result
+    
+
     
 #===========================================================================
 #Helper functions UI

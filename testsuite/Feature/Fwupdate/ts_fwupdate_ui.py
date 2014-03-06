@@ -32,6 +32,7 @@ basic_airlink.append_sys_path()
 tbd_config_map, fwupdate_config_map = basic_airlink.get_config_data(test_area,"")
 
 
+
 class TsFwupdateUi(unittest.TestCase):
     """TsFwupdateUi class provides a firmware update automation using Selenium UI test features.
     """
@@ -48,11 +49,12 @@ class TsFwupdateUi(unittest.TestCase):
         self.fw_to = fwupdate_config_map["ALEOS_BUILD_TO"]
         
         if fwupdate_config_map["MDT"] == "YES":
+            combo_map = fwupdate_airlink.load_temp_tc_map()
             
-            testing_combo = fwupdate_config_map["TESTING_COMBO"]
-            dut_name = fwupdate_config_map[testing_combo][ip_postfix-1]
-            basic_airlink.cslog(dut_name, "RED")
-                        
+            
+            
+            dut_name = combo_map["COMBO_LIST"][ip_postfix-1]
+            basic_airlink.cslog(dut_name, "RED")                       
             self.dut_ip = "192.168.13."+str(ip_postfix)
             self.fw_ins = fwupdate_airlink.FwupdateAirlink(dut_name,dut_ip=self.dut_ip)
             self.conn_ins = connectivity.Connectivity(dut_name)
@@ -361,12 +363,12 @@ class TsFwupdateUi(unittest.TestCase):
                               
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
 
-    def tc_fwupdate_ES440_MC7710_EMEA(self):
+    def tc_fwupdate_ES440_MC7710_OSM(self):
         basic_airlink.cslog(self.dut_ip, "RED")
-        basic_airlink.cslog("tc_fwupdate_ES440_MC7710_EMEA", "RED")
+        basic_airlink.cslog("tc_fwupdate_ES440_MC7710_OSM", "RED")
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware Roundtrip upgrade ", "BLUE", "YELLOW")      
        
-        self.fw_ins.fwrmupdate_ui_roundtrip(self.fw_from, self.fw_to)
+#        self.fw_ins.fwrmupdate_ui_roundtrip(self.fw_from, self.fw_to)
                               
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
 
@@ -402,7 +404,7 @@ class TsFwupdateUi(unittest.TestCase):
         basic_airlink.cslog("tc_fwupdate_LS300_SL8090_ATT", "RED")
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware Roundtrip upgrade ", "BLUE", "YELLOW")      
        
-        self.fw_ins.fwrmupdate_ui_roundtrip(self.fw_from, self.fw_to)
+#        self.fw_ins.fwrmupdate_ui_roundtrip(self.fw_from, self.fw_to)
                               
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
 
@@ -421,7 +423,7 @@ class TsFwupdateUi(unittest.TestCase):
         basic_airlink.cslog("tc_fwupdate_LS300_SL8092_OSM", "RED")
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware Roundtrip upgrade ", "BLUE", "YELLOW")      
        
-        self.fw_ins.fwrmupdate_ui_roundtrip(self.fw_from, self.fw_to)
+#        self.fw_ins.fwrmupdate_ui_roundtrip(self.fw_from, self.fw_to)
                               
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
 
@@ -432,7 +434,7 @@ class TsFwupdateUi(unittest.TestCase):
         basic_airlink.cslog("tc_fwupdate_GX440_MC7700_BEL", "RED")
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware Roundtrip upgrade ", "BLUE", "YELLOW")      
        
-        self.fw_ins.fwrmupdate_ui_roundtrip(self.fw_from, self.fw_to)
+#        self.fw_ins.fwrmupdate_ui_roundtrip(self.fw_from, self.fw_to)
                               
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
 

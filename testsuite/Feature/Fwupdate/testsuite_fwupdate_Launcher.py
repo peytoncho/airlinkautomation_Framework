@@ -16,7 +16,7 @@ import shutil
 import htmlreport
 import basic_airlink
 import mdt_airlink
-
+import yaml
 
 import ts_fwupdate_ui
 import ts_fwupdate_at_commands
@@ -92,6 +92,11 @@ def pickTestcase(combo_list):
     print str(pick_list)
     return pick_list
 
+def dump_tc_list(combo_list):
+    combo_map = {'COMBO_LIST' : combo_list}  
+    stream = open('temp_fwupdate_tc_info.yml','w')
+    yaml.dump(combo_map, stream, default_flow_style=True)
+    stream.close()
 
 ####################################################
 #  Firmware Update test automation main
@@ -104,52 +109,53 @@ if __name__ == "__main__":
 #        device_number =  mdt_airlink.change_global_ip()
         
         #2, check devices connection
-        check_connection_flag = mdt_airlink.ping_devices()
-        if not check_connection_flag:
-            sys.exit(2)
+#        check_connection_flag = mdt_airlink.ping_devices()
+#        if not check_connection_flag:
+#            sys.exit(2)
         #3, form the devices list 
         combo_list = mdt_airlink.form_device_fullname()
         
         #4, pick the test case
         pick_list = pickTestcase(combo_list)
         
-#         combo_list = readCombo(testing_combo)
-#         pick_list = pickTestcase(combo_list)
-#         mySuite = basic_airlink.setup_suite_mdt(tc_ts_map, pick_list)
-#     else:
-#         mySuite = basic_airlink.setup_suite(tbd_config_map,fwupdate_config_map, tc_ts_map)
-#                 
-#     log_filename=basic_airlink.get_log_filename(tbd_config_map, test_area,"")
-#     FORMAT ='%(asctime)-15s => %(levelname)-8s => %(message)s'
-#     if tbd_config_map["LOG_LEVEL"]=="DEBUG":
-#         LEVEL = logging.DEBUG
-#     else: 
-#         LEVEL = logging.INFO 
-#     logging.basicConfig(level = LEVEL,filename = log_filename, format=FORMAT,  filemode='w')    
-#     time_stamp = time.strftime("%b-%d-%Y_%H-%M")
-#     report_filename=basic_airlink.get_report_filename(tbd_config_map, test_area,"")
-#     report_file_name = report_filename.split('/')[-1]
-#     fpp = file(report_filename, 'wb')   
-#     description_text= r""" ***"""+ "log file name " +log_filename
-#           
-#     runner = htmlreport.HTMLTestRunner(
-#                 stream = fpp,
-#                 title = 'Firmware Update Test Report', 
-#                 description = description_text
-#                 )       
-#    
-#     test_cases = mySuite.countTestCases()
-#     basic_airlink.slog("\x1b[0mTotal test cases: %d" % test_cases)
-#      
-#     test_result=runner.run(mySuite)
-#     basic_airlink.slog("\x1b[0mTotal %d test cases PASS." % test_result.success_count )
-#     basic_airlink.slog("Total %d test cases FAILED." % test_result.failure_count )
-#     basic_airlink.slog("Total %d test cases has ERROR." % test_result.error_count )
-#     fpp.close()
-# #    shutil.copyfile('C:'+report_filename, 'C:/jenkins/workspace/Firmware_update_test/reports/'+report_file_name)
-# #    sys.stdout.write("\nFor details of the results please check \n http://carmd-ev-aptest:8080/job/Firmware_update_test/ws/reports/%s\n\n For details of the log please check \n http://carmd-ev-aptest:8080/job/Firmware_update_test/ws/logs/%s\n\n"  % ( report_file_name,log_filename))    
-#     
-#     if (test_result.error_count + test_result.failure_count): 
-#         sys.exit(1)
-#     else:
-#         sys.exit(0)
+        #5,write the list to yml
+        dump_tc_list(combo_list)
+        
+        mySuite = basic_airlink.setup_suite_mdt(tc_ts_map, pick_list)
+    else:
+        mySuite = basic_airlink.setup_suite(tbd_config_map,fwupdate_config_map, tc_ts_map)
+                 
+    log_filename=basic_airlink.get_log_filename(tbd_config_map, test_area,"")
+    FORMAT ='%(asctime)-15s => %(levelname)-8s => %(message)s'
+    if tbd_config_map["LOG_LEVEL"]=="DEBUG":
+        LEVEL = logging.DEBUG
+    else: 
+        LEVEL = logging.INFO 
+    logging.basicConfig(level = LEVEL,filename = log_filename, format=FORMAT,  filemode='w')    
+    time_stamp = time.strftime("%b-%d-%Y_%H-%M")
+    report_filename=basic_airlink.get_report_filename(tbd_config_map, test_area,"")
+    report_file_name = report_filename.split('/')[-1]
+    fpp = file(report_filename, 'wb')   
+    description_text= r""" ***"""+ "log file name " +log_filename
+           
+    runner = htmlreport.HTMLTestRunner(
+                stream = fpp,
+                title = 'Firmware Update Test Report', 
+                description = description_text
+                )       
+    
+    test_cases = mySuite.countTestCases()
+    basic_airlink.slog("\x1b[0mTotal test cases: %d" % test_cases)
+      
+    test_result=runner.run(mySuite)
+    basic_airlink.slog("\x1b[0mTotal %d test cases PASS." % test_result.success_count )
+    basic_airlink.slog("Total %d test cases FAILED." % test_result.failure_count )
+    basic_airlink.slog("Total %d test cases has ERROR." % test_result.error_count )
+    fpp.close()
+#    shutil.copyfile('C:'+report_filename, 'C:/jenkins/workspace/Firmware_update_test/reports/'+report_file_name)
+#    sys.stdout.write("\nFor details of the results please check \n http://carmd-ev-aptest:8080/job/Firmware_update_test/ws/reports/%s\n\n For details of the log please check \n http://carmd-ev-aptest:8080/job/Firmware_update_test/ws/logs/%s\n\n"  % ( report_file_name,log_filename))    
+     
+    if (test_result.error_count + test_result.failure_count): 
+        sys.exit(1)
+    else:
+        sys.exit(0)

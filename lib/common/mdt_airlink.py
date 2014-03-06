@@ -165,8 +165,8 @@ def form_device_fullname():
         time.sleep(3)
         driver.close()
         
-        device_fullname = 'DUT_'+device_model+'_'+device_rm+'_'+device_rmid[0:3]
-        device_lst.append(device_fullname)
+        device_fullname = "DUT_"+device_model+"_"+device_rm+"_"+device_rmid[0:3]
+        device_lst.append(str(device_fullname))
         
     for device in device_lst:
         print device
