@@ -2697,10 +2697,19 @@ class SeleniumAcemanager(unittest.TestCase):
         
         '''
         id = str(msciids.MSCIID_CFG_CMN_HOST_LOCAL_IP)
-        print "deviceIP:"+id
         return self.set_element_by_name(driver, id, value)
           
          
-    
+    def get_rmid(self,driver):
+        '''Set device IP in ACEManager
+        
+        Args: driver
+              value
+        
+        Return: True/False
+        
+        '''
+        id = str(msciids.MSCIID_STS_RMID)
+        return self.get_element_by_id(driver, id)       
     
     

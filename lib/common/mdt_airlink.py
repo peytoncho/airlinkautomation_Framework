@@ -53,6 +53,7 @@ def change_global_ip():
                         reboot_fail_lst.append(global_id)
                         print("exp:Append "+global_id+" to reboot list")                              
                 continue
+            
             retry_counter = 0
             break
         
@@ -69,14 +70,24 @@ def change_global_ip():
     return len(globalid_lst)
 
 
-    
-
-
 def ping_devices():
-#    for i in range(device_number):
-    device_ip = '192.168.13.31'
-    ret = os.system('ping '+device_ip)
-    print ret
+    result_lst = []
+    result = True
+    for i in range(DEVICE_NUMBER):
+        device_ip = '192.168.13.'+str(i+1)
+        ret = os.system('ping '+device_ip)
+        result_lst.append(ret) 
+        if ret == 0:
+            print device_ip+': OK'
+        else:
+            print device_ip+': fail'
+    
+    for i in range(len(result_lst)):
+        if result_lst[i] != 0:
+            result = False
+            break
+    return result
+
 
 def restore_device_ip():
     at_ins = at_utilities.AtCommands()
@@ -113,8 +124,7 @@ def ui_change_ip(selenium_instance,global_id_list):
         if not selenium_instance.set_device_ip(driver, "192.168.13."+str(global_id_index+1)):
             retry_counter+=1
             driver.close()
-            continue           
-    #        selenium_instance.set_device_ip(driver, "192.168.13.31")
+            continue
         selenium_instance.apply_reboot(driver)
             
         time.sleep(5)
@@ -143,10 +153,30 @@ def get_device_ip_list():
     for line in info_lst:
         print(line)
 
+def form_device_fullname():
+    device_lst = []
+    for i in range(DEVICE_NUMBER):
+        ace_url = 'http://192.168.13.'+str(i+1)+':9191'
+        driver = se_ins.login(ace_url, 'user', '12345')
+        time.sleep(5)
+        device_model = se_ins.get_device_model(driver)
+        device_rm = se_ins.get_radio_module_type(driver)
+        device_rmid = se_ins.get_rmid(driver)
+        time.sleep(3)
+        driver.close()
+        
+        device_fullname = 'DUT_'+device_model+'_'+device_rm+'_'+device_rmid[0:3]
+        device_lst.append(device_fullname)
+        
+    for device in device_lst:
+        print device
+    return device_lst
+
 #ui_change_ip(se_ins,globalid_lst)
-restore_device_ip()
-time.sleep(40)
-change_global_ip()
-time.sleep(40)
-get_device_ip_list()
+# restore_device_ip()
+# time.sleep(40)
+# change_global_ip()
+# time.sleep(40)
+# get_device_ip_list()
 #ping_devices()
+#form_device_fullname()
