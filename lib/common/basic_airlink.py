@@ -800,6 +800,12 @@ def setup_suite_v2(area_config_map, tc_ts_map):
         
     return test_suite    
 
+def setup_suite_mdt(tc_ts_map, tc_pick_list):
+    test_suite = unittest.TestSuite()
+    for i in tc_pick_list:
+        test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
+        tc_ts_map[i][2]=1
+    return test_suite
 def setup_suite_v3(tbd_config_map, area_config_map, tc_ts_map):
     """  Gather all the tests from this test module into a test suite.  
     Handle the different arguments from test suite launcher command line:
