@@ -6,19 +6,19 @@
 # Author: Airlink
 # 
 #################################################################################
-import sys
-sys.dont_write_bytecode = True
 
 import time
+import sys
+sys.dont_write_bytecode = True  #Henry ???
+
 import os
+
 import logging
 
 test_area = "LAN"
 test_sub_area=""
 airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME'] 
-sys.path.append(airlinkautomation_home_dirname+"/lib/common")
-sys.path.append(airlinkautomation_home_dirname+"/lib/common/UI")
-sys.path.append(airlinkautomation_home_dirname+"/lib/site-packages")
+#sys.path.append(airlinkautomation_home_dirname+"/lib/common")
 
 import basic_airlink
 basic_airlink.append_sys_path()
@@ -26,8 +26,8 @@ tbd_config_map, lan_config_map = basic_airlink.get_config_data(test_area,"")
 
 import ts_lan_dhcp_addressing
 import ts_lan_at_commands
-import ts_lan_vrrp
 import htmlreport
+import ts_lan_vrrp
 
 # mapping info about test case/test module/testsuite class/selection
 #             test module . test class       test case          flag of  test case selected 
@@ -39,7 +39,7 @@ tc_ts_map = {
     5:      [ts_lan_at_commands.TsLanAtCommands,"tc_ppoe_commands",0],
     6:      [ts_lan_at_commands.TsLanAtCommands,"tc_dual_eth_state",0],
     7:      [ts_lan_at_commands.TsLanAtCommands,"tc_dual_eth_mac",0],
-    8:      [ts_lan_at_commands.TsLanAtCommands,"tc_dummy",0],
+    8:      [ts_lan_at_commands.TsLanAtCommands,"tc_reset_to_factory_default",0],
     9:      [ts_lan_at_commands.TsLanAtCommands,"tc_dummy",0],
     10:     [ts_lan_at_commands.TsLanAtCommands,"tc_dummy",0],     
     11:     [ts_lan_at_commands.TsLanAtCommands,"tc_wifi_mode",0],           
@@ -51,13 +51,19 @@ tc_ts_map = {
     17:     [ts_lan_at_commands.TsLanAtCommands,"tc_wifi_ap_security_type",0],          
     18:     [ts_lan_at_commands.TsLanAtCommands,"tc_wifi_ap_tx_power",0],           
     19:     [ts_lan_at_commands.TsLanAtCommands,"tc_wifi_ap_dhcp_commands",0],           
-    20:     [ts_lan_at_commands.TsLanAtCommands,"tc_wifi_ap_ssid_commands",0],           
+    20:     [ts_lan_at_commands.TsLanAtCommands,"tc_wifi_ap_ssid_commands",0],  
     21:     [ts_lan_dhcp_addressing.TsLanDhcpAddressing,"tc_all_hosts_use_private_ips_default", 0],
     22:     [ts_lan_dhcp_addressing.TsLanDhcpAddressing,"tc_ethernet_uses_public_ip",0],
     23:     [ts_lan_dhcp_addressing.TsLanDhcpAddressing,"tc_usb_uses_public_ip",0],
     24:     [ts_lan_dhcp_addressing.TsLanDhcpAddressing,"tc_ethernet_display_disable",0],
-    25:     [ts_lan_dhcp_addressing.TsLanDhcpAddressing,"tc_dummp",0],
-    26:     [ts_lan_vrrp.TsLanVrrp,"tc_vrrp_basic",0],
+    25:     [ts_lan_dhcp_addressing.TsLanDhcpAddressing,"tc_usb_display",0],
+    26:     [ts_lan_dhcp_addressing.TsLanDhcpAddressing,"tc_wifi_display",0],
+    27:     [ts_lan_dhcp_addressing.TsLanDhcpAddressing,"tc_vlan_display",0],
+    28:     [ts_lan_dhcp_addressing.TsLanDhcpAddressing,"tc_ip_mac_display",0],
+    29:     [ts_lan_dhcp_addressing.TsLanDhcpAddressing,"tc_dummy",0],
+    30:     [ts_lan_dhcp_addressing.TsLanDhcpAddressing,"tc_dummy",0],
+    31:     [ts_lan_vrrp.TsLanVrrp,"tc_vrrp_basic",0],
+
 }
                    
 ####################################################
@@ -65,7 +71,7 @@ tc_ts_map = {
 ####################################################
 if __name__ == "__main__":
     
-    log_filename=basic_airlink.get_log_filename(tbd_config_map, "LAN","")
+    log_filename=basic_airlink.get_log_filename(tbd_config_map, test_area,test_sub_area)
     FORMAT ='%(asctime)-15s => %(levelname)-8s => %(message)s'
     if tbd_config_map["LOG_LEVEL"]=="DEBUG":
         LEVEL = logging.DEBUG
@@ -75,7 +81,7 @@ if __name__ == "__main__":
 
     time_stamp = time.strftime("%b-%d-%Y_%H-%M")
 
-    report_filename=basic_airlink.get_report_filename(tbd_config_map, "LAN","")
+    report_filename=basic_airlink.get_report_filename(tbd_config_map, test_area,test_sub_area)
 
     fpp = file(report_filename, 'wb')
     
@@ -93,13 +99,14 @@ if __name__ == "__main__":
     
     test_cases = mySuite.countTestCases()
     
-    basic_airlink.slog("Total test cases: %d" % test_cases)
+    basic_airlink.cslog("Total test cases: %d" % test_cases)
     
-    test_result=runner.run(mySuite, True, result)
+    #test_result=runner.run(mySuite, True, result)
+    test_result=runner.run(mySuite, fail_flag=tbd_config_map["TERMINATE_ON_FAIL"])
 
-    basic_airlink.slog("Total %d test cases PASS." % test_result.success_count )
-    basic_airlink.slog("Total %d test cases FAILED." % test_result.failure_count )
-    basic_airlink.slog("Total %d test cases has ERROR." % test_result.error_count )    
+    basic_airlink.cslog("Total %d test cases PASS." % test_result.success_count )
+    basic_airlink.cslog("Total %d test cases FAILED." % test_result.failure_count )
+    basic_airlink.cslog("Total %d test cases has ERROR." % test_result.error_count )    
     
     if (test_result.error_count + test_result.failure_count): 
         sys.exit(1)

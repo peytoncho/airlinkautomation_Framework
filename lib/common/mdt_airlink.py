@@ -111,6 +111,7 @@ def ui_change_ip(selenium_instance,global_id_list):
     while retry_counter <= RETRY_TIMES and seccess_flag == False:
        
         driver = selenium_instance.login('http://192.168.13.31:9191','user','12345')
+        time.sleep(5)
         global_id = selenium_instance.get_global_id(driver)
         
         if global_id == '':
@@ -157,7 +158,7 @@ def form_device_fullname():
     device_lst = []
     retry_flag = 1
     for i in range(DEVICE_NUMBER):
-        
+        retry_flag = 1
         while retry_flag == 1 or retry_flag == 2:
             ace_url = 'http://192.168.13.'+str(i+1)+':9191'
             driver = se_ins.login(ace_url, 'user', '12345')
@@ -166,6 +167,7 @@ def form_device_fullname():
         
             if device_model == "":
                 retry_flag = 2
+                driver.close()
                 continue
             
             device_rm = se_ins.get_radio_module_type(driver)
@@ -182,6 +184,13 @@ def form_device_fullname():
         print device
     return device_lst
 
+
+def test(se_ins):
+    driver = se_ins.login('http://192.168.13.31:9191','user','12345')
+    se_ins.navigate_subtab(driver, "Status", "About")
+#    driver.close()
+
+#test(se_ins)
 #ui_change_ip(se_ins,globalid_lst)
 #restore_device_ip()
 # time.sleep(40)

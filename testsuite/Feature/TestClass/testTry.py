@@ -162,12 +162,25 @@ def writecsv(dics):
 
 if __name__ == "__main__":
 #     get_device_ip_list()
-    retrive_global_ip()
+#    retrive_global_ip()
 #     time.sleep(50)
 #   repeat_reboot()
 #    restore_device_ip()
 #    time.sleep(60) 
 #    get_device_ip_list()
+    at_ins = at_utilities.AtCommands()
+    telnet_ins = telnet_airlink.TelnetAirlink(hostname = "192.168.13.31")
+    if not telnet_ins.connect():
+      print("fail connection")
+    
+    ret_str = at_ins.get_cell_info(telnet_ins, "")
+    print("This is result: "+ret_str)
+    telnet_ins.close()
+    
+    
+    
+      
+
     
     
     

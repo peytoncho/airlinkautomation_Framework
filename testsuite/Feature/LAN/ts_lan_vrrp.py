@@ -35,7 +35,6 @@ import basic_airlink
 import connectivity
 from cisco_config import CiscoConfig
 
-
 tbd_config_map, lan_config_map = basic_airlink.get_config_data("LAN","")
     
 @classmethod   

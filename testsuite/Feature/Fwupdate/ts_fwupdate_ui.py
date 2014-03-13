@@ -364,7 +364,7 @@ class TsFwupdateUi(unittest.TestCase):
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
 
     def tc_fwupdate_ES440_MC7710_OSM(self):
-        basic_airlink.cslog(self.dut_ip, "RED")
+#        basic_airlink.cslog(self.dut_ip, "RED")
         basic_airlink.cslog("tc_fwupdate_ES440_MC7710_OSM", "RED")
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware Roundtrip upgrade ", "BLUE", "YELLOW")      
        

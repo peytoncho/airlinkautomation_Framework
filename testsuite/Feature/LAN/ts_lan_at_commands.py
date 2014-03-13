@@ -20,6 +20,7 @@ import basic_airlink
 basic_airlink.append_sys_path()
 import at_utilities
 import connectivity
+import proxy_airlink
 
 tbd_config_map, lan_config_map = basic_airlink.get_config_data("LAN","")
         
@@ -35,21 +36,24 @@ class TsLanAtCommands(unittest.TestCase):
         Returns: None
         '''
            
-        self.conn_ins = connectivity.Connectivity()     
-        self.at_ins   = at_utilities.AtCommands()   
-         
+        self.connectivity_obj = connectivity.Connectivity()     
+                 
         # step: check if devices ready    
         basic_airlink.slog("step: check if testbed is ready")
-        self.conn_ins.testbed_ready() 
+        if not self.connectivity_obj.testbed_ready("LAN"):
+            basic_airlink.cslog("testbed is not ready")
+            sys.exit(0)
+            
         self.device_name = tbd_config_map["DUTS"][0]
                
         basic_airlink.slog("Step:  connect to DUT and generate connection instance")
-        
-        self.connect_instance = self.conn_ins.connection_types()
-        
+        self.connect_instance = self.connectivity_obj.connection_types()
         if not self.connect_instance.connect(): 
-            basic_airlink.slog("Problem: testbed not ready yet")
-                    
+            basic_airlink.cslog("Connect() failed")
+             
+        self.at_ins = self.connectivity_obj.get_at_instance(proxy_ip = tbd_config_map["MANAGEMENT_IP"]["HOST1"])   # remote by proxy 
+        #self.at_ins = self.connectivity_obj.get_at_instance()   # local AT instance
+                 
         self.fail_flag = 0
            
         self.verificationErrors = []
@@ -65,8 +69,23 @@ class TsLanAtCommands(unittest.TestCase):
         self.connect_instance.close()
         
         basic_airlink.slog(" Testcase complete")
-        
+    
+    def get_at_instance(self, proxy_ip = None):
+        ''' if proxy_ip is not None then generate remote at instance else 
+        generate local at instance.
+        '''
+        if proxy_ip is not None:
             
+            self.proxy = proxy_airlink.ProxyAirlink(proxy_ip)
+            self.proxy_conn = self.proxy.connect()
+            
+            self.local_at_ins   = at_utilities.AtCommands() 
+              
+            self.at_ins = self.proxy.deliver(self.local_at_ins)
+            
+        else:
+            self.at_ins = at_utilities.AtCommands()   
+                    
     def tc_ethernet_dhcp_commands(self):
         ''' LAN test case Ethernet_DHCP_commands in ApTest
         '''
@@ -156,9 +175,6 @@ class TsLanAtCommands(unittest.TestCase):
         ret = self.at_ins.get_ethernet_state(self.connect_instance,"3")
         self.assertNotEqual(ret , basic_airlink.ERR)                    
    
-
-
-        
     def tc_ethernet_mac(self):
         ''' LAN test case Ethernet state and Ethernet MAC. Don't insert 
             DualEthernet card.
@@ -168,11 +184,9 @@ class TsLanAtCommands(unittest.TestCase):
         ret = self.at_ins.get_ethernet_mac(self.connect_instance,"")
         self.assertNotEqual(ret, basic_airlink.ERR)  
 
-  
         ret = self.at_ins.get_ethernet_mac(self.connect_instance,"1")
         self.assertNotEqual(ret, basic_airlink.ERR)     
          
-
     def tc_dual_eth_mac(self):
         ''' LAN test case Ethernet state and Ethernet MAC. Please insert 
             DualEthernet card.
@@ -402,13 +416,13 @@ class TsLanAtCommands(unittest.TestCase):
         ret = self.at_ins.get_wifi_mode(connect_instance)
         if  ret.find("2",0) == -1 or ret == basic_airlink.ERR: 
             self.fail_flag +=1             
-            basic_airlink.slog("Problem: wifimode 2 !!!")
+            basic_airlink.cslog("Problem: wifimode 2 !!!")
             
         self.assertEqual(self.at_ins.set_wifi_mode(connect_instance,"3"), True) 
         ret = self.at_ins.get_wifi_mode(connect_instance)
         if  ret.find("3",0) == -1 or ret == basic_airlink.ERR: 
             self.fail_flag +=1 
-            basic_airlink.slog("Problem: wifimode 3 !!!")
+            basic_airlink.cslog("Problem: wifimode 3 !!!")
  
         self.assertEqual(self.fail_flag, 0)
  
@@ -434,10 +448,10 @@ class TsLanAtCommands(unittest.TestCase):
             
         time.sleep(tbd_config_map[self.device_name]["REBOOT_TIMEOUT"])
         
-        basic_airlink.slog("Step:  connect to DUT and generate connection instance")
-        self.connect_instance = self.conn_ins.connection_types()
+        basic_airlink.cslog("Step:  connect to DUT and generate connection instance")
+        self.connect_instance = self.connectivity_obj.connection_types()
         if not self.connect_instance.connect(): 
-            basic_airlink.slog("Problem: testbed not ready yet")
+            basic_airlink.cslog("Problem: testbed not ready yet")
  
         self.assertNotEqual(self.at_ins.get_wifi_mac(self.connect_instance), basic_airlink.ERR)                       
             
@@ -737,7 +751,26 @@ class TsLanAtCommands(unittest.TestCase):
         ret=self.at_ins.get_wifi_ap_wpa_crypt(self.connect_instance,original_wpa_enc_type) 
         self.assertEqual(ret, True)  
                                                      
-        self.assertEqual(self.fail_flag, 0)    
+        self.assertEqual(self.fail_flag, 0)   
+
+    def tc_reset_to_factory_default(self):
+        ''' 
+        '''
+        ret = self.at_ins.factory_reset(self.connect_instance)
+        if not ret:
+            self.fail_flag +=1  
+            
+        time.sleep(tbd_config_map[self.device_name]["REBOOT_TIMEOUT"])
+        
+        basic_airlink.slog("Step:  connect to DUT and generate connection instance")
+        self.connect_instance = self.conn_ins.connection_types()
+        if not self.connect_instance.connect(): 
+            basic_airlink.slog("Problem: testbed not ready yet")
+        else:    
+            ret=self.at_ins.get_system_reset_number(self.connect_instance)     
+            self.assertEqual(int(ret), 1)
+            
+        self.assertEqual(self.fail_flag, 0) 
                                      
     def tc_dummy(self):
         self.assertEqual(self.fail_flag, 0)

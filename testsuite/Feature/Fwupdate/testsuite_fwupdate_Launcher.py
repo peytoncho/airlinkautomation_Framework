@@ -76,7 +76,6 @@ tc_ts_map={
     48:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_GX440_MC7700_BEL",0],          
 }
 
-testing_combo = fwupdate_config_map["TESTING_COMBO"]
 
 def readCombo(testing_combo):
     combo_list = fwupdate_config_map[testing_combo]
@@ -106,9 +105,9 @@ if __name__ == "__main__":
   
     if fwupdate_config_map["MDT"] == "YES":
         #1, change all connected devices IP
-        device_number =  mdt_airlink.change_global_ip()
-        print "IP changed Waiting..."
-        time.sleep(60)
+#        device_number =  mdt_airlink.change_global_ip()
+#        print "IP changed Waiting..."
+#        time.sleep(60)
         #2, check devices connection
         check_connection_flag = mdt_airlink.ping_devices()
         if not check_connection_flag:

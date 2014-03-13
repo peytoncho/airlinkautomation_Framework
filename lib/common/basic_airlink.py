@@ -47,7 +47,8 @@ feature_telnet_path    = slash+'testsuite'+slash+'Feature'+slash+'Services'+slas
 feature_ssh_path       = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'SSH' 
 feature_snmp_path      = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'SNMP' 
 feature_sms_path       = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'SMS' 
-feature_lpm_path       = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'LPM' 
+feature_lpm_path       = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'LPM'
+feature_email_path       = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'Email'
 testclass_path         = slash+'testsuite'+slash+'Feature'+slash+'TestClass' 
 smoke_path             = slash+'testsuite'+slash+'Smoke' 
 performance_path       = slash+'testsuite'+slash+'Performance'
@@ -538,6 +539,9 @@ def get_config_data(area_name, sub_area_name):
     elif area_name == "Services" and sub_area_name == "LPM":
         fo=open(airlinkautomation_home_dirname+feature_lpm_path+slash+\
                 'lpm_test_conf.yml','r')
+    elif area_name == "Services" and sub_area_name == "EMAIL":
+        fo=open(airlinkautomation_home_dirname+feature_email_path+slash+\
+                'email_test_conf.yml','r')    
     elif area_name == "TestClass":
         fo=open(airlinkautomation_home_dirname+testclass_path+slash+\
                 'testclass_test_conf.yml','r')
@@ -626,6 +630,7 @@ def append_sys_path():
     sys.path.append(airlinkautomation_home_dirname+feature_telnet_path)
     sys.path.append(airlinkautomation_home_dirname+feature_ssh_path)
     sys.path.append(airlinkautomation_home_dirname+feature_snmp_path)
+    sys.path.append(airlinkautomation_home_dirname+feature_email_path)
     sys.path.append(airlinkautomation_home_dirname+feature_sms_path)
     sys.path.append(airlinkautomation_home_dirname+feature_lpm_path)
     sys.path.append(airlinkautomation_home_dirname+feature_fwupdate_path)

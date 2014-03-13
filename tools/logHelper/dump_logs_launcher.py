@@ -115,7 +115,7 @@ def write_logs(word=None):
     return "Done"
 
 def time_stamp():
-    time_stamp = time_stamp = time.strftime("%Y-%b-%d_%H-%M-%S")
+    time_stamp = time.strftime("%Y-%b-%d_%H-%M-%S")
     return time_stamp
 
 def get_info(word=None):

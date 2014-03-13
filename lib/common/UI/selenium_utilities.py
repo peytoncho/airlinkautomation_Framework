@@ -74,13 +74,10 @@ class SeleniumAcemanager(unittest.TestCase):
             the text that read from web
             
         '''
-        txt = ""
         tab,subtab = self.get_parents(msciid)
-        ret = self.navigate_subtab(driver, tab, subtab)
+        self.navigate_subtab(driver, tab, subtab)
         
-        if not ret:
-            txt = ""
-        
+        txt = ""
         try:
             if flag == 1:
                 txt= driver.find_element_by_id(msciid).text
@@ -423,12 +420,12 @@ class SeleniumAcemanager(unittest.TestCase):
         '''
         tab,subtab = self.get_parents(id_str)
         self.navigate_subtab(driver, tab, subtab)
-        element = driver.find_element_by_id(id_str)
+        
         val = True
 
         try:
-            element.clear()
-            element.send_keys(val_str)
+            driver.find_element_by_id(id_str).clear()
+            driver.find_element_by_id(id_str).send_keys(val_str)
         
         except NoSuchElementException:
             basic_airlink.slog("set_element_by_id: cannot find " + id_str)
@@ -444,8 +441,9 @@ class SeleniumAcemanager(unittest.TestCase):
         find item by name and set the value
         '''   
         tab,subtab = self.get_parents(name_str)
-        val = self.navigate_subtab(driver, tab, subtab)
+        self.navigate_subtab(driver, tab, subtab)
         
+        val = True
      
         try:
             driver.find_element_by_name(name_str).clear()
@@ -2516,7 +2514,8 @@ class SeleniumAcemanager(unittest.TestCase):
             self.refresh(driver)
                         
 
-        except: 
+        except:
+            basic_airlink.cslog(sys.exc_info())
             self.error_flag +=1
             basic_airlink.cslog("Navigating tab has Exception occurred", "RED", "WHITE")
 
@@ -2579,7 +2578,8 @@ class SeleniumAcemanager(unittest.TestCase):
  
             self.refresh(driver)
             
-        except: 
+        except:
+            basic_airlink.cslog(sys.exc_info())
             self.error_flag +=1
             basic_airlink.cslog("Navigating subtab has Exception occurred, due to error or NA", "RED", "WHITE")
             
@@ -2686,7 +2686,8 @@ class SeleniumAcemanager(unittest.TestCase):
             SUBTAB
         '''
         return self.ele_config_map[msciid][0],self.ele_config_map[msciid][1]
-    
+		
+
     def set_device_ip(self, driver, value):
         '''Set device IP in ACEManager
         
@@ -2710,6 +2711,5 @@ class SeleniumAcemanager(unittest.TestCase):
         
         '''
         id = str(msciids.MSCIID_STS_RMID)
-        return self.get_element_by_id(driver, id)       
-    
+        return self.get_element_by_id(driver, id)	
     

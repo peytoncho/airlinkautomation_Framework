@@ -1,0 +1,221 @@
+###############################################################################
+# This configuration file is for Airlink Status test automation.
+# Company: Sierra Wireless
+# Time: Mar 13, 2013
+#
+#################################################################################
+
+#################################################################################
+# VPN TEST CONFIGURATION
+#################################################################################
+---
+#TESTBED2 : !include  /airlinkautomation/config/testbed2Conf.yml
+
+RUN_ALL_TESTCASES          :    NO
+RUN_SELECTIVE_TESTCASES    :    [[1,6]]
+RUN_REPEAT                 :    1
+ALL_TASECASE_NUMBER        :    6
+    
+LIST_TESTCASES:
+           1  : 
+              TC_ID       : "Feature/ ACEmgr_Functions_Amit_Nasser_Shanifer/ FW_update_ALEOS_and_RMFU_Amit/ ALEOS_FW_update_Peyton/ Using_ACEManager/ Local_Connection/ ALEOS_update_to_current_version
+"           
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update using UI single"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+           2  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_roundtrip"     
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090","MC5728"]       
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update using UI roundtrip"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+           3  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432009_432a010I"     
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","MC8705","SL8090"]              
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands single"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+           4  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_sp_GX400"     
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","MC8705","SL8090","MC5728"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands single"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate           
+                      
+           5  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432a010_432a010I"     
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","MC8705","SL8090"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+           6  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432a010I_434009"     
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","MC8705","SL8090"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+           7  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432009_433014"     
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+           8  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432009_433a014"     
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+           9  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432a010_433014"     
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+           10  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432a010_433a014"     
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+           11  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432a010_434009"     
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+           12  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433a014_434009"     
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+           13  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433014_434009"     
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+           14  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_434008_434009"     
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+           15  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_single"     
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+           16  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_roundtrip"     
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090","MC8705"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+           17  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433014_434009"     
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090","MC8705"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+           18  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fw_rm_update_local"     
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090","MC8705"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+           19  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_434008_434009"     
+              PRODUCT_VER : ["4.3.3","4.3.4"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+           47  :
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_434008_434009"     
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090","SL5011"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
