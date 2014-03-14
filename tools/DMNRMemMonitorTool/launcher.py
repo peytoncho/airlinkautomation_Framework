@@ -5,21 +5,21 @@ import os
 import time
 
 
-def dump_mem_info(times):
+def dump_mem_info(times, time_stamp_str):
     ssh = SshAirlink(hostname="192.168.13.31")
     for i in range(3):
         if ssh.connect():
             break
         else:
+            print "connection failed, wait 1 minute..."
             time.sleep(60)
             
     output_1 = ssh.command("ip route")
     output_2 = ssh.command("free -m")
     output_3 = ssh.command("top -n1")
     os.chdir("./logs/")
-    time_stamp_str = time_stamp = time.strftime("%Y-%b-%d")
     log_filename = time_stamp_str+'_logmsg.txt'
-    print time_stamp_str+": File created, Please Check"
+    print time_stamp_str+": info dumped, Please Check"
     with open(log_filename,"a") as fp:
         fp.write("\n############################ Time "+times+" ############################\n")
         fp.write("========>$: ip route\n")
@@ -36,6 +36,7 @@ def dump_mem_info(times):
     os.chdir("../")
 
 def run():
+    time_stamp_str = time_stamp = time.strftime("%Y-%b-%d_%H-%M-%S")
     try:
       opts, args = getopt.getopt(sys.argv[1:],"n:",["time="])
     except getopt.GetoptError:
@@ -47,16 +48,15 @@ def run():
     for opt,arg in opts:
         if opt == "-n":
             action_times = arg
-    print action_times 
+    print "Dump log every " + str(action_times) + " times"
     url = "HTTP://192.168.13.31:9191"
     username = "user"
     password = "12345"
     driver = s.login(url,username,password)
-#    driver.close()
     s.navigate_wan_dmnr(driver)
     n=0
     while True:
-        print "This is "+str(n)
+        print "This is "+str(n) +" times"
         if n%2==0:
             s.enable_dmnr(driver)
         else:
@@ -64,7 +64,7 @@ def run():
         s.apply(driver)
         n+=1
         if n%int(action_times) == 0:
-            dump_mem_info(str(n))
+            dump_mem_info(str(n),time_stamp_str)
 
     driver.close()
     print "Done!"

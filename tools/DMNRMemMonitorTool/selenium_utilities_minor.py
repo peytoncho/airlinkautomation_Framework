@@ -70,10 +70,12 @@ def reboot(driver):
         return val
 
 def enable_dmnr(driver):
+    print "Change to Enable"
     drop_list_id = "53000"
     Select(driver.find_element_by_name(drop_list_id)).select_by_visible_text("Enable")
 
 
 def disable_dmnr(driver):
+    print "Change to Disable"
     drop_list_id = "53000"
     Select(driver.find_element_by_name(drop_list_id)).select_by_visible_text("Disable")
