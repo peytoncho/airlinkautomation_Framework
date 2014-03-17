@@ -26,10 +26,6 @@ sys.path.append(airlinkautomation_home_dirname+"/lib/common")
 basic_airlink.append_sys_path()
 tbd_config_map, email_config_map = basic_airlink.get_config_data(test_area,test_sub_area)
 
-#import ts_snmp_trap
-#import ts_snmp_version_2
-#import ts_snmp_version_3
-#import ts_snmp_ui_check_up
 
 # mapping info about test case/test module/testsuite class/selection
 #             test module . test class       test case          flag of  test case selected 

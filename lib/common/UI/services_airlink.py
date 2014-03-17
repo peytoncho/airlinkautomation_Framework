@@ -154,27 +154,27 @@ class TelnetSshAirlink(selenium_utilities.SeleniumAcemanager):
     
     def get_remote_login_server_mode(self, driver):
         msciid_str = str(msciids.MSCIID_CFG_TELNET_SSH)
-        ret = self.get_element_by_id(driver, msciid_str)
+        ret = self.get_element_by_name(driver, msciid_str)
         return ret
     
     def get_remote_login_server_port(self,driver):
         msciid_str = str(msciids.MSCIID_CFG_CMN_TELNET_PORT)
-        ret = self.get_element_by_id(driver, msciid_str)
+        ret = self.get_element_by_name(driver, msciid_str)
         return ret
 
     def get_remote_login_server_port_timeout(self,driver):
         msciid_str = str(msciids.MSCIID_CFG_CMN_TNET_TIMEOUT)
-        ret = self.get_element_by_id(driver, msciid_str)
+        ret = self.get_element_by_name(driver, msciid_str)
         return ret
     
     def get_maximum_login_attempts(self,driver):
         msciid_str = str(msciids.MSCIID_CFG_SSH_MAX_LOGIN_TRY)
-        ret = self.get_element_by_id(driver, msciid_str)
+        ret = self.get_element_by_name(driver, msciid_str)
         return ret
     
     def get_telnet_ssh_echo(self,driver):
         msciid_str = str(msciids.MSCIID_CFG_CMN_ECHO_TELNET)
-        ret = self.get_element_by_id(driver, msciid_str)
+        ret = self.get_element_by_name(driver, msciid_str)
         return ret
     
     def get_ssh_status(self,driver):

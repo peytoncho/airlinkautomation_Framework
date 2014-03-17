@@ -43,7 +43,7 @@ feature_security_path  = slash+'testsuite'+slash+'Feature'+slash+'Security'
 feature_apps_path      = slash+'testsuite'+slash+'Feature'+slash+'Applications' 
 feature_datausage_path = slash+'testsuite'+slash+'Feature'+slash+'Applications'+slash+'Data_Usage' 
 feature_services_path  = slash+'testsuite'+slash+'Feature'+slash+'Services' 
-feature_telnet_path    = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'Telnet' 
+feature_telnet_path    = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'Telnet_SSH' 
 feature_ssh_path       = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'SSH' 
 feature_snmp_path      = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'SNMP' 
 feature_sms_path       = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'SMS' 
@@ -524,9 +524,6 @@ def get_config_data(area_name, sub_area_name):
     elif area_name == "Serial":
         fo=open(airlinkautomation_home_dirname+feature_serial_path+slash+\
                 'serial_test_conf.yml','r')
-    elif area_name == "Services" and sub_area_name == "Telnet":
-        fo=open(airlinkautomation_home_dirname+feature_telnet_path+slash+\
-                'telnet_test_conf.yml','r')
     elif area_name == "Services" and sub_area_name == "SSH":
         fo=open(airlinkautomation_home_dirname+feature_ssh_path+slash+\
                 'ssh_test_conf.yml','r')
@@ -541,7 +538,10 @@ def get_config_data(area_name, sub_area_name):
                 'lpm_test_conf.yml','r')
     elif area_name == "Services" and sub_area_name == "EMAIL":
         fo=open(airlinkautomation_home_dirname+feature_email_path+slash+\
-                'email_test_conf.yml','r')    
+                'email_test_conf.yml','r')
+    elif area_name == "Services" and sub_area_name == "TELNET_SSH":
+        fo=open(airlinkautomation_home_dirname+feature_telnet_path+slash+\
+                'telnet_ssh_test_conf.yml','r')     
     elif area_name == "TestClass":
         fo=open(airlinkautomation_home_dirname+testclass_path+slash+\
                 'testclass_test_conf.yml','r')

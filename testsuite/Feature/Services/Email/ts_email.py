@@ -56,7 +56,6 @@ class TsEmail(unittest.TestCase):
         smtp_quick_test_dest = self.services_ins.get_smtp_quick_test_destination(self.driver)
         ba.cslog("Click quick test button", "BLUE")
         #self.services_ins.click_smtp_quick_test(self.driver)
-
         
         ba.cslog(smtp_server_ip)
         ba.cslog(smtp_from_email)

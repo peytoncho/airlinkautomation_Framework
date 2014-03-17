@@ -19,21 +19,20 @@ import ts_telnet_ssh
 
 
 test_area = "Services"
-test_sub_area="EMAIL"
+test_sub_area="TELNET_SSH"
 airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_FRAMEWORK'] 
 sys.path.append(airlinkautomation_home_dirname+"/lib/common")
 
 basic_airlink.append_sys_path()
-tbd_config_map, email_config_map = basic_airlink.get_config_data(test_area,test_sub_area)
-
+tbd_config_map, telnetssh_config_map = basic_airlink.get_config_data(test_area,test_sub_area)
 
 # mapping info about test case/test module/testsuite class/selection
 #             test module . test class       test case          flag of  test case selected 
 tc_ts_map = {
-    1:      [ts_telnet_ssh.TsTelnetSsh,"tc_telnetssh_1",0],
-    2:      [ts_telnet_ssh.TsTelnetSsh,"tc_telnetssh_2",0],
-    3:      [ts_telnet_ssh.TsTelnetSsh,"tc_telnetssh_3",0],
-    4:      [ts_telnet_ssh.TsTelnetSsh,"tc_dummy",0], 
+    1:      [ts_telnet_ssh.TsTelnetSsh,"tc_telnet_login_attempt_wrong_password",0],
+    2:      [ts_telnet_ssh.TsTelnetSsh,"tc_telnet_login_attempt_wrong_username",0],
+    3:      [ts_telnet_ssh.TsTelnetSsh,"tc_telnet_change_ssh",0],
+    4:      [ts_telnet_ssh.TsTelnetSsh,"tc_telnet_change_diff_port",0], 
     5:      [ts_telnet_ssh.TsTelnetSsh,"tc_dummy",0],
     6:      [ts_telnet_ssh.TsTelnetSsh,"tc_dummy",0],
     7:      [ts_telnet_ssh.TsTelnetSsh,"tc_dummy",0],
@@ -85,7 +84,7 @@ if __name__ == "__main__":
     
     result = None
 
-    mySuite=basic_airlink.setup_suite(tbd_config_map,email_config_map, tc_ts_map) 
+    mySuite=basic_airlink.setup_suite(tbd_config_map,telnetssh_config_map, tc_ts_map) 
     
     test_cases = mySuite.countTestCases()
     

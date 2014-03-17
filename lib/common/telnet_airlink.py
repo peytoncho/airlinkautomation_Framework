@@ -75,20 +75,65 @@ class TelnetAirlink:
                 
             else:
                 logging.error("login time out")
-                self.tn.close()
+#                self.tn.close()
                 return False
         
         if len(self.password):
 
             if self.read_until_safe("Password: "):
-                self.tn.write(self.password + "\n")
-
+#                self.tn.write(self.password + "\n")
+                print self.command(self.password+ "\n")
+                
             else:
                 logging.error("password time out")
-                self.tn.close()
+#                self.tn.close()
                 return False
 
         return True
+    
+    def connect_test(self):
+        """Initiates a telnet connection by using telnetlib module.
+        
+        Args:
+            No args. 
+
+        Returns:
+            True: If the connection set up successfully.
+            False: If the connection set up failed.
+        """
+        logging.info("connecting")
+        try:
+            self.tn = telnetlib.Telnet(self.hostname, self.port, self.timeout)
+            
+        except:
+            logging.error("incorrect hostname or port number")
+            return False
+
+        self.tn.set_debuglevel(self.debug_mode)
+        self.tn.msg(logging)
+        
+        if len(self.username):
+            
+            if self.read_until_safe("login: "):
+                self.tn.write(self.username + "\n")
+                
+            else:
+                logging.error("login time out")
+#                self.tn.close()
+                return False
+        
+        if len(self.password):
+
+            if self.read_until_safe("Password: "):
+#                self.tn.write(self.password + "\n")
+                pwd_ret = self.command(self.password+ "\n")
+                
+            else:
+                logging.error("password time out")
+#                self.tn.close()
+                return False
+
+        return pwd_ret
 
     def command(self, cmd):
         """Sends a command to the device and waits till timeout expires.
