@@ -102,18 +102,22 @@ def dump_tc_list(combo_list):
 ####################################################
 
 if __name__ == "__main__":
-  
+    
     if fwupdate_config_map["MDT"] == "YES":
+        mdt_ins = mdt_airlink.MdtAirlink()
+        
         #1, change all connected devices IP
-#        device_number =  mdt_airlink.change_global_ip()
-#        print "IP changed Waiting..."
-#        time.sleep(60)
+        mdt_ins.change_global_ip()
+        print "IP changed Waiting..."
+        time.sleep(90)
+         
         #2, check devices connection
-        check_connection_flag = mdt_airlink.ping_devices()
+        check_connection_flag = mdt_ins.ping_devices()
         if not check_connection_flag:
             sys.exit(2)
+        
         #3, form the devices list 
-        combo_list = mdt_airlink.form_device_fullname()
+        combo_list = mdt_ins.form_device_fullname()
         
         #4, pick the test case
         pick_list = pickTestcase(combo_list)
@@ -155,7 +159,7 @@ if __name__ == "__main__":
 #    shutil.copyfile('C:'+report_filename, 'C:/jenkins/workspace/Firmware_update_test/reports/'+report_file_name)
 #    sys.stdout.write("\nFor details of the results please check \n http://carmd-ev-aptest:8080/job/Firmware_update_test/ws/reports/%s\n\n For details of the log please check \n http://carmd-ev-aptest:8080/job/Firmware_update_test/ws/logs/%s\n\n"  % ( report_file_name,log_filename))    
     
-    mdt_airlink.restore_device_ip()
+    mdt_ins.restore_device_ip()
     
     if (test_result.error_count + test_result.failure_count): 
         sys.exit(1)

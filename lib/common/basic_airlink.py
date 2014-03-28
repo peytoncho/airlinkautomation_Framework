@@ -4,6 +4,9 @@
 # Company: Sierra Wireless
 # Time: Feb 14, 2013
 # Author: Airlink
+# Change History: 
+#       Mar 12, 2014 msciids package instead of single msciids.py file.
+#       Mar 13, 2014 got MSCIID_ALL dynamically.
 #
 ################################################################################
 
@@ -27,6 +30,7 @@ airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_FRAMEWORK']
 slash = "\\" if sys.platform == 'win32' else "/"
 
 lib_common_path        = slash+'lib'+slash+'common'
+msciids_path           = slash+'lib'+slash+'common'+slash+'msciids'
 lib_common_ui_path     = slash+'lib'+slash+'common'+slash+'UI'
 lib_packages_path      = slash+'lib'+slash+'site-packages'
 feature_admin_path     = slash+'testsuite'+slash+'Feature'+slash+'Admin' 
@@ -66,6 +70,21 @@ ERR  = "ERROR"
 ENABLE  = 1
 DISABLE = 0
 
+#MSCIID_ALL ={ "4.3.4":msciids_434,
+#              "4.3.5":msciids_435,
+#              "4.3.6":msciids_436,
+#            }
+
+sys.path.append(airlinkautomation_home_dirname+msciids_path)
+files = os.listdir(airlinkautomation_home_dirname+msciids_path)                               
+test = re.compile("^(msciids_).*[py]$", re.IGNORECASE)
+files = filter(test.search, files)
+
+filenameToModuleNameList = lambda f: os.path.splitext(f)[0]
+shortVersionList=lambda chars: chars.split("_")[1]  
+addDotModuleKeyList = lambda element:reduce(lambda a,b: str(a)+"."+str(b), element)   
+MSCIID_ALL=dict(zip(map(addDotModuleKeyList, map(shortVersionList, map(filenameToModuleNameList, files))),\
+                    map(__import__, map(filenameToModuleNameList, files))))
 TAB_ALL  = ["Status","WAN_Cellular","LAN","Security","VPN","Services","GPS","Events_Reporting", "Serial", "Applications", "I_O", "Admin"]
 
 FEATURE_AREA     = ["WAN","LAN","Security","VPN","GPS","Template","FWupdate","Services","Serial", "Admin"]
@@ -157,6 +176,9 @@ yes_no_map  ={"Yes": 1, "No": 0}
 
 display_map ={"Display": 1, "No Display": 0}
 
+
+
+
  
 def slog(msg):
     '''   Print out the debug message on log file and html report    
@@ -233,7 +255,7 @@ def cslog(msg, fgcolor = None, bgcolor = None):
     Returns: 
         None
     '''    
-#     slog(msg + '\n')
+    slog(msg + '\n')
     _colorlog(msg, fgcolor,bgcolor) 
     
 def test_report(filename, msg):
@@ -587,6 +609,23 @@ def get_ace_config_data():
     
     return ace_config_data
 
+def get_parent_msciid_dict(aleos_version_short_format):
+    ''' 
+    read ACEmanager TAB/SUBTAB[/MINITAB] =>msciids yaml file,e.g. acemanager_elements_435.yml
+    Args: 
+        None
+        
+    Returns: 
+        parent_msciid_dict : dictionary, main configuration data from yaml file 
+    '''
+
+    in_filename  = airlinkautomation_home_dirname+slash+'lib'+slash+'common'+slash+'UI'+slash+'acemanager_elements_'+aleos_version_short_format+'.yml'
+            
+    stream = open(in_filename, 'r')
+    parent_msciid_dict = yaml.load(stream)
+    stream.close()   
+    
+    return parent_msciid_dict
 
 def get_ele_config_data(aleos_version_short):
     ''' 
@@ -811,6 +850,7 @@ def setup_suite_mdt(tc_ts_map, tc_pick_list):
         test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
         tc_ts_map[i][2]=1
     return test_suite
+
 def setup_suite_v3(tbd_config_map, area_config_map, tc_ts_map):
     """  Gather all the tests from this test module into a test suite.  
     Handle the different arguments from test suite launcher command line:
@@ -1074,7 +1114,7 @@ def setup_suite(tbd_config_map, area_config_map, tc_ts_map):
                 and (not aleos_sw_ver in area_config_map["LIST_TESTCASES"][i]["OBSOLETE_VER"]):
                     test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
                     tc_ts_map[i][2]=1
-                    print i, tc_ts_map[i][1] 
+                    print '\n,',i, tc_ts_map[i][1] 
                     
         return test_suite   
                     
@@ -1113,7 +1153,7 @@ def setup_suite(tbd_config_map, area_config_map, tc_ts_map):
                      
                     test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
                     tc_ts_map[i][2]=1
-                    print i, tc_ts_map[i][1]
+                    print '\n',i, tc_ts_map[i][1]
 
     elif args.prd_ver_arg:
         
@@ -1205,7 +1245,7 @@ def setup_suite(tbd_config_map, area_config_map, tc_ts_map):
                 
                 test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
                 tc_ts_map[i][2]=1
-                print i, tc_ts_map[i][1]
+                print '\n',i, tc_ts_map[i][1]
                 
     return test_suite 
 

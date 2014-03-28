@@ -10,7 +10,7 @@
 MDT: "YES"   #YES/NO
 
 
-#RM version for each device by ALEOS
+#======================RM version for each device by ALEOS====================#
 
 4.3.2:
    DUT_GX400_MC8705_ROW:   MC8705_OSM001_T1043D
@@ -62,6 +62,12 @@ MDT: "YES"   #YES/NO
    DUT_ES440_MC7700_OSM:   ''
    DUT_GX440_MC7700_BEL:   ''
 
+#Add new things to HERE
+#4.3.6 : 
+
+#==============================================================================#
+
+#==========================Path upgrade configuration==========================#
 
 PATH_LIST : [PATH1,]
 
@@ -69,7 +75,54 @@ PATH1 : [4.3.4.009,
          4.3.4.010-I,
          4.3.5.010,]
 
-   
+#==============================================================================#
+
+#==========================RM version name mapping=============================#
+
+RM_VER_NAME_MAP :
+          P1008  : P1_0_0_8AP,
+          T1043D : T1_0_4_3DAP,
+          1032   : T1_0_3_2AP,
+          3552   : T3_5_5_2AP,
+          3553   : T3_5_5_3AP,
+          11301  : p3111301,
+          153    : p3110503,
+          156    : p3110506
+
+#==============================================================================#
+
+#==========================Other Configuration=================================#
+# TODO these range values need to confirm
+UPDATE_TYPE : ["ALEOS_Software","Radio_Module_Firmware"]
+
+ALEOS_VERSION_LIST: ["4.3.2","4.3.3","4.3.4","4.3.5"]
+
+ALEOS_BUILD_FROM : "4.3.4.009"
+ALEOS_BUILD_TO : "4.3.5.010"
+ROUNDTRIP_TIMES : 1
+
+FTP_SERVER_ADDRESS: "192.168.13.100"
+FTP_USERNAME: user1
+FTP_PASSWORD: "12345"
+
+ATTEMP_TIME: 100
+
+#Timer for applying step
+TIMER:
+    LS  :
+       WAIT_PROCESS_FULL              : 240
+       WAIT_PROCESS_INCREAMENT        : 100       
+    GX  :
+       WAIT_PROCESS_FULL              : 150
+       WAIT_PROCESS_INCREAMENT        : 100
+    RM  : 1000
+
+#The Timer between each step       
+STEP_TIMER : 3 
+
+#==============================================================================#
+
+
 LIST_TESTCASES:
            1  : 
               TC_ID       : "Feature/ ACEmgr_Functions_Amit_Nasser_Shanifer/ FW_update_ALEOS_and_RMFU_Amit/ ALEOS_FW_update_Peyton/ Using_ACEManager/ Local_Connection/ ALEOS_update_to_current_version
@@ -275,32 +328,4 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate
            
    
-# TODO these range values need to confirm
-UPDATE_TYPE : ["ALEOS_Software","Radio_Module_Firmware"]
-
-ALEOS_VERSION_LIST: ["4.3.2","4.3.3","4.3.4","4.3.5"]
-
-ALEOS_BUILD_FROM : "4.3.4.009"
-ALEOS_BUILD_TO : "4.3.5.010"
-
-RM_VERSION : "MC8705_OSM001_3552"
-
-ROUNDTRIP_TIMES : 1
-
-FTP_SERVER_ADDRESS: "192.168.13.100"
-FTP_USERNAME: user1
-FTP_PASSWORD: "12345"
-
-ATTEMP_TIME: 100
-
-#Timer
-TIMER:
-    LS  :
-       WAIT_PROCESS_F        : 240
-       WAIT_PROCESS_I        : 100       
-    GX  :
-       WAIT_PROCESS_F        : 150
-       WAIT_PROCESS_I        : 100
-    RM  : 1000
-       
-STEP_TIMER : 3  
+ 

@@ -24,6 +24,8 @@ RESOURCE_MONITOR : "YES"   #YES to monitor the resource usage in device, Roger
 LOG_LEVEL : "DEBUG"     
 
 EMAIL_LIST : Airlink_Test@sierrawireless.com  
+DEVICE_NUMBER : 2
+
 
 ACE_URL:
     ETH  : "HTTP://192.168.13.31:9191/"
@@ -425,7 +427,7 @@ DUT_LS300_SL8090_ATT:
     CONNECTION_PORT :    2332
     COM_PORT        :    COM1
     REBOOT_TIMEOUT  :    360             # 150sec = 2.5min
-    TELNET_TIMEOUT  :    60                
+    TELNET_TIMEOUT  :    3                
     TELNET_DEBUGMODE:    YES                
     SSH_TIMEOUT     :    60
     SERIAL_TIMEOUT  :    60  

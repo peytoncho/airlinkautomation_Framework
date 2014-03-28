@@ -8,7 +8,6 @@
 ################################################################################
 
 import basic_airlink
-import msciids
 import os
 import sys
 import datetime

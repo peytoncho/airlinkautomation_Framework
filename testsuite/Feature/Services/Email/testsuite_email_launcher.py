@@ -32,7 +32,7 @@ tbd_config_map, email_config_map = basic_airlink.get_config_data(test_area,test_
 tc_ts_map = {
     1:      [ts_email.TsEmail,"tc_email_1",0],
     2:      [ts_email.TsEmail,"tc_email_2",0],
-    3:      [ts_email.TsEmail,"tc_dummy",0],
+    3:      [ts_email.TsEmail,"tc_email_3",0],
     4:      [ts_email.TsEmail,"tc_dummy",0], 
     5:      [ts_email.TsEmail,"tc_dummy",0],
     6:      [ts_email.TsEmail,"tc_dummy",0],

@@ -22,6 +22,7 @@ import selenium_utilities
 import at_utilities
 import fwupdate_airlink
 import ssh_airlink
+import telnet_airlink
 
 ip_postfix = 1
 fail_flag = 0
@@ -30,8 +31,6 @@ test_sub_area=""
 airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME']
 basic_airlink.append_sys_path()
 tbd_config_map, fwupdate_config_map = basic_airlink.get_config_data(test_area,"")
-
-
 
 class TsFwupdateUi(unittest.TestCase):
     """TsFwupdateUi class provides a firmware update automation using Selenium UI test features.
@@ -49,24 +48,16 @@ class TsFwupdateUi(unittest.TestCase):
         self.fw_to = fwupdate_config_map["ALEOS_BUILD_TO"]
         
         if fwupdate_config_map["MDT"] == "YES":
-            combo_map = fwupdate_airlink.load_temp_tc_map()
-            
-            
-            
+            combo_map = fwupdate_airlink.load_temp_tc_map()            
             dut_name = combo_map["COMBO_LIST"][ip_postfix-1]
             basic_airlink.cslog(dut_name, "RED")                       
             self.dut_ip = "192.168.13."+str(ip_postfix)
             self.fw_ins = fwupdate_airlink.FwupdateAirlink(dut_name,dut_ip=self.dut_ip)
-            self.conn_ins = connectivity.Connectivity(dut_name)
-#             basic_airlink.cslog("Ping to "+self.dut_ip, "BLUE")
-#            self.assertTrue(self.conn_ins.dut_ready(self.dut_ip), self.dut_ip+" DUT not Ready")
                                
         else:
             dut_name =  tbd_config_map["DUTS"][0]
             self.fw_ins = fwupdate_airlink.FwupdateAirlink(dut_name)
-            self.conn_ins = connectivity.Connectivity(dut_name)
             #        check the connection between host and dut
-#            try:
             self.assertTrue(self.conn_ins.testbed_ready(), "DUT not Ready")
             self.assertTrue(self.fw_ins._device_check(), "Device does not match the one set in config file")
     
@@ -98,7 +89,7 @@ class TsFwupdateUi(unittest.TestCase):
         if not "True" in result :
             self.fail("Test failed. Reason: "+result)
         else:
-            basic_airlink.clog(time.ctime(time.time())+" ===>> "+result, "GREEN")
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> "+result, "GREEN")
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE")            
   
     def tc_fwupdate_local_roundtrip(self):
@@ -174,7 +165,7 @@ class TsFwupdateUi(unittest.TestCase):
         if not "True" in result :
             self.fail("Test failed. Reason: "+result)
         else:
-            basic_airlink.clog(time.ctime(time.time())+" ===>> "+result, "GREEN")
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> "+result, "GREEN")
     
     #This is the template for creating ALEOS path update                  
     def tc_fwupdate_path_example(self):
@@ -252,8 +243,7 @@ class TsFwupdateUi(unittest.TestCase):
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE")
         pass       
     
-    
-    
+        
     def tc_fwupdate_GX400_MC8705_OSM(self):
         basic_airlink.cslog(self.dut_ip, "GREEN")
         basic_airlink.cslog("tc_fwupdate_GX400_MC8705_OSM", "RED")

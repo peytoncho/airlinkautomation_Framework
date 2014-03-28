@@ -1,0 +1,1490 @@
+SIERRA-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    OBJECT-TYPE, NOTIFICATION-TYPE, MODULE-IDENTITY, IpAddress,
+    Integer32, Opaque, enterprises, Counter32, Unsigned32
+        FROM SNMPv2-SMI
+
+    TEXTUAL-CONVENTION, DisplayString, TruthValue
+	FROM SNMPv2-TC;
+
+sierrawireless MODULE-IDENTITY
+    LAST-UPDATED "201202290000Z"
+    ORGANIZATION "Sierra Wireless Inc"
+    CONTACT-INFO    
+	"Sierra Wirelss Inc
+        "
+
+    DESCRIPTION
+	""
+    REVISION "201202290000Z"
+
+    DESCRIPTION
+	"This file defines the private Sierra MIB extensions."
+
+    ::= { enterprises 20542 }
+
+sharks OBJECT IDENTIFIER ::= { sierrawireless  9}
+
+-- MIB versions
+
+mibversion1 OBJECT IDENTIFIER ::= { sharks  1}
+
+--  GUI Tabs for Sharks
+
+statustab OBJECT IDENTIFIER ::= { mibversion1  1}
+cellulartab OBJECT IDENTIFIER ::= { mibversion1  2}
+lantab OBJECT IDENTIFIER ::= { mibversion1  3}
+vpntab OBJECT IDENTIFIER ::= { mibversion1 4}
+securitytab OBJECT IDENTIFIER ::= { mibversion1  5}
+servicestab OBJECT IDENTIFIER ::= { mibversion1  6}
+gpstab OBJECT IDENTIFIER ::= { mibversion1  7}
+eventsreportingtab OBJECT IDENTIFIER ::= { mibversion1  8}
+serialtab OBJECT IDENTIFIER ::= { mibversion1  9}
+iotab OBJECT IDENTIFIER ::= { mibversion1  10}
+admintab OBJECT IDENTIFIER ::= { mibversion1  11}
+snmpconfig OBJECT IDENTIFIER ::= { mibversion1  12}
+
+--  status elements
+
+home   OBJECT IDENTIFIER ::= { statustab  1}
+cellular OBJECT IDENTIFIER ::= { statustab  2}
+lan  	OBJECT IDENTIFIER ::= { statustab  3}
+vpn     OBJECT IDENTIFIER ::= { statustab  4}
+security     OBJECT IDENTIFIER ::= { statustab  5}
+services     OBJECT IDENTIFIER ::= { statustab  6}
+gps     OBJECT IDENTIFIER ::= { statustab  7}
+serial     OBJECT IDENTIFIER ::= { statustab  8}
+about     OBJECT IDENTIFIER ::= { statustab  9}
+
+-- io elements
+currentstate OBJECT IDENTIFIER ::= { iotab  1}
+configuration OBJECT IDENTIFIER ::= { iotab  2}
+
+
+--  home status elements
+
+phoneNumber OBJECT-TYPE
+	SYNTAX DisplayString (SIZE (10))
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { home 17 }
+
+ipAddress OBJECT-TYPE
+	SYNTAX IpAddress
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { home 301 }
+
+networkState OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { home 259 }
+
+rssi OBJECT-TYPE
+	SYNTAX INTEGER(-125..-50)
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { home 261 }
+
+gprsnetworkOperator OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { home 770 }
+
+cdmanetworkOperator OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { home 644 }
+
+gprsECIO OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+ 	DESCRIPTION ""
+	::= { home 772 }
+
+cdmaECIO OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+  	DESCRIPTION ""
+	::= { home 643 }
+
+powerIn OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { home 266 }
+
+boardTemprature OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { home 267 }
+
+networkServiceType OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { home 264}
+
+aleosSWVer OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { home 4 }
+
+netChannel OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { home 260 }
+
+cellularBytesSent OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { home 283 }
+
+cellularBytesRecvd OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { home 284 }
+
+
+deviceName OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { home 1154 }
+
+--  cellular status elements
+
+wanIP OBJECT-TYPE
+	SYNTAX IpAddress
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 301 }
+
+electronicID OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 10 }
+
+iccid OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 771 }
+
+cellid OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 773 }
+
+lac OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 774 }
+
+imsi OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 785 }
+
+keepAliveIpAddress OBJECT-TYPE
+	SYNTAX IpAddress
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 1105 }
+
+keepAlivePingTime OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 1104 }
+
+dnsServer1 OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 1082 }
+
+dnsServer2 OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 1083 }
+
+cellBand OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 2056 }
+
+apn OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 2151 }
+
+wanUseTime OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 5046 }
+
+rscp OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 10249 }
+
+errorRate OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 263 }
+
+bytesSent OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 283 }
+
+bytesRecvd OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 284 }
+
+packetsSent OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 281 }
+
+packetsRecvd OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 282 }
+
+prlVersion OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 642 }
+
+prlUpdateStatus OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 646 }
+
+sid OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 648 }
+
+nid OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 649 }
+
+pnOffset OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 650 }
+
+baseClass OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { cellular 651 }
+
+--  LAN status elements
+
+usbMode OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { lan 1130 }
+
+
+vrrpEnabled OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { lan 9001 }
+
+lanpacketsSent OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { lan 279 }
+
+lanpacketsRecvd OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { lan 280 }
+
+wifipacketsSent OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { lan 10405 }
+
+wifipacketsRecvd OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { lan 10406 }
+
+wifiBridgeEnabled OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { lan 10401 }
+
+wifiSecurityType OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { lan 4509 }	
+
+wifiAPStatus OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { lan 4506 }
+
+wifiSSID OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { lan 4507 }
+
+wifiChannel OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { lan 4508 }
+
+--  VPN status elements
+
+
+incomingOOB OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { vpn 3177 }
+
+outgoingOOB OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { vpn 3178 }
+
+outgoingHostOOB OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { vpn 3179 }
+
+
+vpn1Status OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { vpn 3176 }
+
+vpn2Status OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { vpn 3205 }
+
+vpn3Status OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { vpn 3231 }
+
+vpn4Status OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { vpn 3257 }
+
+vpn5Status OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { vpn 3283 }
+
+--  Security status elements
+
+dmz OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { security 5113 }
+
+portForwarding OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { security 5112 }
+
+portFilteringIn OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { security 3505 }
+
+portFilteringOut OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { security 3506 }
+
+trustedHosts OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { security 1062 }
+
+macFiltering OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { security 3509 }
+
+badPasswdCount OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { security 385 }
+
+ipRejectCount OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { security 386 }
+
+ipRejectLog OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { security 387 }
+
+--  Services status elements
+
+aceNet OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { services 5026 }
+
+aceManager OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { services 1149 }
+
+dynamicDnsService OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { services 5011 }
+
+fullDomainName OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { services 5007 }
+
+--  GPS status elements
+
+gpsFix OBJECT-TYPE
+	SYNTAX INTEGER 
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { gps 900 }
+
+satelliteCount OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { gps 901 }
+
+latitude OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { gps 902 }
+
+longitude OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { gps 903 }
+
+heading OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { gps 904 }
+
+speed OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { gps 905 }
+
+engineHours OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { gps 906 }
+
+--  Serial status elements
+
+serialPortMode OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { serial 1043 }
+
+tcpAutoAnswer OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { serial 1048 }
+
+udpAutoAnswer OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { serial 1054 }
+
+serialPacketsSent OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { serial 273 }
+
+serialPacketsRecvd OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { serial 274 }
+
+--  About status elements
+
+deviceModel OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { about 7 }
+
+
+radioModelType OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { about 9 }
+
+radioFirmwareVersion OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { about 8 }
+
+deviceID OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { about 25 }
+
+macAddress OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { about 66 }
+
+aleosSWVersion OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { about 4 }
+
+deviceHwConfiguration OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { about 5 }
+
+msciVersion OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-only
+	STATUS current
+    	DESCRIPTION ""
+	::= { about 3 }
+
+-- Read Write values
+
+snmpenable OBJECT-TYPE
+	SYNTAX INTEGER {
+           disabled(0),
+           enabled(1)}
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig 10040 }
+
+snmpversion OBJECT-TYPE
+	SYNTAX INTEGER {
+           snmpv2c(2),
+           snmpv3(3)}
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10041 }
+
+snmpport OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10042 }
+
+snmpContact OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  2730 }
+
+snmpName OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  2731 }
+
+snmpLocation OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  2732 }
+
+rocommunity OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10063 }
+
+rouser OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10045 }
+
+rosecuritylvl OBJECT-TYPE
+	SYNTAX INTEGER {
+           noauthnopriv(0),
+           authnopriv(1),
+           authpriv(2)}
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10046 }
+
+roauthtype OBJECT-TYPE
+	SYNTAX INTEGER {
+           md5(0),
+           sha(1) }
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10047 }
+
+roauthkey OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10048 }
+
+roprivtype OBJECT-TYPE
+	SYNTAX INTEGER {
+           aes(0),
+           des(1) }
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10049 }
+
+roprivkey OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10050 }
+
+
+rwcommunity OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10064 }
+
+rwuser OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10051 }
+
+rwsecuritylvl OBJECT-TYPE
+	SYNTAX INTEGER {
+           noauthnopriv(0),
+           authnopriv(1),
+           authpriv(2)}
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10052 }
+
+rwauthtype OBJECT-TYPE
+	SYNTAX INTEGER {
+           md5(0),
+           sha(1) }
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10053 }
+
+rwauthkey OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10054 }
+
+
+rwprivtype OBJECT-TYPE
+	SYNTAX INTEGER {
+           aes(0),
+           des(1) }
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10055 }
+
+rwprivkey OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10056 }
+
+
+trapipAddress OBJECT-TYPE
+	SYNTAX IpAddress
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig 1166 }
+
+trapport OBJECT-TYPE
+	SYNTAX INTEGER
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10043 }
+
+engineid OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10044 }
+
+trapcommunity OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10065 }
+
+trapuser OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10057 }
+
+trapsecuritylvl OBJECT-TYPE
+	SYNTAX INTEGER {
+           noauthnopriv(0),
+           authnopriv(1),
+           authpriv(2)}
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10058 }
+
+trapauthtype OBJECT-TYPE
+	SYNTAX INTEGER {
+           md5(0),
+           sha(1) }
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10059 }
+
+trapauthkey OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10060 }
+
+
+trapprivtype OBJECT-TYPE
+	SYNTAX INTEGER {
+           aes(0),
+           des(1) }
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10061 }
+
+trapprivkey OBJECT-TYPE
+	SYNTAX DisplayString
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  10062 }
+
+
+rebootmodem OBJECT-TYPE
+	SYNTAX INTEGER {
+           nop(0),
+           reboot(1) }
+	MAX-ACCESS read-write
+	STATUS current
+    	DESCRIPTION ""
+	::= { snmpconfig  65001 }
+
+digitalInput1 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Digital Input 1 MSCIID 851"
+    ::= { currentstate 851 }
+
+digitalInput2 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Digital Input 2 MSCIID 852"
+    ::= { currentstate 852 }
+
+digitalInput3 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Digital Input 3 MSCIID 853"
+    ::= { currentstate 853 }
+
+digitalInput4 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Digital Input 4 MSCIID 854"
+    ::= { currentstate 854 }
+
+digitalInput5 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Digital Input 5 MSCIID 867"
+    ::= { currentstate 867 }
+
+digitalInput6 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Digital Input 6 MSCIID 868"
+    ::= { currentstate 868 }
+
+digitalOutput1 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Digital Output 1 MSCIID 859"
+    ::= { currentstate 859 }
+
+digitalOutput2 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Digital Output 2 MSCIID 860"
+    ::= { currentstate 860 }
+
+digitalOutput3 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Digital Output 3 MSCIID 863"
+    ::= { currentstate 863 }
+
+digitalOutput4 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Digital Output 4 MSCIID 864"
+    ::= { currentstate 864 }
+
+digitalOutput5 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Digital Output 5 MSCIID 865"
+    ::= { currentstate 865 }
+
+digitalOutput6 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Digital Output 6 MSCIID 866"
+    ::= { currentstate 866 }
+
+digitalConfig1 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Digital Configuration 1 MSCIID 861"
+    ::= { configuration 861 }
+
+digitalConfig2 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Digital Configuration 2 MSCIID 862"
+    ::= { configuration 862 }
+
+digitalConfig3 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Digital Configuration 3 MSCIID 869"
+    ::= { configuration 869 }
+
+digitalConfig4 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Digital Configuration 4 MSCIID 870"
+    ::= { configuration 870 }
+
+digitalConfig5 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Digital Configuration 5 MSCIID 871"
+    ::= { configuration 871 }
+
+digitalConfig6 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Digital Configuration 6 MSCIID 872"
+    ::= { configuration 872 }
+
+
+pulseAccumulator1 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Pulse Accumulator 1 MSCIID 4002"
+    ::= { currentstate 4002 }
+
+pulseAccumulator2 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Pulse Accumulator 2 MSCIID 4003"
+    ::= { currentstate 4003 }
+
+pulseAccumulator3 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Pulse Accumulator 3 MSCIID 4004"
+    ::= { currentstate 4004 }
+
+pulseAccumulator4 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Pulse Accumulator 4 MSCIID 4005"
+    ::= { currentstate 4005 }
+
+pulseAccumulator5 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Pulse Accumulator 5 MSCIID 4006"
+    ::= { currentstate 4006 }
+
+pulseAccumulator6 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Pulse Accumulator 6 MSCIID 4007"
+    ::= { currentstate 4007 }
+
+analogInput1 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Analog  Input 1 MSCIID 855"
+    ::= { currentstate 855 }
+
+
+analogInput2 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Analog  Input 2 MSCIID 856"
+    ::= { currentstate 856 }
+
+analogInput3 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Analog  Input 3 MSCIID 857"
+    ::= { currentstate 857 }
+
+analogInput4 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Analog  Input 4 MSCIID 858"
+    ::= { currentstate 858 }
+
+analogInput5 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Analog  Input 5 MSCIID 873"
+    ::= { currentstate 873 }
+
+analogInput6 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Analog  Input 6 MSCIID 874"
+    ::= { currentstate 874 }
+
+analogInput7 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Analog  Input 7 MSCIID 875"
+    ::= { currentstate 875 }
+
+analogInput8 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Analog  Input 8 MSCIID 876"
+    ::= { currentstate 876 }
+
+coefficientAnalogInput1 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Coefficient Analog  Input 1 MSCIID 4011"
+    ::= { currentstate 4011 }
+
+coefficientAnalogInput2 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Coefficient Analog  Input 2 MSCIID 4012"
+    ::= { currentstate 4012 }
+
+coefficientAnalogInput3 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Coefficient Analog  Input 3 MSCIID 4013"
+    ::= { currentstate 4013 }
+
+coefficientAnalogInput4 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Coefficient Analog  Input 4 MSCIID 4014"
+    ::= { currentstate 4014 }
+
+coefficientAnalogInput5 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Coefficient Analog  Input 5 MSCIID 4015"
+    ::= { currentstate 4015 }
+
+coefficientAnalogInput6 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Coefficient Analog  Input 6 MSCIID 4016"
+    ::= { currentstate 4016 }
+
+coefficientAnalogInput7 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Coefficient Analog  Input 7 MSCIID 4017"
+    ::= { currentstate 4017 }
+
+coefficientAnalogInput8 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Coefficient Analog  Input 8 MSCIID 4018"
+    ::= { currentstate 4018 }
+
+offsetAnalogInput1 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Offset Analog  Input 1 MSCIID 4021"
+    ::= { currentstate 4021 }
+
+offsetAnalogInput2 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Offset Analog  Input 2 MSCIID 4022"
+   ::= { currentstate 4022 }
+
+offsetAnalogInput3 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Offset Analog  Input 3 MSCIID 4023"
+    ::= { currentstate 4023 }
+
+offsetAnalogInput4 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Offset Analog  Input 4 MSCIID 4024"
+    ::= { currentstate 4024 }
+
+offsetAnalogInput5 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Offset Analog  Input 5 MSCIID 4025"
+    ::= { currentstate 4025 }
+
+offsetAnalogInput6 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Offset Analog  Input 6 MSCIID 4026"
+    ::= { currentstate 4026 }
+
+offsetAnalogInput7 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Offset Analog  Input 7 MSCIID 4027"
+    ::= { currentstate 4027 }
+
+offsetAnalogInput8 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Offset Analog  Input 8 MSCIID 4028"
+    ::= { currentstate 4028 }
+
+unitsAnalogInput1 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Units Analog  Input 1 MSCIID 4031"
+    ::= { currentstate 4031 }
+
+unitsAnalogInput2 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Units Analog  Input 2 MSCIID 4032"
+    ::= { currentstate 4032 }
+
+unitsAnalogInput3 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Units Analog  Input 3 MSCIID 4033"
+    ::= { currentstate 4033 }
+
+unitsAnalogInput4 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Units Analog  Input 4 MSCIID 4034"
+    ::= { currentstate 4034 }
+
+unitsAnalogInput5 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Units Analog  Input 5 MSCIID 4035"
+    ::= { currentstate 4035 }
+
+unitsAnalogInput6 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Units Analog  Input 6 MSCIID 4036"
+    ::= { currentstate 4036 }
+
+unitsAnalogInput7 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Units Analog  Input 7 MSCIID 4037"
+    ::= { currentstate 4037 }
+
+unitsAnalogInput8 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Units Analog  Input 8 MSCIID 4038"
+    ::= { currentstate 4038 }
+
+scaledAnalogInput1 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Scaled Analog  Input 1 MSCIID 4041"
+    ::= { currentstate 4041 }
+
+scaledAnalogInput2 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Scaled Analog  Input 2 MSCIID 4042"
+    ::= { currentstate 4042 }
+
+scaledAnalogInput3 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Scaled Analog  Input 3 MSCIID 4043"
+    ::= { currentstate 4043 }
+
+scaledAnalogInput4 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Scaled Analog  Input 4 MSCIID 4044"
+    ::= { currentstate 4044 }
+
+scaledAnalogInput5 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Scaled Analog  Input 5 MSCIID 4045"
+    ::= { currentstate 4045 }
+
+scaledAnalogInput6 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Scaled Analog  Input 6 MSCIID 4046"
+    ::= { currentstate 4046 }
+
+scaledAnalogInput7 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Scaled Analog  Input 7 MSCIID 4047"
+    ::= { currentstate 4047 }
+
+scaledAnalogInput8 OBJECT-TYPE
+    SYNTAX DisplayString
+    STATUS      current
+    DESCRIPTION "Scaled Analog  Input 8 MSCIID 4048"
+    ::= { currentstate 4048 }
+
+
+
+
+--  Notifications starting at 1000
+
+modemNotifications OBJECT IDENTIFIER ::= { mibversion1  1000 }
+
+
+value OBJECT-TYPE
+    SYNTAX       DisplayString
+    MAX-ACCESS  accessible-for-notify
+    STATUS      current
+    DESCRIPTION "value of MSCIID that triggered this event"
+    ::= { modemNotifications 500 }
+
+gpsFixNotification NOTIFICATION-TYPE
+    OBJECTS     { value }
+    STATUS      current
+    DESCRIPTION
+        "GPS Fix MSCIID 900"
+::= { modemNotifications 17 }
+
+vehicleSpeed NOTIFICATION-TYPE
+    OBJECTS     { value }
+    STATUS      current
+    DESCRIPTION
+        "Vehicle Speed MSCIID 905"
+::= { modemNotifications 18 }
+
+engineHoursNotification NOTIFICATION-TYPE
+    OBJECTS     { value }
+    STATUS      current
+    DESCRIPTION
+        "Engine Hours MSCIID 906"
+::= { modemNotifications 19 }
+
+headingChange NOTIFICATION-TYPE
+    OBJECTS     { value }
+    STATUS      current
+    DESCRIPTION
+        "Heading Change MSCIID 904"
+::= { modemNotifications 20 }
+
+rssiNotification NOTIFICATION-TYPE
+    OBJECTS     { value }
+    STATUS      current
+    DESCRIPTION
+        "RSSI MSCIID 261"
+::= { modemNotifications 21 }
+
+networkStateNotification NOTIFICATION-TYPE
+    OBJECTS     { value }
+    STATUS      current
+    DESCRIPTION
+        "Network State MSCIID 259"
+::= { modemNotifications 22 }
+
+networkService NOTIFICATION-TYPE
+    OBJECTS     { value }
+    STATUS      current
+    DESCRIPTION
+        "Network Service 264"
+::= { modemNotifications 23 }
+
+networkErrorRate NOTIFICATION-TYPE
+    OBJECTS     { value }
+    STATUS      current
+    DESCRIPTION
+        "Network Error Rate MSCIID 263"
+::= { modemNotifications 24 }
+
+periodicReports NOTIFICATION-TYPE
+    OBJECTS     { value }
+    STATUS      current
+    DESCRIPTION
+        "Periodic Reports MSCIID 270"
+::= { modemNotifications 25 }
+
+powerInNotification NOTIFICATION-TYPE
+    OBJECTS     { value }
+    STATUS      current
+    DESCRIPTION
+        "Power In  MSCIID 266"
+::= { modemNotifications 26 }
+
+boardTemp NOTIFICATION-TYPE
+    OBJECTS     { value }
+    STATUS      current
+    DESCRIPTION
+        "Board Temperature MSCIID 267"
+::= { modemNotifications 27 }
+
+cdmaTemp NOTIFICATION-TYPE
+    OBJECTS     { value }
+    STATUS      current
+    DESCRIPTION
+        "CDMA Temperature MSCIID 641"
+::= { modemNotifications 28 }
+
+
+dailyDataUsage NOTIFICATION-TYPE
+    OBJECTS     { value }
+    STATUS      current
+    DESCRIPTION
+        "Daily Data Usage MSCIID 25001"
+::= { modemNotifications 29 }
+
+monthlyDataUsage NOTIFICATION-TYPE
+    OBJECTS     { value }
+    STATUS      current
+    DESCRIPTION
+        "Monthly Data Usage MSCIID 25002"
+::= { modemNotifications 30 }
+
+END

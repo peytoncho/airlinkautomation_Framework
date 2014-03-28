@@ -9,12 +9,10 @@
 # VPN TEST CONFIGURATION
 #################################################################################
 ---
-#TESTBED2 : !include  /airlinkautomation/config/testbed2Conf.yml
 
-RUN_ALL_TESTCASES          :    NO
-RUN_SELECTIVE_TESTCASES    :    [[1,6]]
-RUN_REPEAT                 :    1
-ALL_TASECASE_NUMBER        :    6
+CONFIG_PORT : 2111
+
+
     
 LIST_TESTCASES:
            1  : 

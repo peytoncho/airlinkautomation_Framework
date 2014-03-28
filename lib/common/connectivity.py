@@ -13,9 +13,6 @@ import sys
 import datetime
 import time
 
-airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME'] 
-sys.path.append(airlinkautomation_home_dirname+"/lib/common")
-sys.path.append(".")
 
 import basic_airlink
 import proxy_airlink
@@ -344,3 +341,107 @@ class Connectivity:
                 print ret  
                 #time.sleep(60)
                 connectivity_ins.close() 
+
+    def get_at_instance(self, proxy_ip = None):
+        ''' if proxy_ip is not None then will generate remote at instance.
+        '''
+        local_at_ins   = at_utilities.AtCommands() 
+        
+        if proxy_ip is not None:
+            
+            self.proxy = proxy_airlink.ProxyAirlink(proxy_ip)
+            self.proxy_conn = self.proxy.connect()
+        
+            at_ins = self.proxy.deliver(local_at_ins)
+            
+        else:
+            at_ins = local_at_ins 
+            
+        return at_ins
+
+    def get_se_instance(self, proxy_ip = None):
+        ''' if proxy_ip is not None then will generate remote Selenium UI instance.
+        '''
+        local_se_ins = selenium_utilities.SeleniumAcemanager(self.device_name)
+        
+        if proxy_ip is not None:
+            self.proxy = proxy_airlink.ProxyAirlink(proxy_ip)
+            self.proxy_conn = self.proxy.connect()
+            
+            se_ins = self.proxy.deliver(local_se_ins)
+        else:
+            se_ins = local_se_ins
+        
+        return se_ins        
+                            
+    def global_init(self, proxy_ip=None, how_init ="AT"):
+        '''  THhis method will do the global initialization (factory reset) on
+         all DUTs defined in comm_testbed_conf.yml.
+         Args: 
+             proxy_ip    None - DUT connects to controller, 
+                         host  IP address - DUT connects to host
+            how_init     AT - by AT coomand do factort reset 
+                        UI - factory reset by ACEmanger UI -> Admin -> Advanced  -> Factory resset button
+         Returns:  True/False 
+         Globals:  
+             self.device_name 
+             tbd_config_map["GLOBAl_INIT"] ON/OFF
+             tbd_config_map[self.device_name]["USERNAME"],
+             tbd_config_map[self.device_name]["PASSWORD"],
+        '''
+        
+        ret_init = True
+       
+        if tbd_config_map["GLOBAl_INIT"] == "ON":
+            
+            basic_airlink.cslog("On "+ self.devcie_name+", Global initialization "+'begins from testsuite launcher, parameters: proxy_ip = '+str(proxy_ip)+", how_init ="+how_init)
+            
+                        
+            if how_init == "AT":
+                
+                at_ins = self.get_at_instance(proxy_ip)
+                
+                basic_airlink.cslog("Try out: serial interface")
+                connect_instance = self.serial_interface()
+                if not connect_instance.connect(): 
+                    basic_airlink.cslog("Problem: serial connection")
+                    
+                    basic_airlink.cslog("Try out: SSH interface")           
+                    connect_instance = self.ssh_interface()
+                    if not connect_instance.connect(): 
+                        basic_airlink.cslog("Problem: ssh connection")
+
+                        basic_airlink.cslog("Try out: Telnet interface")           
+                        connect_instance = self.telnet_interface()
+                        if not connect_instance.connect(): 
+                            basic_airlink.cslog("Problem: telnet connection")
+                            return False                                             
+                                
+                ret = at_ins.factory_reset(connect_instance)
+                if not ret:
+                    ret_init =  False  
+                
+                time.sleep(tbd_config_map[self.device_name]["REBOOT_TIMEOUT"])   # TO Enhance                 
+                
+            elif how_init == "UI":
+                
+                se_ins = self.get_se_instance(proxy_ip)
+           
+                basic_airlink.cslog("step: login to ACEmanager")
+                ace_manager_url = self.get_url()
+                driver = se_ins.login(ace_manager_url, 
+                                                tbd_config_map[self.device_name]["USERNAME"], 
+                                                tbd_config_map[self.device_name]["PASSWORD"])
+                time.sleep(tbd_config_map[self.device_name]["ACE_LOGIN_WAIT"])  
+                     
+                se_ins.admin_advanced_page(driver)
+                
+                if not se_ins.factory_reset(driver): 
+                    ret_init =  False   
+                else: 
+                    
+                    time.sleep(tbd_config_map[self.device_name]["REBOOT_TIMEOUT"])  #  TO Enhance      
+                    
+                se_ins.quit(driver)                       
+        
+        return ret_init       

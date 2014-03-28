@@ -3,7 +3,12 @@
 # This module provides UI operation using Selenium lib. 
 # Company: Sierra Wireless
 # Time: Feb 19, 2013
-# 
+# Author: Airlink
+# History: 
+#         Mar 19, 2014  
+#         removed the tab parameter from lan_page() and subtab parameter from 
+#         status_lan_page(). updated get_current_tab() and get_current_subtab() 
+#         when flag = 2.
 ################################################################################
 from selenium import webdriver   
 from selenium.common.exceptions import NoSuchElementException
@@ -20,21 +25,22 @@ import unittest
 import logging
 import basic_airlink
 #from msciids import *
-import msciids
+#import msciids
 
 sys.path.append(basic_airlink.airlinkautomation_home_dirname+basic_airlink.lib_common_path)
 
 basic_airlink.append_sys_path()
 
 tbd_config_map = basic_airlink.get_tbd_config_data()
-ace_config_map = basic_airlink.get_ace_config_data()
+ace_config_map = basic_airlink.get_ace_config_data()   # ace pages
+
 
 # This is basic data structure of one parameter/element in ACEmanager UI
 ACEelement={
          'tab'   :'Status',  ## refer to tab list in acemanage_pages.yml
          'subtab':'Home',    ## refer to subtab list in acemanage_pages.yml
          'byhow' :'BY_ID',   #BY_ID/BY_NAME/BY_XPATH/BY_CSS_SELECTOR/BY_CLASS_NAME/BY_LINK_TEXT
-         'field' :'',        #masciid/name/xpath/css_selector
+         'field' :'',        #msciid/name/xpath/css_selector
          'flag'  :1,         #possible post action (e.g. get text, click, get attribute) after find element byhow
          'value' :''         
          }
@@ -58,10 +64,13 @@ class SeleniumAcemanager(unittest.TestCase):
         self.device_name  = device_name
         self.device_model = tbd_config_map[self.device_name]["MODEL"]
         self.aleos_sw_ver = tbd_config_map[self.device_name]["ALEOS_FW_VER"][:-4]  #long -> short
-        self.aleos_sw_ver_format = self.aleos_sw_ver.replace('.','_')
-        
-        self.ele_config_map = basic_airlink.get_ele_config_data(self.aleos_sw_ver)
+        self.aleos_sw_ver_format = self.aleos_sw_ver.replace('.','')               #short normal -> short format (remove '.')
+        self.parent_msciid_dict= basic_airlink.get_parent_msciid_dict(self.aleos_sw_ver_format)
+        self.ele_config_map    = basic_airlink.get_ele_config_data(self.aleos_sw_ver_format)
         self.short_time = 3
+        self.current_tab     = "Status"
+        self.current_subtab  = "Home"
+        self.current_minitab = "None"
         
     def get_element_by_id(self, driver, msciid, flag=1):
         '''
@@ -74,9 +83,12 @@ class SeleniumAcemanager(unittest.TestCase):
             the text that read from web
             
         '''
-        tab,subtab = self.get_parents(msciid)
-        self.navigate_subtab(driver, tab, subtab)
-        
+        tab,subtab,minitab = self.get_parents(msciid)
+        if minitab != "None": 
+            self.navigate_minitab(driver, tab, subtab, minitab)
+        else:
+            self.navigate_subtab(driver, tab, subtab)
+                    
         txt = ""
         try:
             if flag == 1:
@@ -108,9 +120,11 @@ class SeleniumAcemanager(unittest.TestCase):
             
         '''
 
-        tab,subtab = self.get_parents(name)
-        self.navigate_subtab(driver, tab, subtab)
-                
+        tab,subtab,minitab = self.get_parents(name)
+        if minitab != "None": 
+            self.navigate_minitab(driver, tab, subtab, minitab)
+        else:
+            self.navigate_subtab(driver, tab, subtab)                
         val = ""
         try:
             if flag == 1:
@@ -186,18 +200,6 @@ class SeleniumAcemanager(unittest.TestCase):
         
         finally: 
             return txt              
-        
-    def get_element_by_class_name(self, driver, name, flag=1):
-        ''' TODO
-        '''
-        ret = driver.find_element_by_class_name(name)
-        return ret
-
-    def get_element_by_tag_name(self, driver, name, flag=1):
-        ''' TODO
-        '''
-        ret = driver.find_element_by_tag_name(name)
-        return ret
         
     def get_element_by_link_text(self, driver, link_text, flag=1):
         ''' TODO
@@ -308,60 +310,83 @@ class SeleniumAcemanager(unittest.TestCase):
         else:
             basic_airlink.cslog("wrong by_type paramter")
             return False
-        
-#    def get_subtab_elements(self, driver, tab, subtab):  
-#        elems= ""
-#                                         
-#        try:
-#            
-#            if ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][0] == "BY_CSS_SELECTOR":
-#                elems=driver.find_elements_by_css_selector(ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][1])
-#                
-#            elif ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][0] == "BY_ID":
-#                elems=driver.find_elements_by_id(ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][1])
-#    
-#            elif ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][0] == "BY_XPATH":
-#                elems=driver.find_elements_by_xpath(ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][1])
-#            else:
-#                basic_airlink.cslog( "Incorrect byhow parameter or NA subtab")
-#                        
-#            time.sleep(10)               
-#            
-#        except: 
-#            self.error_flag +=1
-#            basic_airlink.cslog(" Exception occurred", "RED", "WHITE")
-#            
-#            ret = ""
-#            
-#        finally:
-#            return elems
-#        
-#    def get_config(self, driver, tab, subtab):
-#        ''' Get all parameters on the specified subtab page, and put onto 
-#        config_elements stack.
-#         TODO
-#        '''
-#        config_elements = []       
-#        
-#        self.navigate_subtab(driver, tab, subtab)
-##        xpath = self.get_subtab_xpath(driver, tab, subtab)
-##        page_elems = driver.find_elements_by_xpath(xpath)
-#        page_elems = self.get_subtab_elements(driver, tab, subtab)
-#        print (str(page_elems))
-#        
-#        for elem in page_elems:
-#            id1 = str(elem.get_attribute("id"))
-#            
-##            byid = self.get_element_by_id(driver, id1)
-##            byname = self.get_element_by_name(driver, id1)
-#            bytitle = str(elem.get_attribute("title"))
-#            text1 = str(elem.text)
-#            #config_elements.append({'tab':tab,'subtab':subtab,'byhow':'by_id','field':field,'value':value})
-#            
-#            basic_airlink.cslog("id="+id1+",title="+bytitle+",text="+text1)
-#            
-#        return config_elements
-    
+             
+    def get_subtab_elements(self, driver, tab, subtab):
+        ''' Get all parameters on the specified subtab page, and put onto 
+        config_elements stack.
+         TODO
+        '''
+        config_elements = []       
+        try:
+            self.navigate_subtab(driver, tab, subtab)
+            page_elems  = self.parent_msciid_dict[tab][subtab].viewkeys() 
+            max_try_count = len(page_elems)     
+            for elem in page_elems:
+                if max_try_count < 1: 
+                    break
+                max_try_count = max_try_count-1
+                id1   = self.parent_msciid_dict[tab][subtab][elem][0]
+                flag1 = self.parent_msciid_dict[tab][subtab][elem][1]
+                err_cnt = self.error_flag
+                if flag1 == 0:    #table not handle here
+                    continue
+                elif flag1 == 2: 
+                    ret = self.get_element_by_name(driver, id1,2)  #drop down
+                    byhow ='by_name'
+                elif flag1 == 1:    #default RO/RW
+                    ret = self.get_element_by_id(driver, id1)
+                    byhow = 'by_id'
+                if self.error_flag == err_cnt: 
+                    config_elements.append({'tab':tab,'subtab':subtab,'byhow':byhow,'field':id1,'value':ret})
+                
+                basic_airlink.cslog("id="+id1+", value ="+ret)
+                
+        except Exception as et100: 
+            self.error_flag+=1
+            basic_airlink.cslog(str(et100)+" exception generated at get_subtab_elements()")
+            
+        finally:
+            
+            return config_elements
+
+    def get_minitab_elements(self, driver, tab, subtab, minitab):
+        ''' Get all parameters on the specified minitab page, and put onto 
+        config_elements stack.
+         TODO
+        '''
+        config_elements = []       
+        try:
+            self.navigate_minitab(driver, tab, subtab, minitab)
+            page_elems  = self.parent_msciid_dict[tab][subtab][minitab].viewkeys() 
+            max_try_count = len(page_elems)     
+            for elem in page_elems:
+                if max_try_count < 1: 
+                    break
+                max_try_count = max_try_count-1
+                id1   = self.parent_msciid_dict[tab][subtab][minitab][elem][0]
+                flag1 = self.parent_msciid_dict[tab][subtab][minitab][elem][1]
+                err_cnt = self.error_flag
+                if flag1 == 0:    #table not handle here
+                    continue
+                elif flag1 == 2: 
+                    ret = self.get_element_by_name(driver, id1,2)  #drop down
+                    byhow ='by_name'
+                elif flag1 == 1:    #default RO/RW
+                    ret = self.get_element_by_id(driver, id1)
+                    byhow = 'by_id'
+                if self.error_flag == err_cnt: 
+                    config_elements.append({'tab':tab,'subtab':subtab,'byhow':byhow,'field':id1,'value':ret})
+                
+                basic_airlink.cslog("id="+id1+", value ="+ret)
+                
+        except Exception as et100: 
+            self.error_flag+=1
+            basic_airlink.cslog(str(et100)+" exception generated at get_minitab_elements()")
+            
+        finally:
+            
+            return config_elements 
+            
     def select_box_by_xpath(self, driver, x_path):
         '''
         find item by xpath
@@ -418,16 +443,25 @@ class SeleniumAcemanager(unittest.TestCase):
         '''
         find item by id and set the value
         '''
-        tab,subtab = self.get_parents(id_str)
-        self.navigate_subtab(driver, tab, subtab)
-        
+
         val = True
 
         try:
+            tab,subtab,minitab = self.get_parents(id_str)
+            
+            if tab == "None"  or subtab == "None":
+                return False 
+            
+            if minitab != "None": 
+                self.navigate_minitab(driver, tab, subtab, minitab)
+            else:
+                self.navigate_subtab(driver, tab, subtab)
+                    
             driver.find_element_by_id(id_str).clear()
             driver.find_element_by_id(id_str).send_keys(val_str)
         
-        except NoSuchElementException:
+
+        except:
             basic_airlink.slog("set_element_by_id: cannot find " + id_str)
             self.error_flag+=1
             val = False
@@ -440,12 +474,20 @@ class SeleniumAcemanager(unittest.TestCase):
         '''
         find item by name and set the value
         '''   
-        tab,subtab = self.get_parents(name_str)
-        self.navigate_subtab(driver, tab, subtab)
-        
+                    
         val = True
      
         try:
+            tab,subtab,minitab = self.get_parents(name_str)
+            
+            if tab == "None"  or subtab == "None":
+                return False 
+            
+            if minitab != "None": 
+                self.navigate_minitab(driver, tab, subtab, minitab)
+            else:
+                self.navigate_subtab(driver, tab, subtab)
+            
             driver.find_element_by_name(name_str).clear()
             driver.find_element_by_name(name_str).send_keys(val_str)
         
@@ -462,17 +504,25 @@ class SeleniumAcemanager(unittest.TestCase):
         select item by visible text
         
         '''   
-        tab,subtab = self.get_parents(id_str)
-        self.navigate_subtab(driver, tab,subtab)
-        
+                    
         val = True
-     
-        basic_airlink.cslog("select_item_by_visible_text: msciid="+id_str+",option="+option_visible_text+"\n")
-        try: 
+
+        try:
+            tab,subtab,minitab = self.get_parents(id_str)
+            
+            if tab == "None"  or subtab == "None":
+                return False 
+            
+            if minitab != "None": 
+                self.navigate_minitab(driver, tab, subtab, minitab)
+            else:
+                self.navigate_subtab(driver, tab, subtab)
+
             Select(driver.find_element_by_name(id_str)).select_by_visible_text(option_visible_text)
             time.sleep(self.short_time)
+            
         except Exception as inst:
-            basic_airlink.cslog("select_item_by_visible_text exception: "+str(inst))
+            basic_airlink.cslog("select_item_by_visible_text() exception: "+str(inst) + "id:"+id_str+" option_visible_text:"+option_visible_text)
             self.error_flag+=1
             val = False
                 
@@ -484,16 +534,25 @@ class SeleniumAcemanager(unittest.TestCase):
         select item by value
         
         '''   
-        tab,subtab = self.get_parents(id_str)
-        self.navigate_subtab(driver, tab, subtab)
         
         val = True
-     
-        basic_airlink.cslog("select_option_by_value: msciid="+id_str+",option="+option_str+"\n")
-        try: 
+
+        try:
+            tab,subtab,minitab = self.get_parents(id_str)
+            
+            if tab == "None" or subtab == "None":
+                return False 
+            
+            if minitab != "None": 
+                self.navigate_minitab(driver, tab, subtab, minitab)
+            else:
+                self.navigate_subtab(driver, tab, subtab)
+                
             Select(driver.find_element_by_name(id_str)).select_by_value(option_str)
             time.sleep(self.short_time)
+            
         except Exception as inst:
+            
             basic_airlink.cslog("select_option_by_value exception: "+str(inst))
             self.error_flag+=1
             val = False
@@ -645,7 +704,7 @@ class SeleniumAcemanager(unittest.TestCase):
             if tbd_config_map["BROWSER"] == "FF":
                 driver = webdriver.Firefox()                # Get local session of firefox
                 #driver.set_window_position(200, 200)
-                #driver.set_window_size(800, 600)
+                driver.set_window_size(1024, 768)
                 #driver.maximize_window()
             else:
                 driver = webdriver.Ie()                     # Get local session of IE
@@ -667,6 +726,11 @@ class SeleniumAcemanager(unittest.TestCase):
             self.error_flag += 1
         
         finally:
+            
+            self.current_tab     = "Status"
+            self.current_subtab  = "Home"
+            self.current_minitab = "None"
+            
             return driver  
     
     def logout(self, driver):
@@ -736,7 +800,7 @@ class SeleniumAcemanager(unittest.TestCase):
             phone number
         '''
         
-        msciid_str = str(msciids.MSCIID_INF_PHONE_NUM)
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_INF_PHONE_NUM)
 
         ret=self.get_element_by_id(driver, msciid_str)
         
@@ -752,7 +816,7 @@ class SeleniumAcemanager(unittest.TestCase):
             network IP
         '''
 
-        msciid_str = str(msciids.MSCIID_STS_NETWORK_IP)
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_NETWORK_IP)
 
         ret=self.get_element_by_id(driver, msciid_str)
         
@@ -768,7 +832,7 @@ class SeleniumAcemanager(unittest.TestCase):
             network state
         '''
 
-        msciid_str = str(msciids.MSCIID_STS_NETWORK_STATE)
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_NETWORK_STATE)
 
         ret=self.get_element_by_id(driver, msciid_str)
 
@@ -784,7 +848,7 @@ class SeleniumAcemanager(unittest.TestCase):
             network RSSI
         '''
 
-        msciid_str = str(msciids.MSCIID_STS_NETWORK_RSSI)
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_NETWORK_RSSI)
 
         ret=self.get_element_by_id(driver, msciid_str)
 
@@ -792,31 +856,75 @@ class SeleniumAcemanager(unittest.TestCase):
         
         return ret  
  
-    def get_network_operator(self, driver):
-        ''' get network operator by ACEmanager Web UI Status/Home page
+    def get_gprs_network_operator(self, driver):
+        ''' get GPRS network operator by ACEmanager Web UI Status/Home page
         Args: 
             driver FF/IE web driver 
         Returns: 
             network operator
         '''
 
-        msciid_str = str(msciids.MSCIID_STS_GPRS_OPERATOR)
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_GPRS_OPERATOR)
 
         ret=self.get_element_by_id(driver, msciid_str)
 
         basic_airlink.cslog("network operator: "+ret)     
         
         return ret 
-       
-    def get_gprs_cell_info(self, driver):
-        ''' get GPRS cell info by ACEmanager Web UI Status/Home page
+
+    def get_cdma_network_operator(self, driver):
+        ''' get CDMA network operator by ACEmanager Web UI Status/Home page
+        Args: 
+            driver FF/IE web driver 
+        Returns: 
+            network operator
+        '''
+
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_CDMA_OPERATOR)
+
+        ret=self.get_element_by_id(driver, msciid_str)
+
+        basic_airlink.cslog("network operator: "+ret)     
+        
+        return ret 
+
+    def get_network_operator(self, driver, technology = "CDMA"):
+        ''' get network operator by ACEmanager Web UI Status/Home page
+        Args: 
+            driver FF/IE web driver 
+            technology CDMA/GPRS
+        Returns: 
+            network operator
+        '''
+
+        try:
+            if technology == "CDMA":
+                msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_CDMA_OPERATOR)
+            elif technology == "GPRS":
+                msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_GPRS_OPERATOR)
+
+        except:
+            basic_airlink.cslog("Exception generated in get_network_operator()") 
+            self.error_flag+=1   
+            return None 
+            
+        else:    
+            
+            ret=self.get_element_by_id(driver, msciid_str)
+
+            basic_airlink.cslog("network operator: "+ret)     
+        
+            return ret 
+                   
+    def get_cell_info(self, driver):
+        ''' get GPRS LTE cell info by ACEmanager Web UI Status/Home page
         Args: 
             driver FF/IE web driver 
         Returns: 
             GPRS cell info
         '''
 
-        msciid_str = str(msciids.MSCIID_STS_GPRS_CELL_INFO)
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_GPRS_LTE_CELL_INFO)
 
         ret=self.get_element_by_id(driver, msciid_str)
         
@@ -832,13 +940,14 @@ class SeleniumAcemanager(unittest.TestCase):
             network service
         '''
 
-        msciid_str = str(msciids.MSCIID_STS_NETWORK_SERVICE)
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_NETWORK_SERVICE)
 
         ret=self.get_element_by_id(driver, msciid_str)
 
         basic_airlink.cslog("network service: "+ret)     
             
         return ret  
+    
     
     def get_aleos_sw_ver(self, driver, flag = 1):
         ''' get ALEOS SW version by ACEmanager Web UI Status/Home or 
@@ -860,25 +969,65 @@ class SeleniumAcemanager(unittest.TestCase):
             long  format e.g. 4.3.4.009 for for 4.3.4 and older
 
         '''
-        ret_subtab = self.get_current_subtab(driver,2)  # get subtab and convert
+        msciid_str =""
         
-        if flag == 0: 
-            if ret_subtab == 'Home':
-                msciid_str = str(msciids.MSCIID_INF_ALEOS_SW_VER)
-            elif ret_subtab == 'About':
-                msciid_str = str(msciids.MSCIID_INF_ALEOS_SW_VER)+'-d1'
-    
-        elif flag == 1:
-            if ret_subtab == 'Home':
-                msciid_str = str(msciids.MSCIID_INF_ALEOS_SW_VER_SHORT )
-            elif ret_subtab == 'About':
-                msciid_str = str(msciids.MSCIID_INF_ALEOS_SW_VER_SHORT )+'-d1'
+        try: 
+            #ret_subtab = self.get_current_subtab(driver,2)  # get subtab and convert
             
-        ret=self.get_element_by_id(driver, msciid_str)
+            if flag == 0: 
+                if self.current_subtab == 'Home':
+                    msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_INF_ALEOS_SW_VER)
+                elif self.current_subtab == 'About':
+                    msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_INF_ALEOS_SW_VER)+'-d1'
 
-        basic_airlink.cslog("ALEOS SW version: "+ret) 
-      
-        return ret  
+            elif flag == 1:
+                if self.current_subtab == 'Home':
+                    msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_INF_ALEOS_SW_VER_SHORT )
+                elif self.current_subtab == 'About':
+                    msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_INF_ALEOS_SW_VER_SHORT )+'-d1'
+        
+        except: 
+            
+            basic_airlink.cslog("Exception generated in get_aleos_sw_ver()") 
+            self.error_flag+=1   
+            return None 
+                
+        else:
+                
+            ret=self.get_element_by_id(driver, msciid_str)
+
+            basic_airlink.cslog("ALEOS SW version: "+ret) 
+
+            return ret  
+    
+    def get_ecio(self, driver, technology = "GPRS"):
+        ''' get ECIO by ACEmanager Web UI Status/Home page
+        Args: 
+            driver FF/IE web driver 
+            technology CDMA/CDMA_1X/CDMA_HD/GPRS
+        Returns: 
+            CDMA 1x ECIO/CDMA ECIO/GPRS ECIO
+        '''
+        ret = None
+        try: 
+            if technology == "CDMA_1X":
+                msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_CDMA_1XECIO)
+            elif technology == "CDMA_HD":
+                msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_CDMA_HDECIO)
+            elif technology == "CDMA":
+                msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_CDMA_ECIO)
+            elif technology == "GPRS":
+                msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_GPRS_ECIO)                
+
+                ret=self.get_element_by_id(driver, msciid_str)
+                basic_airlink.cslog("ECIO: "+ret) 
+        except:
+             
+            basic_airlink.cslog("Exception generated in get_ecio()") 
+            self.error_flag+=1   
+            return None            
+        else:        
+            return ret  
     
     def get_cdma_1xecio(self, driver):
         ''' get CDMA 1x ECIO by ACEmanager Web UI Status/Home page
@@ -888,7 +1037,7 @@ class SeleniumAcemanager(unittest.TestCase):
             CDMA 1x ECIO
         '''
         
-        msciid_str = str(msciids.MSCIID_STS_CDMA_1XECIO)
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_CDMA_1XECIO)
 
         ret=self.get_element_by_id(driver, msciid_str)
 
@@ -904,7 +1053,7 @@ class SeleniumAcemanager(unittest.TestCase):
             GPRS ECIO
         '''
 
-        msciid_str = str(msciids.MSCIID_STS_GPRS_ECIO)
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_GPRS_ECIO)
 
         ret=self.get_element_by_id(driver, msciid_str)
 
@@ -920,7 +1069,7 @@ class SeleniumAcemanager(unittest.TestCase):
             network channel
         '''
 
-        msciid_str = str(msciids.MSCIID_STS_NETWORK_CHANNEL)
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_NETWORK_CHANNEL)
 
         ret=self.get_element_by_id(driver, msciid_str)
 
@@ -936,7 +1085,7 @@ class SeleniumAcemanager(unittest.TestCase):
             Bytes sent
         '''
 
-        msciid_str = str(msciids.MSCIID_STS_MODEM_SENT)+'-d1'
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_MODEM_SENT)+'-d1'
 
         ret=self.get_element_by_id(driver, msciid_str)
         
@@ -952,7 +1101,7 @@ class SeleniumAcemanager(unittest.TestCase):
             bytes received
         '''
 
-        msciid_str = str(msciids.MSCIID_STS_MODEM_RECV)+'-d1'
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_MODEM_RECV)+'-d1'
 
         ret=self.get_element_by_id(driver, msciid_str)
         
@@ -960,6 +1109,14 @@ class SeleniumAcemanager(unittest.TestCase):
         
         return ret     
  
+    def get_rmid(self,driver):
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_RMID)
+
+        ret=self.get_element_by_id(driver, msciid_str)
+        
+        basic_airlink.cslog("Modem Name: "+ret)
+        
+        return ret         
     def get_modem_name(self, driver):
         ''' get modem name by ACEmanager Web UI Status/Home page
         Args: 
@@ -968,7 +1125,7 @@ class SeleniumAcemanager(unittest.TestCase):
             modem name
         '''
 
-        msciid_str = str(msciids.MSCIID_CFG_CMN_MDM_NAME)+'-d1'
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_CFG_CMN_MDM_NAME)+'-d1'
 
         ret=self.get_element_by_id(driver, msciid_str)
         
@@ -984,7 +1141,7 @@ class SeleniumAcemanager(unittest.TestCase):
             X card type
         '''
 
-        msciid_str = str(msciids.MSCIID_X_CARD_TYPE)
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_X_CARD_TYPE)
 
         ret=self.get_element_by_id(driver, msciid_str)
         
@@ -1030,7 +1187,7 @@ class SeleniumAcemanager(unittest.TestCase):
             X card state
         '''
 
-        msciid_str = str(msciids.MSCIID_STS_X_CARD_STATE)
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_X_CARD_STATE)
 
         ret=self.get_element_by_id(driver, msciid_str)
         basic_airlink.cslog("X-Card State: "+ret)
@@ -1046,7 +1203,7 @@ class SeleniumAcemanager(unittest.TestCase):
             Radio FW version
         '''
 
-        msciid_str = str(msciids.MSCIID_INF_MODEM_SW_VER)
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_INF_MODEM_SW_VER)
 
         ret=self.get_element_by_id(driver, msciid_str)
         
@@ -1062,7 +1219,7 @@ class SeleniumAcemanager(unittest.TestCase):
             LTE RSRP
         '''
 
-        msciid_str = str(msciids.MSCIID_STS_LTE_RSRP)
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_LTE_RSRP)
 
         ret=self.get_element_by_id(driver, msciid_str)
         
@@ -1077,7 +1234,7 @@ class SeleniumAcemanager(unittest.TestCase):
             LTE RSRQ
         '''
 
-        msciid_str = str(msciids.MSCIID_STS_LTE_RSRQ)
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_LTE_RSRQ)
 
         ret=self.get_element_by_id(driver, msciid_str)
         
@@ -1095,7 +1252,7 @@ class SeleniumAcemanager(unittest.TestCase):
         '''
 
 
-        msciid_str = str(msciids.MSCIID_INF_MODEM_ID)
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_INF_MODEM_ID)
 
         ret=self.get_element_by_id(driver, msciid_str)
         
@@ -1112,13 +1269,14 @@ class SeleniumAcemanager(unittest.TestCase):
             network IPv6 or IPv4 conenction type 
         '''
 
-        msciid_str = str(msciids.MSCIID_STS_NETWORK_IPV6_CONN)
-
-        ret=self.get_element_by_id(driver, msciid_str)
-        
-        basic_airlink.cslog("network IPv6 or IPv4 conenction type: "+ret)
-        
-        return ret 
+        try: 
+            msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_RADIO_IPV6_CONN)
+        except: 
+            return None
+        else:
+            ret =  self.get_element_by_id(driver, msciid_str)
+            basic_airlink.cslog("network IPv6 or IPv4 conenction type: "+ret)
+            return ret 
     
     def get_network_ipv6(self, driver):
         ''' get network IP v6 by ACEmanager Web UI Status/Home page
@@ -1128,13 +1286,19 @@ class SeleniumAcemanager(unittest.TestCase):
             network IPv6
         '''
 
-        msciid_str = str(msciids.MSCIID_STS_NETWORK_IPV6)  
+        try:
+            msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_NETWORK_IPV6)  
 
-        ret=self.get_element_by_id(driver, msciid_str)
+            ret=self.get_element_by_id(driver, msciid_str)
+
+
+        except:
+            return None
         
-        basic_airlink.cslog("network IPv6: "+ret)
-        
-        return ret    
+        else:
+            
+            basic_airlink.cslog("network IPv6: "+ret)
+            return ret    
  
     def get_network_ipv6_prefix_len(self, driver):
         ''' get network IPv6 prefix length by ACEmanager Web UI Status/Home page
@@ -1144,14 +1308,16 @@ class SeleniumAcemanager(unittest.TestCase):
             network IPv6 prefix length
         '''
 
-        msciid_str = str(msciids.MSCIID_STS_NETWORK_IPV6PREFIXLEN)
+        try: 
+            msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_NETWORK_IPV6PREFIXLEN)
+            ret =  self.get_element_by_id(driver, msciid_str)
+        except: 
+            return None
+        else:
 
-        ret=self.get_element_by_id(driver, msciid_str)
+            basic_airlink.cslog("network IPv6 prefix length: "+ret)
+            return ret 
         
-        basic_airlink.cslog("network IPv6 prefix length: "+ret)
-        
-        return ret 
-
     def get_network_ipv6_prefix(self, driver):
         ''' get network IPv6 prefix by ACEmanager Web UI Status/Home page
         Args: 
@@ -1160,13 +1326,19 @@ class SeleniumAcemanager(unittest.TestCase):
             network IPv6 prefix 
         '''
 
-        msciid_str = str(msciids.MSCIID_CFG_NETWORK_IPV6_PREF)
+        try:
+            msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_CFG_NETWORK_IPV6_PREF)
 
-        ret=self.get_element_by_id(driver, msciid_str)
-        
-        basic_airlink.cslog("network IPv6 prefix: "+ret)
-        
-        return ret 
+            ret=self.get_element_by_id(driver, msciid_str)
+            
+        except:
+            return None
+            
+        else:
+            basic_airlink.cslog("network IPv6 prefix: "+ret)
+
+            
+            return ret 
  
     def get_gprs_rscp(self, driver):
         ''' get GPRS RSCP by ACEmanager Web UI Status/Home page
@@ -1176,13 +1348,19 @@ class SeleniumAcemanager(unittest.TestCase):
             GPRS RSCP
         '''
 
-        msciid_str = str(msciids.MSCIID_STS_GPRS_RSCP)
+        try:
+            msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_GPRS_RSCP)
 
-        ret=self.get_element_by_id(driver, msciid_str)
-        
-        basic_airlink.cslog("GPRS RSCP: "+ret)
-        
-        return ret 
+    
+            ret=self.get_element_by_id(driver, msciid_str)
+
+        except:
+            return None
+            
+        else:        
+            basic_airlink.cslog("GPRS RSCP: "+ret)
+
+            return ret 
                  
 ############Status/About subtab page############################################
 
@@ -1194,7 +1372,7 @@ class SeleniumAcemanager(unittest.TestCase):
             device model
         '''
 
-        msciid_str = str(msciids.MSCIID_INF_PRODUCT_STR )
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_INF_PRODUCT_STR )
             
         ret=self.get_element_by_id(driver, msciid_str)
         
@@ -1210,7 +1388,7 @@ class SeleniumAcemanager(unittest.TestCase):
             radio module type
         '''
 
-        msciid_str = str(msciids.MSCIID_INF_MODEM_HW_VER )
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_INF_MODEM_HW_VER )
             
         ret=self.get_element_by_id(driver, msciid_str)
         
@@ -1227,13 +1405,19 @@ class SeleniumAcemanager(unittest.TestCase):
             Certified Mobile Network Operator, e.g. "ATT01"
         '''
 
-        msciid_str = str(msciids.MSCIID_STS_RMID )
+        try:
+            msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_RMID )
+                
+            ret=self.get_element_by_id(driver, msciid_str)
+
+        except:
+            return None
+        
+        else:
             
-        ret=self.get_element_by_id(driver, msciid_str)
-        
-        basic_airlink.cslog("Certified Mobile Network Operator: "+ret)
-        
-        return ret 
+            basic_airlink.cslog("Certified Mobile Network Operator: "+ret)
+            
+            return ret  
     
     def get_global_id(self, driver):
         ''' get Global ID by ACEmanager Web UI Status/About page
@@ -1243,7 +1427,7 @@ class SeleniumAcemanager(unittest.TestCase):
             Global ID
         '''
 
-        msciid_str = str(msciids.MSCIID_INF_DEVICE_ID )
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_INF_DEVICE_ID )
             
         ret=self.get_element_by_id(driver, msciid_str)
         
@@ -1259,7 +1443,7 @@ class SeleniumAcemanager(unittest.TestCase):
             PRI ID
         '''
 
-        msciid_str = str(msciids.MSCIID_STS_PRIID )
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_PRIID )
             
         ret=self.get_element_by_id(driver, msciid_str)
         
@@ -1275,7 +1459,7 @@ class SeleniumAcemanager(unittest.TestCase):
              GPS/RAP Device ID
         '''
         
-        msciid_str = str(msciids.MSCIID_STS_RAP_DEVICEID )
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_RAP_DEVICEID )
             
         ret=self.get_element_by_id(driver, msciid_str)
         
@@ -1293,11 +1477,11 @@ class SeleniumAcemanager(unittest.TestCase):
             Ethernet Mac Address
         '''
         if eth_port == 1:
-            msciid_str = str(msciids.MSCIID_INF_MAC_ADDR )
+            msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_INF_MAC_ADDR )
         elif eth_port == 2:
-            msciid_str = str(msciids.MSCIID_INF_MAC_ADDR2 )
+            msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_INF_MAC_ADDR2 )
         elif eth_port == 3:
-            msciid_str = str(msciids.MSCIID_INF_MAC_ADDR3 )
+            msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_INF_MAC_ADDR3 )
                         
         ret=self.get_element_by_id(driver, msciid_str)
         
@@ -1313,7 +1497,7 @@ class SeleniumAcemanager(unittest.TestCase):
             ALEOS SW build
         '''
 
-        msciid_str = str(msciids.MSCIID_INF_ALEOS_SW_BUILD )
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_INF_ALEOS_SW_BUILD )
             
         ret=self.get_element_by_id(driver, msciid_str)
         
@@ -1329,7 +1513,7 @@ class SeleniumAcemanager(unittest.TestCase):
             Device Hardware Configuration
         '''
 
-        msciid_str = str(msciids.MSCIID_INF_ALEOS_HW_VER )
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_INF_ALEOS_HW_VER )
         
         ret=self.get_element_by_id(driver, msciid_str)
         
@@ -1345,7 +1529,7 @@ class SeleniumAcemanager(unittest.TestCase):
             Boot Version
         '''
 
-        msciid_str = str(msciids.MSCIID_INF_BOOT_VER )
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_INF_BOOT_VER )
             
         ret=self.get_element_by_id(driver, msciid_str)
         
@@ -1361,7 +1545,7 @@ class SeleniumAcemanager(unittest.TestCase):
             MSCI Version
         '''
 
-        msciid_str = str(msciids.MSCIID_INF_VERSION )   
+        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_INF_VERSION )   
             
         ret=self.get_element_by_id(driver, msciid_str)
 
@@ -1402,19 +1586,17 @@ class SeleniumAcemanager(unittest.TestCase):
         #basic_airlink.slog("step: from Ace Manager navigate to Status/WAN page: ")
         return self.navigate_subtab(driver, "Status", "WAN_Cellular")            
  
-    def status_lan_page(self, driver, subtab = "LAN"):
+    def status_lan_page(self, driver):
         ''' ACEmanager navigates to Status/LAN page
         Args: 
             driver - Firefox/IE web driver
-            
-            subtab - "LAN" or "LAN_Wi-Fi or "LAN_WiFi"
-            
+                        
         Returns: 
             True/False
         '''
         
         #basic_airlink.slog("step: from Ace Manager navigate to Status/LAN page: ")
-        return self.navigate_subtab(driver, "Status", subtab)        
+        return self.navigate_subtab(driver, "Status", "LAN")        
              
     def status_vpn_page(self, driver):
         ''' ACEmanager navigates to Status/VPN page
@@ -1520,12 +1702,11 @@ class SeleniumAcemanager(unittest.TestCase):
         #basic_airlink.slog("step: from Ace Manager navigate to WAN/RSR page: ")
         return self.navigate_subtab(driver, "WAN_Cellular", "Reliable_Static_Route_RSR")    
                 
-    def lan_page(self, driver, tab = "LAN"):
+    def lan_page(self, driver):
         ''' ACEmanager navigates to LAN page
         
         Args:
             driver FF/IE web driver 
-            tab   "LAN","LAN_WiFi","LAN_Wi-Fi"
 
         Returns: 
             True/False 
@@ -1595,7 +1776,10 @@ class SeleniumAcemanager(unittest.TestCase):
             True/False 
         
         '''
-        return self.navigate_subtab(driver, "LAN", "Wi-Fi")    
+        if self.aleos_sw_ver in ["4.3.1","4.3.2","4.3.3a","4.3.3b","4.3.4"]: 
+            return self.navigate_subtab(driver, "LAN", "WiFi")               
+        else:
+            return self.navigate_subtab(driver, "LAN", "Wi-Fi")    
 
                      
     def lan_global_dns_page(self, driver):
@@ -1695,19 +1879,21 @@ class SeleniumAcemanager(unittest.TestCase):
         Returns: 
             True/False         
         '''
-        basic_airlink.slog("step: ACEmanager navigate to VPN subpage: " + str(vpn_no))
+        #basic_airlink.slog("step: ACEmanager navigate to VPN subpage: " + str(vpn_no))
 
         if   vpn_no == 1: 
-            driver.find_element_by_xpath("//li[@id='SM1_VPN_VPN 1M1']/a/span").click()
+            self.navigate_subtab(driver, "VPN", "VPN_1") 
         elif vpn_no == 2: 
-            driver.find_element_by_xpath("//li[@id='SM1_VPN_VPN 2M1']/a/span").click()
+            self.navigate_subtab(driver, "VPN", "VPN_2") 
         elif vpn_no == 3: 
-            driver.find_element_by_xpath("//li[@id='SM1_VPN_VPN 3M1']/a/span").click()
+            self.navigate_subtab(driver, "VPN", "VPN_3") 
         elif vpn_no == 4: 
-            driver.find_element_by_xpath("//li[@id='SM1_VPN_VPN 4M1']/a/span").click()
+            self.navigate_subtab(driver, "VPN", "VPN_4") 
         elif vpn_no == 5: 
-            driver.find_element_by_xpath("//li[@id='SM1_VPN_VPN 5M1']/a/span").click()
-            
+            self.navigate_subtab(driver, "VPN", "VPN_5") 
+        else:
+            basic_airlink.slog("Wrong VPN number")
+              
         time.sleep(1)     
 
     def vpn_1_page(self, driver):
@@ -1927,11 +2113,15 @@ class SeleniumAcemanager(unittest.TestCase):
         ''' ACEmanager navigates to Services/Wifi landing subtab
         Args:
             driver: FF/IE web driver 
+            flag : 
             
         Returns: 
             True/False                
         '''       
-        return self.navigate_subtab(driver, "Services", "Wi-Fi_Landing_Page")    
+        if self.aleos_sw_ver in ["4.3.1","4.3.2","4.3.3a","4.3.3b","4.3.4"]: 
+            return self.navigate_subtab(driver, "Services", "WiFi_Landing_Page")    
+        else: 
+            return self.navigate_subtab(driver, "Services", "Wi-Fi_Landing_Page")    
                 
     def services_sms_page(self, driver):
         ''' ACEmanager navigates to Services/SMS subtab
@@ -1953,7 +2143,7 @@ class SeleniumAcemanager(unittest.TestCase):
             True/False 
         '''
         #basic_airlink.cslog("step: ACEmanager navigate to Services/Telnet/SSH subtab: ")
-        return self.navigate_subtab(driver, "Services", "Telent_SSH")    
+        return self.navigate_subtab(driver, "Services", "Telnet_SSH")    
 
     def services_email_smtp_page(self, driver):
         ''' ACEmanager navigates to Services/Email(SMTP) subtab 
@@ -2020,20 +2210,27 @@ class SeleniumAcemanager(unittest.TestCase):
             True/False         
         
         '''
-        basic_airlink.slog("step: from Ace Manager navigate to GPS/Server page: ")
-        
-        if server_no == 1: 
-            driver.find_element_by_xpath("//li[@id='SM1_GPS_Server 1M1']/a/span").click()
-        elif server_no == 2: 
-            driver.find_element_by_xpath("//li[@id='SM1_GPS_Server 2M1']/a/span").click()
-        elif server_no == 3: 
-            driver.find_element_by_xpath("//li[@id='SM1_GPS_Server 3M1']/a/span").click()
-        elif server_no == 4: 
-            driver.find_element_by_xpath("//li[@id='SM1_GPS_Server 4M1']/a/span").click()
-        else: 
-            basic_airlink.slog("wrong server number parameter! ")
+        basic_airlink.slog("step: ACEmanager navigates to GPS/Server page: ")
+        try: 
+            if server_no == 1: 
+                driver.find_element_by_xpath("//li[@id='SM1_GPS_Server 1M1']/a/span").click()
+            elif server_no == 2: 
+                driver.find_element_by_xpath("//li[@id='SM1_GPS_Server 2M1']/a/span").click()
+            elif server_no == 3: 
+                driver.find_element_by_xpath("//li[@id='SM1_GPS_Server 3M1']/a/span").click()
+            elif server_no == 4: 
+                driver.find_element_by_xpath("//li[@id='SM1_GPS_Server 4M1']/a/span").click()
+            else: 
+                basic_airlink.cslog("wrong server number parameter! ")
+                return False
 
-        time.sleep(2)
+        except Exception as et100: 
+            basic_airlink.cslog(str(et100)+" exception occurred due to NA or Error.", "RED", "WHITE")
+            return False
+        else:
+             
+            time.sleep(2)
+            return True
 
     def gps_server_1_page(self, driver):
         ''' ACEmanager navigates to GPS/Server 1 subtab
@@ -2121,7 +2318,6 @@ class SeleniumAcemanager(unittest.TestCase):
             True/False  
                     
         '''
-        #basic_airlink.slog("step: Ace Manager navigates to Events Reporting page: ")
         return self.navigate_tab(driver, "Events_Reporting")       
 
     def er_events_page(self, driver):
@@ -2131,9 +2327,18 @@ class SeleniumAcemanager(unittest.TestCase):
         Returns: 
             True/False          
         '''
-        #basic_airlink.slog("step: ACEmanager navigates to Events Reporting/Events page: ")
         return self.navigate_subtab(driver, "Events_Reporting","Events")
 
+    def er_event_minitab_page(self, driver, event_no):
+        ''' ACEmanager navigates to Events Reporting/Events/Event 1-5 page
+        Args: 
+            driver: FF/IE web driver 
+        Returns: 
+            True/False          
+        '''
+        if event_no in range(1,6):
+            return self.navigate_minitab(driver, "Events_Reporting","Events", "Event_"+str(event_no))
+    
     def er_actions_page(self, driver):
         ''' ACEmanager navigates to Events Reporting/Actions page
 
@@ -2143,9 +2348,20 @@ class SeleniumAcemanager(unittest.TestCase):
             True/False  
                     
         '''
-        #basic_airlink.slog("step: ACEmanager navigates to Events Reporting/Actions page: ")
         return self.navigate_subtab(driver, "Events_Reporting","Actions")
-        
+ 
+    def er_action_minitab_page(self, driver, action_no):
+        ''' ACEmanager navigates to Events Reporting/Actions/Action_1 - 5 page
+
+        Args: 
+            driver: FF/IE web driver 
+        Returns: 
+            True/False  
+                    
+        '''
+        if action_no in range(1,6):
+            return self.navigate_minitab(driver, "Events_Reporting","Actions", "Action_"+str(action_no))
+           
     def serial_page(self, driver):
         ''' ACEmanager navigates to Serial page
 
@@ -2185,7 +2401,7 @@ class SeleniumAcemanager(unittest.TestCase):
         Returns: 
             True/False          
         '''
-        #basic_airlink.slog("step: from Ace Manager navigate to Application page: ")
+        basic_airlink.slog("step: from Ace Manager navigate to Application page: ")
         return self.navigate_tab(driver, "Applications")    
 
     def applications_data_usage_page(self, driver):
@@ -2195,7 +2411,7 @@ class SeleniumAcemanager(unittest.TestCase):
         Returns: 
             True/False      
         '''
-        #basic_airlink.slog("step: from Ace Manager navigate to Application/Data_Usage page: ")
+        basic_airlink.slog("step: from Ace Manager navigate to Application/Data_Usage page: ")
         return self.navigate_subtab(driver, "Applications","Data_Usage")  
     
     def applications_garmin_page(self, driver):
@@ -2205,7 +2421,7 @@ class SeleniumAcemanager(unittest.TestCase):
         Returns: 
             True/False     
         '''
-        #basic_airlink.slog("step: from Ace Manager navigate to Application/Garmin page: ")
+        basic_airlink.slog("step: from Ace Manager navigate to Application/Garmin page: ")
         return self.navigate_subtab(driver, "Applications","Garmin")  
     
     def applications_aleos_applicatio_framework_page(self, driver):
@@ -2215,7 +2431,7 @@ class SeleniumAcemanager(unittest.TestCase):
         Returns: 
             True/False    
         '''
-        #basic_airlink.slog("step: from Ace Manager navigate to Application/ALEOS_Application_Framework page: ")
+        basic_airlink.slog("step: from Ace Manager navigate to Application/ALEOS_Application_Framework page: ")
         return self.navigate_subtab(driver, "Applications","ALEOS_Application_Framework")  
             
     def io_page(self, driver):
@@ -2226,7 +2442,7 @@ class SeleniumAcemanager(unittest.TestCase):
             True/False   
         '''
         #basic_airlink.slog("step: ACEmanager navigates to I/O page: ")
-        return self.navigate_tab(driver, "IO")
+        return self.navigate_tab(driver, "I_O")
      
 
     def io_current_state_page(self, driver):
@@ -2237,7 +2453,7 @@ class SeleniumAcemanager(unittest.TestCase):
             True/False    
         '''
         #basic_airlink.slog("step: ACEmanager navigates to IO/Current state subtab: ")
-        return self.navigate_subtab(driver, "IO", "Current_State")
+        return self.navigate_subtab(driver, "I_O", "Current_State")
   
         
     def io_configuration_page(self, driver):
@@ -2248,7 +2464,7 @@ class SeleniumAcemanager(unittest.TestCase):
             True/False   
         '''
         #basic_airlink.slog("step: ACEmanager navigates to IO/Configuration subtab: ")
-        return self.navigate_subtab(driver, "IO", "Configuration")
+        return self.navigate_subtab(driver, "I_O", "Configuration")
     
             
     def admin_page(self, driver):
@@ -2331,7 +2547,7 @@ class SeleniumAcemanager(unittest.TestCase):
         ''' 
                      
         #basic_airlink.slog("step: navigate to Admin/log page: ")
-        return self.navigate_subtab(driver, "Admin", "Log_Configure_Logging")
+        return self.navigate_minitab(driver, "Admin","Log", "Configure_Logging")
 
         
     def admin_view_log_page(self, driver):
@@ -2345,131 +2561,113 @@ class SeleniumAcemanager(unittest.TestCase):
         ''' 
                      
         #basic_airlink.slog("step: navigate to Admin/log/View page: ")             
-        return self.navigate_subtab(driver, "Admin", "Log_View_Log")
-    
-    def retry_match_state(self, driver, state, fail_refresh_count, restart_count, refresh_delta_time, url, username, password):
-        ''' retry to get the correct state in UI, refresh the page if the state is not match, 
-            restart the browser after refreshing does not work 
-        Args: 
-            diver : FF/IE web driver
-            state: The state needed match
-            fail_refresh_count: refresh count
-            restart_count: restart the browser count
-            refresh_delta_time: Time interval of refresh
-            url: device AceManager url
-            username: AceManager username
-            password: AceManager password
-        Returns: 
-             True: match the state sucessfully
-             FalseL: fail to match state
-        '''              
-        ret = True
-        flag = 0
-        var = ""
-        func_lst = []
-        
-        #If the network state is not Network Ready, keep refreshing until times up, then restart the Firefox
-        if state == "Network Ready":
-            time.sleep(2)        
-            var = self.get_network_state(driver)
-            func_lst = [self.get_network_state(driver)]
-        elif state == "4.3.4":
-            time.sleep(2)
-            var = self.get_aleos_sw_ver(driver)
-            func_lst = [self.get_aleos_sw_ver(driver)]
-#        Add the states need to be checked
-#        elif state == 
-        
-        else:
-            flag = 1
-            ret = False
-                
-        try_restart_count = 0
-        while try_restart_count != restart_count and var != state and flag == 0:
-            if try_restart_count > 0:
-                driver = self.login(url, username, password)                      
-            fail_get_state_count = 0
-            while var != state and fail_get_state_count != fail_refresh_count:
-                logging.info("Logging:state: "+ var)
-                basic_airlink.slog("Logging:state: "+ var)
-                time.sleep(refresh_delta_time)
-                fail_get_state_count+=1
-                basic_airlink.slog("Get try refresh count: "+ str(fail_get_state_count))
-                self.refresh(driver)
-                var = func_lst[0]           
-                        
-            if fail_get_state_count == fail_refresh_count and var != state:               
-                try_restart_count+=1
-                basic_airlink.slog("Get try restart count: "+ str(try_restart_count))
-                driver.close()
-                
-                basic_airlink.slog("can not get right state, restart...")
-            
-        if try_restart_count == restart_count and restart_count != 0:
-            ret = False
-        return ret
+        return self.navigate_minitab(driver, "Admin", "Log", "View_Log")
     
         
-    def get_current_tab(self, driver, flag = 1):
-        '''
+    def get_current_tab(self, driver, flag = 0):
+        ''' TODO
          get the current page (Status/VPN/WAN/etc) 
          Args: 
              flag  1 to get the current tab, don't do any convertion
                    2 to get the current tab, and remove '/' from return string if exist
+                   0 to get self.current_tab
          Usage:
              get_current_tab(driver)
+             get_current_tab(driver,1)
              get_current_tab(driver,2)
              
          Return: string the current tab page
         '''
-        self.error_flag+=1
+        if flag == 0:
+            return self.current_tab
         
         txt = ""
         try:
             txt= driver.find_element_by_class_name("current").text
             if flag == 1: 
-                basic_airlink.slog("current tab : "+ txt)
-            elif flag ==2:
-                txt = txt.replace('/','_').replace(' ','_')
-                basic_airlink.slog("current converted tab : "+ txt)
+                basic_airlink.cslog("current tab : "+ txt)
+            if flag ==2:
+                txt = txt.replace('/','_').replace(' ','_').replace('_WiFi','').replace('_Wi-Fi','')
+                basic_airlink.cslog("current converted tab : "+ txt)
                
-        except NoSuchElementException:
+        #except NoSuchElementException:
+        except:
             
-            basic_airlink.slog("get_element_by_class_name: cannot find current tab")
-            self.error_flag+=1
+            basic_airlink.cslog("get_element_by_class_name: cannot find current tab")
+            return None
         
-        finally: 
+        else: 
             return txt           
 
-    def get_current_subtab(self, driver, flag=1):
-        '''
+    def get_current_subtab(self, driver, flag=0):
+        ''' TODO
          get the current subtab page under tab
          Args: 
              flag  1 to get the current subtab, don't do any convertion
                    2 to get the current subtab, and convert '/' or ' ' or '(' or ')' to '_' in string.
+                   0 to get self.current_subtab
          Usage:
              get_current_subtab(driver)
+             get_current_subtab(driver,1)
              get_current_subtab(driver,2)
              
          Return: string the current subtab page
-         '''        
+         '''  
+        if flag == 0:
+            return self.current_subtab
+      
         txt = ""
         try:
             txt= driver.find_element_by_xpath("//td[@class='fsm']//li[@class='current']").text
             if flag == 1:
                 basic_airlink.cslog("current subtab : "+ txt)
-            elif flag == 2: # with editing
-                txt = txt.replace(')','').replace(' (','_').replace('/','_').replace(' ','_')
+            if flag == 2: # with editing
+                txt = txt.replace(')','').replace(' (','_').replace('/','_').replace(' ','_').replace('_WiFi','').replace('_Wi-Fi','')
                 basic_airlink.cslog("current subtab : "+ txt)
             
         
         except NoSuchElementException:
             
-            basic_airlink.slog("get_element_by_xpath: cannot find current subtab")
-            self.error_flag+=1
-        finally:
+            basic_airlink.cslog("get_element_by_xpath: cannot find current subtab")
+            return None
+            
+        else:
             return txt  
-        
+
+    def get_current_minitab(self, driver, flag=0):
+        ''' TODO
+         get the current minitab page under tab
+         Args: 
+             flag  1 to get the current minitab, don't do any convertion
+                   2 to get the current minitab, and convert '/' or ' ' or '(' or ')' to '_' in string.
+                   0 to get self.current_tab 
+         Usage:
+             get_current_minitab(driver)
+             get_current_minitab(driver,1)
+             get_current_minitab(driver,2)
+             
+         Return: string the current minitab page
+         '''     
+        if flag == 0:
+            return self.current_minitab
+   
+        txt = ""
+        try:
+            txt= driver.find_element_by_xpath("//td[@class='fsm']//li[@class='current']//li[@class='current']").text
+            if flag == 1:
+                basic_airlink.cslog("current minitab : "+ txt)
+            if flag == 2: # with editing
+                txt = txt.replace(')','').replace(' (','_').replace('/','_').replace(' ','_')
+                basic_airlink.cslog("current minitab : "+ txt)
+            
+        except:
+            
+            basic_airlink.cslog("get_element_by_xpath: cannot find current minitab")
+            return None
+            
+        else:
+            return txt  
+                
     def navigate_tab(self, driver, tab):
         '''
         This function gets the desired tab and navigates to it.
@@ -2486,13 +2684,14 @@ class SeleniumAcemanager(unittest.TestCase):
         Reurns: True/False
         
         '''
-        ret = True
-        cur_page = self.get_current_tab(driver,2)
-        if cur_page == tab: 
-            return ret   
+        if tab == "None":
+            return False
+        
+        basic_airlink.cslog( "step: navigate tab "+ tab + " in ACEmanager UI")
+        if self.current_tab == tab: 
+            return True   
                 
         try:
-            
 
             if ace_config_map[self.aleos_sw_ver][self.device_name][tab]["TAB"][0] == "BY_CSS_SELECTOR":
                 driver.find_element_by_css_selector(ace_config_map[self.aleos_sw_ver][self.device_name][tab]["TAB"][1]).click()
@@ -2504,7 +2703,7 @@ class SeleniumAcemanager(unittest.TestCase):
                 driver.find_element_by_xpath(ace_config_map[self.aleos_sw_ver][self.device_name][tab]["TAB"][1]).click()
             else:
                 basic_airlink.cslog( "Incorrect byhow")
-                ret = False
+                return False
                 
             time.sleep(1)               
             
@@ -2514,16 +2713,13 @@ class SeleniumAcemanager(unittest.TestCase):
             self.refresh(driver)
                         
 
-        except:
-            basic_airlink.cslog(sys.exc_info())
-            self.error_flag +=1
-            basic_airlink.cslog("Navigating tab has Exception occurred", "RED", "WHITE")
-
-            ret = False
+        except Exception as et100: 
+            basic_airlink.cslog("navigate_tab(): "+str(et100)+" exception occurred on "+self.device_name + " with " +self.aleos_sw_ver +" due to error or NA", "RED", "WHITE")
+            return False
             
-        finally:
-          
-            return ret 
+        else:
+            self.current_tab = tab
+            return True 
         
     def navigate_subtab(self, driver, tab, subtab):
         '''
@@ -2544,57 +2740,145 @@ class SeleniumAcemanager(unittest.TestCase):
         Reurns: True/False
         
         '''
-
-        ret = True
-        
-        cur_subtab = self.get_current_subtab(driver,2)
-        if cur_subtab == subtab: 
-            return ret              
+        if subtab == "None":
+            return False
                 
-        basic_airlink.cslog( "Begins navigating subtab "+ tab +"/"+subtab)
+        #cur_subtab = self.get_current_subtab(driver,2)
+        if self.current_subtab == subtab: 
+            return True              
+                
+        basic_airlink.cslog( "step: navigate subtab "+ tab +"/"+subtab+ " in ACEmanager UI")
                  
-        try:
-            cur_page = self.get_current_tab(driver,2)
+        try: # if there exist minitab then SUBTAB is there 
             
-            if cur_page != tab: 
-                self.navigate_tab(driver, tab)
-            
-            if ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][0] == "BY_CSS_SELECTOR":
-                driver.find_element_by_css_selector(ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][1]).click()
+            if self.current_tab != tab: 
+                self.navigate_tab(driver, tab)   #change  self.current_tab if navigate successfully
                 
-            elif ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][0] == "BY_ID":
-                driver.find_element_by_id(ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][1]).click()
+            if ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab]["SUBTAB"][0] == "BY_CSS_SELECTOR":
+                driver.find_element_by_css_selector(ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab]["SUBTAB"][1]).click()
+                
+            elif ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab]["SUBTAB"][0] == "BY_ID":
+                driver.find_element_by_id(ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab]["SUBTAB"][1]).click()
     
-            elif ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][0] == "BY_XPATH":
-                driver.find_element_by_xpath(ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][1]).click()
+            elif ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab]["SUBTAB"][0] == "BY_XPATH":
+                driver.find_element_by_xpath(ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab]["SUBTAB"][1]).click()
             else:
                 basic_airlink.cslog( "Incorrect byhow parameter or NA subtab")
-                ret = False       
+                return False  
+                
+            time.sleep(1)               
+
+            if ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab]["SUBTAB"][2] == 1: 
+                self.expand_all(driver) 
+ 
+            self.refresh(driver)
+                
+        except: # there is no minitab 
+            try:
+                if ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][0] == "BY_CSS_SELECTOR":
+                    driver.find_element_by_css_selector(ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][1]).click()
+                    
+                elif ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][0] == "BY_ID":
+                    driver.find_element_by_id(ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][1]).click()
+        
+                elif ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][0] == "BY_XPATH":
+                    driver.find_element_by_xpath(ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][1]).click()
+                else:
+                    basic_airlink.cslog( "Incorrect byhow parameter or NA subtab")
+                    return False       
+                        
+                time.sleep(1)               
+    
+                if ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][2] == 1: 
+                    self.expand_all(driver) 
+     
+                self.refresh(driver)
+            
+            except Exception as et100: 
+                basic_airlink.cslog("navigate_subtab(): "+str(et100)+" exception occurred on "+self.device_name + " with " +self.aleos_sw_ver +" due to error or NA", "RED", "WHITE")
+                return False
+            else:
+                self.current_subtab = subtab
+                self.current_tab    =    tab
+                return True                
+            
+        else:
+
+            self.current_subtab = subtab
+            self.current_tab    =    tab
+            return True
+        
+       
+    def navigate_minitab(self, driver, tab, subtab, minitab):
+        '''
+        This function navigates to the specified Tab/Subtab/Minitab page in ACEmanager 
+        UI.
+        
+        Args: 
+            tab:  Tab is defined as those selectable items on top of each page 
+                  of the Acemanager for each tab. 
+                  (e.g. Status, VPN,GPS, Services, etc.)
+            subtab:  subtab name under tab in ACEmanager UI 
+            minitab: minitab name under subtab in ACEmanager UI 
+            
+        Usage: 
+            navigate_minitab(driver, "Admin","Log","Configure_Logging")
+            navigate_minitab(driver, "Events_Reporting","Events","Event_2")
+            
+        Reurns: True/False
+        
+        '''
+
+        if minitab == "None":
+            return False
+                
+        #cur_minitab = self.get_current_minitab(driver,2)
+        if self.current_minitab == minitab: 
+            return True              
+                   
+        basic_airlink.cslog( "step: navigate minitab "+ tab +"/"+subtab+"/"+minitab+ " in ACEmanager UI")
+                 
+        try:
+            #cur_subtab = self.get_current_subtab(driver,2)
+            if self.current_subtab != subtab: 
+                self.navigate_subtab(driver, tab,subtab)    # change self.current_tab/self.current_subtab if navigate successfully
+                        
+            if ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][minitab][0] == "BY_CSS_SELECTOR":
+                driver.find_element_by_css_selector(ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][minitab][1]).click()
+                
+            elif ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][minitab][0] == "BY_ID":
+                driver.find_element_by_id(ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][minitab][1]).click()
+    
+            elif ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][minitab][0] == "BY_XPATH":
+                driver.find_element_by_xpath(ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][minitab][1]).click()
+            else:
+                basic_airlink.cslog( "Incorrect byhow parameter or NA minitab")
+                return False       
                         
             time.sleep(1)               
 
-            if ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][2] == 1: 
+            if ace_config_map[self.aleos_sw_ver][self.device_name][tab][subtab][minitab][2] == 1: 
                 self.expand_all(driver) 
  
             self.refresh(driver)
             
-        except:
-            basic_airlink.cslog(sys.exc_info())
-            self.error_flag +=1
-            basic_airlink.cslog("Navigating subtab has Exception occurred, due to error or NA", "RED", "WHITE")
-            
-            ret = False
-            
-        finally:
+        except Exception as et100: 
 
-            return ret 
-        
+            basic_airlink.cslog("navigate_minitab(): "+str(et100)+" exception occurred on "+self.device_name + " with " +self.aleos_sw_ver +" due to error or NA", "RED", "WHITE")
+            
+            return False
+            
+        else:
+            self.current_minitab = minitab
+            self.current_subtab  =  subtab
+            self.current_tab     =     tab
+            return True 
+                
     def expand_all(self,driver):
         '''
         This functions click on the expand-all button in the Acemanager
         '''
         driver.find_element_by_id("btn_Expand").click()
-        basic_airlink.slog("Expanded all the tiers")
         
     def verify_config(self, driver, config_elements):
         '''
@@ -2679,37 +2963,26 @@ class SeleniumAcemanager(unittest.TestCase):
         return config_elements
     
     def get_parents(self, msciid):
-        ''' find TAB/SUBTAB based on msciid and acemanager_msciids_x.y.z.yml
-        x.y.x is ALEOS version short format.
+        ''' find TAB/SUBTAB/MINITAB based on teh paramter msciid and file 
+        acemanager_msciids_xyz.yml. xyz is ALEOS version short format,e.g.435.
         Returns: 
-            TAB
-            SUBTAB
-        '''
-        return self.ele_config_map[msciid][0],self.ele_config_map[msciid][1]
-		
 
-    def set_device_ip(self, driver, value):
-        '''Set device IP in ACEManager
-        
-        Args: driver
-              value
-        
-        Return: True/False
-        
+
+            TAB/SUBTAB/MINITAB if msciid exists
+            None/None/None if msciid doesn't exist
+            
         '''
-        id = str(msciids.MSCIID_CFG_CMN_HOST_LOCAL_IP)
-        return self.set_element_by_name(driver, id, value)
-          
-         
-    def get_rmid(self,driver):
-        '''Set device IP in ACEManager
+
+        ret1=ret2=ret3="None"
         
-        Args: driver
-              value
-        
-        Return: True/False
-        
-        '''
-        id = str(msciids.MSCIID_STS_RMID)
-        return self.get_element_by_id(driver, id)	
-    
+        try:
+
+            ret1 = self.ele_config_map[msciid][0]
+            ret2 = self.ele_config_map[msciid][1]
+            ret3 = self.ele_config_map[msciid][2]
+        except: 
+            basic_airlink.cslog("Exception occured when try to find parents of msciid: "+str(msciid))
+
+        finally:
+
+            return ret1,ret2,ret3 
