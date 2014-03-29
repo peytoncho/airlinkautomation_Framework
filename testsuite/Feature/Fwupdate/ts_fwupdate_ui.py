@@ -55,11 +55,11 @@ class TsFwupdateUi(unittest.TestCase):
             self.fw_ins = fwupdate_airlink.FwupdateAirlink(dut_name,dut_ip=self.dut_ip)
                                
         else:
-            dut_name =  tbd_config_map["DUTS"][0]
-            self.fw_ins = fwupdate_airlink.FwupdateAirlink(dut_name)
+#            dut_name =  tbd_config_map["DUTS"][0]
+            self.fw_ins = fwupdate_airlink.FwupdateAirlink()
             #        check the connection between host and dut
-            self.assertTrue(self.conn_ins.testbed_ready(), "DUT not Ready")
-            self.assertTrue(self.fw_ins._device_check(), "Device does not match the one set in config file")
+#            self.assertTrue(self.conn_ins.testbed_ready(), "DUT not Ready")
+#            self.assertTrue(self.fw_ins._device_check(), "Device does not match the one set in config file")
     
     def tearDown(self):
         ''' the test runner will invoke that method after each test

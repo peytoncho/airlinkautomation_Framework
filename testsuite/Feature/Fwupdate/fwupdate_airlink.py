@@ -82,7 +82,8 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         '''
         update_rm_version = self._match_rm(update_fw_version)
         result = self._pre_fwupdate_aleos(update_fw_version, update_rm_version)
-
+#         result = "completed"
+#         self.rm_update_flag = True
         if result == "completed":
             if self.rm_update_flag:
                 if "True" in self._verify_aleos(update_fw_version) and "True" in self._verify_rm(update_rm_version):
@@ -321,9 +322,9 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         current_rm_version = at_ins.get_rm_version(self.conn_ins)
         rm_version_dict = rm_ver_dict[rm_version_rear]
         self.conn_ins.close()
-        basic_airlink.clog(time.ctime(time.time())+" ===>> "+current_rm_version)
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> "+current_rm_version)
         if (rm_version_dict == "") or (not rm_version_dict in current_rm_version):
-            basic_airlink.clog(time.ctime(time.time())+" ===>> rm_version_dict: "+rm_version_dict)
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> rm_version_dict: "+rm_version_dict)
             result = False
         
         return str(result)
@@ -548,7 +549,16 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                 driver.find_element_by_name("go").click()
                 basic_airlink.cslog(time.ctime(time.time())+" ===>> Applying Firmware ...")
                 self.rm_update_flag = True
-                time.sleep(tbd_config_map[self.device_name]["RM_TIMEOUT"])
+
+                try:
+                    result = True          
+#                    WebDriverWait(driver, timeout=tbd_config_map[self.device_name]["RM_TIMEOUT"]).until(\
+#                                               EC.visibility_of_element_located((By.ID, "aceMasterInn")))
+                    dirver.implicity_wait(tbd_config_map[self.device_name]["RM_TIMEOUT"])
+                except:
+                    basic_airlink.cslog(time.ctime(time.time())+" ===>> Fail on RM update")
+                    result = False                    
+#                time.sleep(tbd_config_map[self.device_name]["RM_TIMEOUT"])
                 
         except:
             result = False
@@ -564,10 +574,10 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         Returns: result: True/False
         '''
         device_prefix = self._get_device_prefix()
-        
+        wait_rm_frame = 45
         if update_type == 'Radio_Module_Firmware':
             timer_wait_logout = fwupdate_config_map["TIMER"]['RM']
-            wait_rm_frame = 90
+            
             basic_airlink.clog("WAIT_PROCESS_RM", "RED")
         
         else:       
@@ -577,22 +587,22 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
             else:
                 timer_wait_logout = fwupdate_config_map["TIMER"][device_prefix]["WAIT_PROCESS_FULL"]
                 basic_airlink.cslog("WAIT_PROCESS_FULL", "RED")
-        
+    
         try:
             result = False
-            WebDriverWait(driver, timeout=wait_rm_frame).until(EC.visibility_of_element_located((By.XPATH, \
-                                    ".//div[@id='file_upload']/center[2]/div/div[3]/div/div/iframe")))
-            
+            WebDriverWait(driver, timeout=wait_rm_frame).until(EC.visibility_of_element_located((By.ID, "main1")))
+             
             basic_airlink.cslog(time.ctime(time.time())+" ===>> RM frame shows") 
         except:
             basic_airlink.cslog(time.ctime(time.time())+" ===>> no RM frame")        
             try:
                 result = True          
                 WebDriverWait(driver, timeout=timer_wait_logout-wait_rm_frame).until(EC.visibility_of_element_located((By.ID, "aceMasterInn")))
+
             except:
                 basic_airlink.cslog(time.ctime(time.time())+" ===>> Fail on wait log out")
                 result = False
-        
+         
         finally:
             return result
 
@@ -740,6 +750,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                 if not "check.gif" in step_3_pic:
                     if not self._rm_update(self.driver, path_list[1]):
                         if "warning.gif" in step_3_pic:
+                            basic_airlink.cslog("Warning picture...", fgcolor, bgcolor)
                             continue
                         self.driver.quit()
                     quit_flag = True

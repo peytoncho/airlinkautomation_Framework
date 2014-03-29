@@ -3,39 +3,38 @@
 # This file includes Connectivity class, and implementation
 # Company: Sierra Wireless
 # Time   : Jun  24, 2013
-# Author: Airlink
+# Author : Airlink
 #
 ################################################################################
 
 import logging
-import os
-import sys
 import datetime
-import time
-
-
 import basic_airlink
-import proxy_airlink
 
 basic_airlink.append_sys_path()
 
 tbd_config_map = basic_airlink.get_tbd_config_data()
 import telnet_airlink, ssh_airlink, ping_airlink, serial_airlink
 import linux_airlink
-
+import at_utilities
+import sys
+import time
+import selenium_utilities
+import proxy_airlink
 
 class Connectivity:
     
-    def __init__(self, device_name="", dut_ip = "", username="user", password="12345", debug_level = "0", verbose = False):
+    def __init__(self, device_name=tbd_config_map["DUTS"][0], username="user", password="12345", debug_level = "0", verbose = False):
         
         ''' check all related items in testbed for testing '''
                 
-        self.device_name = device_name
-        self.dut_ip = dut_ip
+        self.device_name  = device_name
         self.username = username
         self.password = password
         self.debug_level = debug_level
         self.verbose = verbose
+        self.device_model = tbd_config_map[self.device_name]["MODEL"]
+        self.aleos_sw_ver = tbd_config_map[self.device_name]["ALEOS_FW_VER"][:-4]  #long -> short        
         self.error_flag = 0
         
     def get_url(self):
@@ -88,11 +87,6 @@ class Connectivity:
             logging.debug("\n Wrong interface type")
             
         return connect_instance
-    
-    def telnet_interface_mdt(self):
-        tn_timeout = tbd_config_map[self.device_name]["TELNET_TIMEOUT"]
-        connect_instance = telnet_airlink.TelnetAirlink(self.dut_ip, "2332", self.username,self.password,self.verbose, tn_timeout)
-        return connect_instance
 
 
     def ssh_interface(self):
@@ -107,7 +101,6 @@ class Connectivity:
         if    tbd_config_map[self.device_name]["INTERFACE"] == "ETHERNET":
             ssh_instance = ssh_airlink.SshAirlink( hostname=tbd_config_map[self.device_name]["ETH_DEVICE_IP"], port = "22", username = self.username, password = self.password)
         elif  tbd_config_map[self.device_name]["INTERFACE"] == "USB":
-            print "\n USB IP = " + tbd_config_map[self.device_name]["USB_IP"]
             ssh_instance = ssh_airlink.SshAirlink( hostname=tbd_config_map[self.device_name]["USB_DEVICE_IP"], port = "22", username = self.username, password = self.password)
         elif  tbd_config_map[self.device_name]["INTERFACE"] == "OTA":
             ssh_instance = ssh_airlink.SshAirlink( hostname=tbd_config_map[self.device_name]["WAN_IP"], port = "22", username = self.username, password = self.password)
@@ -126,13 +119,13 @@ class Connectivity:
         '''
         serial_timeout =tbd_config_map[self.device_name]["SERIAL_TIMEOUT"]
 
-        logging.debug("\n Make sure the serial cable connected before testing")
+        basic_airlink.cslog(" Make sure the serial cable connected before testing")
        
-        if   tbd_config_map[self.device_name]["INTERFACE"] == "SERIAL":
-            print "\n COM_PORT=======" + tbd_config_map[self.device_name]["COM_PORT"]
-            serial_instance = serial_airlink.SerialAirlink(tbd_config_map[self.device_name]["COM_PORT"], 115200, serial_timeout)
-        else:       
-            logging.debug("\n Wrong interface type")
+#        if   tbd_config_map[self.device_name]["INTERFACE"] == "SERIAL":
+#            print "\n COM_PORT=======" + tbd_config_map[self.device_name]["COM_PORT"]
+        serial_instance = serial_airlink.SerialAirlink(tbd_config_map[self.device_name]["COM_PORT"], 115200, serial_timeout)
+#        else:       
+#            logging.debug("\n Wrong interface type")
         
         return serial_instance
     
@@ -153,58 +146,71 @@ class Connectivity:
             logging.debug("\n Wrong connection type")
             
     
-    def connection_types(self,test_type="singel"):
+    def connection_types(self):
         '''
         
         '''
-        if test_type == "singel":
-            if tbd_config_map[self.device_name]["CONNECTION_TYPE"] == "TELNET":
-                interface = self.telnet_interface()
-            elif tbd_config_map[self.device_name]["CONNECTION_TYPE"] == "SSH":
-                interface = self.ssh_interface()
-            elif tbd_config_map[self.device_name]["CONNECTION_TYPE"] == "SERIAL":
-                interface = self.serial_interface()
-        elif test_type == "mdt":
-            interface = self.telnet_interface_mdt()
-        return interface
+        if    tbd_config_map[self.device_name]["CONNECTION_TYPE"] == "TELNET":
+            return self.telnet_interface()
+        elif  tbd_config_map[self.device_name]["CONNECTION_TYPE"] == "SSH":
+            return self.ssh_interface()
+        elif  tbd_config_map[self.device_name]["CONNECTION_TYPE"] == "SERIAL":
+            return self.serial_interface()
+   
  
-    def testbed_ready(self):
+    def testbed_ready(self, proxy_ip=None, testbed_name="WAN", retry_count = 3):
         ''' check if testbed ready 
         '''
-#         if not self.controller_ready(testbed_name):
-#             return False
+        if not self.controller_ready(testbed_name):
+            return False
         
-#         if testbed_name in ["WAN","VPN","GPS","LPM", "LAN"]:
-#             if not self.host_ready(1, testbed_name) or \
-#                not self.host_ready(2, testbed_name):
-#                 return False
-        dut_ip=self.address()    
-        if not self.dut_ready(dut_ip): 
+        if testbed_name in ["WAN","VPN","GPS","LPM", "LAN"]:
+            if not self.host_ready(1, testbed_name) or \
+               not self.host_ready(2, testbed_name):
+                return False
+            
+        if not self.dut_ready(proxy_ip, retry_count): 
             return False
         
         return True    
             
-    def dut_ready(self,dut_ip):
+    def dut_ready(self, proxy_ip=None, device_name=tbd_config_map["DUTS"][0],retry_count=3):
         ''' check if DUT is ready 
+        TODO
         '''
-               
-        ret = True  
-        if  tbd_config_map[self.device_name]["INTERFACE"] == "SERIAL":
-            logging.debug("please make sure the serial line connected!\n")  
-            return ret
-        else:               
-            pp=ping_airlink.PingAirlink()         # shall not be Serial cable connection
-            for i in range(1,5):
-                if  pp.ping_test(dut_ip):            
-                    logging.debug("DUT ready\n")  
-                else: 
-                    logging.debug("DUT not ready yet\n")  
-                    self.error_flag +=1
-                    ret = False
-            
-        return ret    
+        adr = self.address()
+        ready = False
 
-    def host_ready(self, host_no=1, testbed_name="WAN"):
+        if proxy_ip is not None:
+            self.proxy = proxy_airlink.ProxyAirlink(proxy_ip)
+            self.proxy_conn = self.proxy.connect()    
+            for ii in range(retry_count):
+                pp = ping_airlink.PingAirlink()
+                remote_ping = self.proxy.deliver(pp)
+                
+                if remote_ping.ping_test(adr):
+                    basic_airlink.cslog(device_name+" ready " + " at Try out "+str(ii+1)) 
+                    ready = True
+                    break                       
+                else:
+                    basic_airlink.cslog(device_name+" not ready yet "+ " at Try out "+str(ii+1)) 
+                                   
+        else:
+            for ii in range(retry_count):       
+    #            if  tbd_config_map[self.device_name]["INTERFACE"] == "SERIAL":
+    #                basic_airlink.cslog("please make sure the serial line connected!\n")  
+    #                return True
+                           
+                pp=ping_airlink.PingAirlink()         # shall not be Serial cable connection
+                if  not pp.ping_test(adr):            
+                    basic_airlink.cslog(device_name+" not ready yet "+ " at Try out "+str(ii+1))  
+                else:
+                    basic_airlink.cslog(device_name+" ready "+ " at Try out "+str(ii+1)) 
+                    ready = True
+                    break
+        return ready       
+
+    def host_ready(self, host_no=1, testbed_name="WAN", retry_count = 3):
         ''' check if host1/host2 ready
         TODO
         '''
@@ -326,20 +332,16 @@ class Connectivity:
         self.delete_route(host2_private_ip)
         self.add_route(host2_private_ip,"255.255.255.255",controller_private_ip, 30)    
         
-    def resource_monitor(self, flag):
+    def resource_monitor(self, flag=tbd_config_map["RESOURCE_MONITOR"]):
         ''' need to do first
-             #self.connectivity_obj = connectivity.Connectivity(username="root", password="v3r1fym3", debug_level = tbd_config_map["LOG_LEVEL"], verbose = True) 
+             #self.connectivity_obj = connectivity.Connectivity(device_name=tbd_config_map["DUTS"][0], username="root", password="v3r1fym3", debug_level = tbd_config_map["LOG_LEVEL"], verbose = True) 
        
         '''
         if flag == "YES":
             connectivity_ins = self.connection_types()
             if connectivity_ins.connect():
-    #                self.at_radio_ins = at_utilities_radio.AtCommandsRadio()
-    #                ret = self.at_radio_ins.get_gstatus(self.connectivity_ins)
                 self.linux_ins = linux_airlink.LinuxAirlink()
                 ret = self.linux_ins.get_mem_usage(connectivity_ins)                
-                print ret  
-                #time.sleep(60)
                 connectivity_ins.close() 
 
     def get_at_instance(self, proxy_ip = None):

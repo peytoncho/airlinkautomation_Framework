@@ -159,7 +159,7 @@ if __name__ == "__main__":
 #    shutil.copyfile('C:'+report_filename, 'C:/jenkins/workspace/Firmware_update_test/reports/'+report_file_name)
 #    sys.stdout.write("\nFor details of the results please check \n http://carmd-ev-aptest:8080/job/Firmware_update_test/ws/reports/%s\n\n For details of the log please check \n http://carmd-ev-aptest:8080/job/Firmware_update_test/ws/logs/%s\n\n"  % ( report_file_name,log_filename))    
     
-    mdt_ins.restore_device_ip()
+    #mdt_ins.restore_device_ip()
     
     if (test_result.error_count + test_result.failure_count): 
         sys.exit(1)
