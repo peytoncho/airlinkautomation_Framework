@@ -42,7 +42,7 @@ ACE_URL:
 #DUTS : ["DUT_GX440_MC7750_VZW"]
 #DUTS : ["DUT_GX440_MC7700_BEL"] 
 
-DUTS : ["DUT_GX400_MC8705_ATT"] 
+#DUTS : ["DUT_GX400_MC8705_ATT"] 
 #DUTS : ["DUT_GX400_MC8705_ROW"]   
 #DUTS : ["DUT_GX400_MC5728_VZW"]
 #DUTS : ["DUT_GX400_MC5728_SPT"]
@@ -50,7 +50,7 @@ DUTS : ["DUT_GX400_MC8705_ATT"]
 #DUTS : ["DUT_LS300_SL8090_ATT"] 
 #DUTS : ["DUT_LS300_SL5011_VZW"]
 #DUTS : ["DUT_LS300_SL5011_SPT"]
-#DUTS : ["DUT_LS300_SL8092_OSM"]
+DUTS : ["DUT_LS300_SL8092_OSM"]
 
 ACE_URL         :    "HTTP://192.168.13.31:9191/"
 USERNAME        :    "user"
@@ -90,7 +90,7 @@ DUT_ES440_MC7750_VZW:
     ALEOS_FW_VER    :    "4.3.4.009"
     RADIO_FW_VER    :    "SWI9600M_03.05.10.09ap r5700 carmd-en-10527 2013/03/12 10:37:48" 
     MODEM_NAME      :    "HF33730130001001"
-    RM_TIMEOUT      :    400
+    RM_TIMEOUT      :    600
     
 DUT_ES440_MC7710_OSM:       
     MODEL           :    ES440
@@ -126,7 +126,7 @@ DUT_ES440_MC7710_OSM:
     ALEOS_FW_VER    :    "4.3.4.009"
     RADIO_FW_VER    :    "SWI9200X_03.05.10.02AP R4684 CARMD-EN-10527 2012/02/25 11:58:38"
     MODEM_NAME      :    "CA1250202761004"  #SSID/Network name
-    RM_TIMEOUT      :    400
+    RM_TIMEOUT      :    600
 
 DUT_ES440_MC7700_ATT:       
     MODEL           :    ES440
@@ -162,7 +162,7 @@ DUT_ES440_MC7700_ATT:
     ALEOS_FW_VER    :    "4.3.4.009"
     RADIO_FW_VER    :    "SWI9200X_03.05.10.02AP R4684 CARMD-EN-10527 2012/02/25 11:58:38"
     MODEM_NAME      :    "CA1250202761004"  #SSID/Network name
-    RM_TIMEOUT      :    400
+    RM_TIMEOUT      :    600
     
 DUT_GX440_MC7700_ATT:       
     MODEL           :    GX440
@@ -202,7 +202,7 @@ DUT_GX440_MC7700_ATT:
     ALEOS_FW_VER    :    "4.3.4.009"
     RADIO_FW_VER    :    "SWI9200X_03.05.10.02AP R4684 CARMD-EN-10527 2012/02/25 11:58:38"
     MODEM_NAME      :    "CA1250202761004"  #SSID/Network name
-    RM_TIMEOUT      :    400
+    RM_TIMEOUT      :    600
       
 DUT_GX440_MC7750_VZW: 
     MODEL           :    GX440
@@ -241,7 +241,7 @@ DUT_GX440_MC7750_VZW:
     ALEOS_FW_VER    :    "4.3.4.009"
     RADIO_FW_VER    :    "SWI9600M_03.05.10.06ap r5595 carmd-en-10527 2012/11/12 15:07:45" 
     MODEM_NAME      :    "CA1256107161002"
-    RM_TIMEOUT      :    400
+    RM_TIMEOUT      :    600
 
 DUT_GX440_MC7700_BEL: 
     MODEL           :    GX440
@@ -280,7 +280,7 @@ DUT_GX440_MC7700_BEL:
     ALEOS_FW_VER    :    "4.3.4.009"
     RADIO_FW_VER    :    "SWI9600M_03.05.10.06ap r5595 carmd-en-10527 2012/11/12 15:07:45" 
     MODEM_NAME      :    "CA1256107161002"
-    RM_TIMEOUT      :    400
+    RM_TIMEOUT      :    600
    
 DUT_GX400_MC8705_ROW:       
     MODEL           :    GX400 
@@ -320,7 +320,7 @@ DUT_GX400_MC8705_ROW:
     ALEOS_FW_VER    :    "4.3.4.009"
     RADIO_FW_VER    :    "T1_0_4_3DAP R554 CNSZXD00000140 2012/08/21 13:10:40"
     MODEM_NAME      :    "CA1300201401004"  #SSID
-    RM_TIMEOUT      :    400
+    RM_TIMEOUT      :    550
 
 DUT_GX400_MC8705_ATT:       
     MODEL           :    GX400 
@@ -352,7 +352,7 @@ DUT_GX400_MC8705_ATT:
     CONNECTION_TYPE :    "TELNET"             # TELNET/SSH/SERIAL
     CONNECTION_PORT :    2332
     COM_PORT        :    COM1
-    REBOOT_TIMEOUT  :    250                #150sec = 2.5min
+    REBOOT_TIMEOUT  :    150                #150sec = 2.5min
     TELNET_TIMEOUT  :    3                
     TELNET_DEBUGMODE:    YES                
     SSH_TIMEOUT     :    3
@@ -360,7 +360,7 @@ DUT_GX400_MC8705_ATT:
     ALEOS_FW_VER    :    "4.3.4.009"
     RADIO_FW_VER    :    "T1_0_4_3DAP R554 CNSZXD00000140 2012/08/21 13:10:40"
     MODEM_NAME      :    "CA1300201401004"  #SSID
-    RM_TIMEOUT      :    1800
+    RM_TIMEOUT      :    600
     
 DUT_LS300_SL8092_ROW:      
     MODEL           :    LS300
@@ -397,7 +397,7 @@ DUT_LS300_SL8092_ROW:
     RADIO_FW_VER    :    "P1_0_0_8AP R1338 CNHKGDKCE01 2011/10/21 09:21:31"    
     MODEM_NAME      :    "CA916520029100F"       # Modem name/Global ID
     HW_CONFIG       :    "161D0A06000700000000000000000000"
-    RM_TIMEOUT      :    400
+    RM_TIMEOUT      :    700
 
 DUT_LS300_SL8090_ATT:      
     MODEL           :    LS300
@@ -426,7 +426,7 @@ DUT_LS300_SL8090_ATT:
     CONNECTION_TYPE :    TELNET        # TELNET/SSH/SERIAL
     CONNECTION_PORT :    2332
     COM_PORT        :    COM1
-    REBOOT_TIMEOUT  :    360             # 150sec = 2.5min
+    REBOOT_TIMEOUT  :    250             # 150sec = 2.5min
     TELNET_TIMEOUT  :    3                
     TELNET_DEBUGMODE:    YES                
     SSH_TIMEOUT     :    60
@@ -435,7 +435,7 @@ DUT_LS300_SL8090_ATT:
     RADIO_FW_VER    :    "P1_0_0_8AP R1338 CNHKGDKCE01 2011/10/21 09:21:31"   
     MODEM_NAME      :   "CA817220095100E"       # Modem name/Global ID
     HW_CONFIG       :   "161C0A06000700000000000000000000"
-    RM_TIMEOUT      :    400
+    RM_TIMEOUT      :    700
 
 
 #when use callbox 
@@ -476,6 +476,7 @@ DUT_GX440_MC7700_ATT_CBX:
     ALEOS_FW_VER    :    "4.3.4.009"
     RADIO_FW_VER    :   "SWI9200X_03.05.10.02AP R4684 CARMD-EN-10527 2012/02/25"
     MODEM_NAME      :   "CA1250202761004"  #"CA1250205061004"
+    RM_TIMEOUT      :    1800
 
 DUT_LS300_SL5011_VZW:      
     MODEL           :    LS300
@@ -511,7 +512,7 @@ DUT_LS300_SL5011_VZW:
     RADIO_FW_VER    :    "p3110506,52992 [Oct 30 2011 22:54:02]"   
     MODEM_NAME      :    "CA719220179100F"       # Modem name/Global ID
     HW_CONFIG       :    "161B0A06000700000000000000000000"
-    RM_TIMEOUT      :    500
+    RM_TIMEOUT      :    700
 
 DUT_LS300_SL5011_SPT:      
     MODEL           :    LS300
@@ -547,7 +548,7 @@ DUT_LS300_SL5011_SPT:
     RADIO_FW_VER    :    "p3110506,52992 [Oct 30 2011 22:54:02]"   
     MODEM_NAME      :    "CA719220179100F"       # Modem name/Global ID
     HW_CONFIG       :    "161B0A06000700000000000000000000"
-    RM_TIMEOUT      :    400
+    RM_TIMEOUT      :    700
     
 DUT_LS300_SL8092_OSM:      
     MODEL           :    LS300
@@ -583,7 +584,7 @@ DUT_LS300_SL8092_OSM:
     RADIO_FW_VER    :    "p3110506,52992 [Oct 30 2011 22:54:02]"   
     MODEM_NAME      :    "CA719220179100F"       # Modem name/Global ID
     HW_CONFIG       :    "161B0A06000700000000000000000000"
-    RM_TIMEOUT      :    400
+    RM_TIMEOUT      :    700
 
 DUT_GX400_MC5728_VZW:       
     MODEL           :    GX400 
@@ -622,6 +623,7 @@ DUT_GX400_MC5728_VZW:
     ALEOS_FW_VER    :    "4.3.4.009"
     RADIO_FW_VER    :    "p2815600,58016 [Aug 27 2012 10:01:25]"
     MODEM_NAME      :    "CA1162106690K0B"  #SSID
+    RM_TIMEOUT      :    600
 
 DUT_GX400_MC5728_SPT:       
     MODEL           :    GX400 
@@ -660,6 +662,7 @@ DUT_GX400_MC5728_SPT:
     ALEOS_FW_VER    :    "4.3.4.009"
     RADIO_FW_VER    :    "p2815600,58016 [Aug 27 2012 10:01:25]"
     MODEM_NAME      :    "CA1162106690K0B"  #SSID
+    RM_TIMEOUT      :    600
 
 DUT_LS300_SL5011_SPR:      
     MODEL           :    LS300
@@ -696,6 +699,7 @@ DUT_LS300_SL5011_SPR:
     RADIO_FW_VER    :    "p3110506,52992 [Oct 30 2011 22:54:02]"   
     MODEM_NAME      :   "CA719220179100F"       # Modem name/Global ID
     HW_CONFIG       :   "161B0A06000700000000000000000000"
+    RM_TIMEOUT      :    700
    
 # To contgrol Agilent power supply by GPIB or COM1
 POWER_SUPPLY:

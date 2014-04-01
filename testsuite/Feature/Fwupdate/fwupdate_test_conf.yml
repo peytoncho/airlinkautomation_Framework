@@ -20,7 +20,7 @@ MDT: "NO"   #YES/NO
 
 4.3.4:
    DUT_GX400_MC8705_ROW:   MC8705_OSM001_T1043D
-   DUT_GX400_MC8705_ATT:   MC8705_ATT001_1032
+   DUT_GX400_MC8705_ATT:   MC7700_BEL001_35205
    DUT_GX400_MC8705_BEL:   ''
    DUT_GX400_MC8705_TLS:   ''
    DUT_GX400_MC8705_OSM:   MC8705_OSM001_T1043D
@@ -63,7 +63,27 @@ MDT: "NO"   #YES/NO
    DUT_GX440_MC7700_BEL:   ''
 
 #Add new things to HERE
-#4.3.6 : 
+4.3.6 : 
+   DUT_GX400_MC8705_ROW:   MC8705_OSM001_3552
+   DUT_GX400_MC8705_ATT:   MC8705_ATT001_3553
+   DUT_GX400_MC8705_BEL:   ''
+   DUT_GX400_MC8705_TLS:   ''
+   DUT_GX400_MC8705_OSM:   MC8705_OSM001_3552
+   DUT_LS300_SL5011_VZW:   SL5011_VZW003_11301
+   DUT_LS300_SL5011_SPT:   SL5011_SPT003_11301
+   DUT_LS300_SL8090_ATT:   SL8090_ATT003_P1008
+   DUT_LS300_SL8090_BEL:   SL8090_BCA003_P1008
+   DUT_LS300_SL8092_OSM:   SL8092_OSM002_P10018A
+   DUT_GX400_MC5728_VZW:   MC5728_VZW001_15600
+   DUT_GX440_MC7750_VZW:   MC7750_VZW002_35109
+   DUT_GX440_MC7700_ATT:   MC7700_ATT002_35102
+   DUT_GX400_MC5728_SPT:   MC5728_SPT001_15601
+   DUT_GX440_MC7700_OSM:   ''
+   DUT_ES440_MC7750_VZW:   MC7750_VZW002_35109
+   DUT_ES440_MC7700_ATT:   MC7700_ATT002_35102
+   DUT_ES440_MC7710_OSM:   ''
+   DUT_ES440_MC7700_OSM:   ''
+   DUT_GX440_MC7700_BEL: 
 
 #==============================================================================#
 
@@ -80,14 +100,15 @@ PATH1 : [4.3.4.009,
 #==========================RM version name mapping=============================#
 
 RM_VER_NAME_MAP :
-          "P1008"  : P1_0_0_8AP
-          "T1043D" : T1_0_4_3DAP
-          "1032"   : T1_0_3_2AP
-          "3552"   : T3_5_5_2AP
-          "3553"   : T3_5_5_3AP
-          "11301"  : p3111301
-          "153"    : p3110503
-          "156"    : p3110506
+          "P1008"   : P1_0_0_8AP
+          "P10018A" : P1_0_0_18AAP
+          "T1043D"  : T1_0_4_3DAP
+          "1032"    : T1_0_3_2AP
+          "3552"    : T3_5_5_2AP
+          "3553"    : T3_5_5_3AP
+          "11301"   : p3111301
+          "153"     : p3110503
+          "156"     : p3110506
 
 #==============================================================================#
 
@@ -95,9 +116,9 @@ RM_VER_NAME_MAP :
 # TODO these range values need to confirm
 UPDATE_TYPE : ["ALEOS_Software","Radio_Module_Firmware"]
 
-ALEOS_VERSION_LIST: ["4.3.2","4.3.3","4.3.4","4.3.5"]
+ALEOS_VERSION_LIST: ["4.3.2","4.3.3","4.3.4","4.3.5","4.3.6"]
 
-ALEOS_BUILD_FROM : "4.3.4.009"
+ALEOS_BUILD_FROM : "4.3.6.E06"
 ALEOS_BUILD_TO : "4.3.5.010"
 ROUNDTRIP_TIMES : 1
 
