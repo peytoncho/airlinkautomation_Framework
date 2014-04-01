@@ -146,9 +146,8 @@ STEP_TIMER : 3
 
 LIST_TESTCASES:
            1  : 
-              TC_ID       : "Feature/ ACEmgr_Functions_Amit_Nasser_Shanifer/ FW_update_ALEOS_and_RMFU_Amit/ ALEOS_FW_update_Peyton/ Using_ACEManager/ Local_Connection/ ALEOS_update_to_current_version
-"           
-              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5"]
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_ACEManager/ Local_ALEOS_update_single"           
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
               RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
@@ -157,8 +156,8 @@ LIST_TESTCASES:
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
            2  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_roundtrip"     
-              PRODUCT_VER : ["4.3.3","4.3.4"]
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_ACEManager/ Local_ALEOS_update_roundtrip"     
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
               RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090","MC5728"]       
