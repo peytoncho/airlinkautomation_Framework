@@ -12,20 +12,21 @@ airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_FRAMEWORK']
 with open(airlinkautomation_home_dirname+'\config\common_testbed_conf.yml','r') as stream:
     tbd_conf_map = yaml.load(stream)
 
-DEVICE_NUMBER = int(tbd_conf_map["DEVICE_NUMBER"])
+#DEVICE_NUMBER = int(tbd_conf_map["DEVICE_NUMBER"])
 
 class MdtAirlink(object):
-    def __init__(self):        
+    def __init__(self,device_number):        
         self.se_ins = selenium_utilities.SeleniumAcemanager()
         self.at_ins = at_utilities.AtCommands()
-        self.globalid_lst = []      
+        self.globalid_lst = []
+        self.device_num = device_number      
             
     def change_global_ip(self):        
         globalid_lst = []
         reboot_fail_lst = []
         retry_counter = 0
             
-        while len(self.globalid_lst)<DEVICE_NUMBER or len(reboot_fail_lst)>0:
+        while len(self.globalid_lst)<self.device_num or len(reboot_fail_lst)>0:
             result = ""
             curr_ip = "192.168.13.31"
             telnet_ins = telnet_airlink.TelnetAirlink(hostname = curr_ip)
@@ -79,7 +80,7 @@ class MdtAirlink(object):
     def ping_devices(self):
         result_lst = []
         result = True
-        for i in range(DEVICE_NUMBER):
+        for i in range(self.device_num):
             device_ip = '192.168.13.'+str(i+1)
             ret = os.system('ping '+device_ip)
             result_lst.append(ret) 
@@ -98,7 +99,7 @@ class MdtAirlink(object):
     def restore_device_ip(self):
         at_ins = at_utilities.AtCommands()
         
-        for i in range(DEVICE_NUMBER):
+        for i in range(self.device_num):
             curr_ip = '192.168.13.'+str(i+1)
             change_ip = '192.168.13.31'
             telnet_ins = telnet_airlink.TelnetAirlink(hostname = curr_ip)
@@ -144,7 +145,7 @@ class MdtAirlink(object):
     def get_device_ip_list(self):
         at_ins = at_utilities.AtCommands()
         info_lst = []
-        for i in range(DEVICE_NUMBER):
+        for i in range(self.device_num):
             change_ip = "192.168.13."+str(i+1)
             telnet_ins = telnet_airlink.TelnetAirlink(hostname = change_ip)
             
@@ -163,7 +164,7 @@ class MdtAirlink(object):
     def form_device_fullname(self):
         device_lst = []
         retry_flag = 1
-        for i in range(DEVICE_NUMBER):
+        for i in range(self.device_num):
             retry_flag = 1
             while retry_flag == 1 or retry_flag == 2:
                 ace_url = 'http://192.168.13.'+str(i+1)+':9191'

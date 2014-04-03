@@ -274,6 +274,8 @@ class SeleniumAcemanager(unittest.TestCase):
             element['value'] = ""
             
         return element
+    
+
 
     def set_element(self, driver, element):
         '''
@@ -1551,7 +1553,17 @@ class SeleniumAcemanager(unittest.TestCase):
 
         basic_airlink.cslog("MSCI Version: "+ret) 
         
-        return ret  
+        return ret
+    
+    def set_device_ip(self, driver, value):
+        '''Set device IP in ACEManager
+        
+        Args: driver
+              value
+        Return: True/False    
+        '''
+        id = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_CFG_CMN_HOST_LOCAL_IP)
+        return self.set_element_by_name(driver, id, value)  
     
     def status_page(self, driver):
         ''' ACEmanager navigates to status page
@@ -2794,7 +2806,8 @@ class SeleniumAcemanager(unittest.TestCase):
      
                 self.refresh(driver)
             
-            except Exception as et100: 
+            except Exception as et100:
+                print "error: ",sys.exc_info()[1] 
                 basic_airlink.cslog("navigate_subtab(): "+str(et100)+" exception occurred on "+self.device_name + " with " +self.aleos_sw_ver +" due to error or NA", "RED", "WHITE")
                 return False
             else:

@@ -844,12 +844,7 @@ def setup_suite_v2(area_config_map, tc_ts_map):
         
     return test_suite    
 
-def setup_suite_mdt(tc_ts_map, tc_pick_list):
-    test_suite = unittest.TestSuite()
-    for i in tc_pick_list:
-        test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
-        tc_ts_map[i][2]=1
-    return test_suite
+
 
 def setup_suite_v3(tbd_config_map, area_config_map, tc_ts_map):
     """  Gather all the tests from this test module into a test suite.  
@@ -1045,7 +1040,15 @@ def setup_suite_v3(tbd_config_map, area_config_map, tc_ts_map):
         
     return test_suite   
 
-def setup_suite(tbd_config_map, area_config_map, tc_ts_map):
+def setup_suite_mdt(tc_ts_map, tc_pick_list):
+    test_suite = unittest.TestSuite()
+    for i in tc_pick_list:
+        test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
+        tc_ts_map[i][2]=1
+    return test_suite
+
+
+def setup_suite(tbd_config_map, area_config_map, tc_ts_map, dut_name=None):
     """  Gather all the tests from this test module into a test suite.  
     Handle the different arguments from test suite launcher command line:
         -n <test case # range>
@@ -1063,8 +1066,10 @@ def setup_suite(tbd_config_map, area_config_map, tc_ts_map):
         test suite, including the selected testcases
         
     """
-    
-    device_name = tbd_config_map["DUTS"][0]
+    if dut_name is None: 
+        device_name = tbd_config_map["DUTS"][0]
+    else:
+        device_name = dut_name
     aleos_sw_ver= tbd_config_map[device_name]["ALEOS_FW_VER"][:6]
     if aleos_sw_ver[5]==' ' or aleos_sw_ver[5]=='.': 
         aleos_sw_ver=aleos_sw_ver[:5]

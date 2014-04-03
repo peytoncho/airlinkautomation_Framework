@@ -2695,7 +2695,6 @@ class SeleniumAcemanager(unittest.TestCase):
               value
         
         Return: True/False
-        
         '''
         id = str(msciids.MSCIID_CFG_CMN_HOST_LOCAL_IP)
         return self.set_element_by_name(driver, id, value)
