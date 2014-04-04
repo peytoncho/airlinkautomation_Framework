@@ -2,7 +2,7 @@
 #
 # This module provides FW Update operations by UI. 
 # Company: Sierra Wireless
-# Time: October 15th, 2013
+# Time: April 10th, 2014
 # 
 #################################################################################
 from selenium.common.exceptions import NoSuchFrameException, WebDriverException
@@ -176,8 +176,6 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
 
         return result
     
-
-    
 #===========================================================================
 #Helper functions UI
 #===========================================================================
@@ -197,8 +195,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
             login_attemp_count+=1
             logging.info("Can not Login, attemp: " + str(login_attemp_count))
             basic_airlink.cslog("Can not Login, attemp: " + str(login_attemp_count), "RED")
-            self.error_flag = 0
-            
+            self.error_flag = 0          
             self.driver.close()
             self.driver =self.login(self.url, self.username, self.password)
                
@@ -210,7 +207,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         return:result str: True/False 
         '''
         result = True
-        attempt_verify_times = 30
+        attempt_verify_times = fwupdate_config_map["ATTEMPT_VERIFY_TIME"]
         while attempt_verify_times > 0:
             aleos_version = self._aleos_check()
             basic_airlink.cslog("Current fw version: "+aleos_version)
@@ -300,7 +297,8 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         at_ins = at_utilities.AtCommands()
         attempt_count = 1
         
-        while (not self.conn_ins.connect()) and (attempt_count<=100):
+        while (not self.conn_ins.connect()) \
+               and (attempt_count<=fwupdate_config_map["ATTEMPT_VERIFY_TIME"]):
             aleos_version = -1
             attempt_count+=1
             basic_airlink.clog(time.ctime(time.time())+" ===>> _verify_rm: Connection Failed, try again")

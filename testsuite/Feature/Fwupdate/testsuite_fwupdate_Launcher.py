@@ -65,9 +65,10 @@ class Runner(object):
                         14:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_ota_roundtrip_rm",0],                       
                         15:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ota_single_aleos",0],
                         16:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ota_roundtrip_aleos",0],
-                        17:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ota_roundtrip_rm",0],
-                        18:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ota_single_aleos_rm",0],                       
-                        19:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ota_roundtrip_aleos_rm",0],
+                        17:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ota_single_rm",0],
+                        18:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ota_roundtrip_rm",0],
+                        19:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ota_single_aleos_rm",0],                       
+                        20:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ota_roundtrip_aleos_rm",0],
                         }
     
     def create_log_name(self):
@@ -95,9 +96,10 @@ class Runner(object):
             mySuite = basic_airlink.setup_suite(tbd_config_map,fwupdate_config_map, self.tc_ts_map, dut_name = self.device_name)
         else:
             mySuite = basic_airlink.setup_suite(tbd_config_map,fwupdate_config_map, self.tc_ts_map)
+           
         test_cases = mySuite.countTestCases()   
         basic_airlink.slog("\x1b[0mTotal test cases: %d" % test_cases)
-        test_result=runner.run(mySuite)
+#        test_result=runner.run(mySuite)
         fpp.close()
         basic_airlink.slog("\x1b[0mTotal %d test cases PASS." % test_result.success_count )
         basic_airlink.slog("Total %d test cases FAILED." % test_result.failure_count )
@@ -122,7 +124,7 @@ class Launcher(object):
 #            if not check_connection_flag:
 #                sys.exit(2)
         
-            #3, form the devices list 
+            #3, form the devices list            
             combo_list = self.mdt_ins.form_device_fullname()
                 
             #4,write the list to yml             
@@ -135,11 +137,10 @@ class Launcher(object):
          
 #        self.mdt_ins.restore_device_ip()
 if __name__ == "__main__":
-    if fwupdate_config_map["MDT"] == "YES":    
+    if fwupdate_config_map["MDT_LOCAL"] == "YES" :
         test_type = "mdt"
     else:
         test_type = "single"
-    
     Launcher(test_type).run()
     #mdt_ins.restore_device_ip()
     

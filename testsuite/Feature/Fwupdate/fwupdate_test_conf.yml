@@ -1,14 +1,80 @@
 ###############################################################################
 # This configuration file is for Airlink Firmware Update test automation.
 # Company: Sierra Wireless
-# Time: October 11, 2013
+# Time: April 10, 2014
 #
 ###############################################################################
 
 ---
+#======================Test type Switches Configuration====================#
+#Please make sure what test you are doing
 
-MDT: "YES"   #YES/NO
+#Multiple device testing in local way.
+#If set "YES", the IP will be dynamically assigned to device and test all devices connected to switch
+#If set "NO", only ONE device will be tested. 
 
+MDT_LOCAL : "NO"   #YES/NO
+
+#Multiple device testing in OTA way
+#If set "YES", all device list in "OTA_IP_LIST" will be tested
+#If set "NO", just test one device which IP set by "OTA_IP" below
+
+OTA     : "NO"    #YES/NO    Enable OTA or not
+MDT_OTA : "NO"   #YES/NO
+ 
+
+#==========================Fwupdate Main Configuration=================================#
+
+#For single update and roundtrip update
+ALEOS_BUILD_FROM : "4.3.6.E06"
+ALEOS_BUILD_TO : "4.3.5.010"
+ROUNDTRIP_TIMES : 1
+
+#For MDT_LOCAL update
+DEVICE_NUMBER : 2 
+
+#For OTA update
+OTA_IP      : 184.151.218.226
+OTA_IP_LIST : ["184.151.218.226"] 
+
+#FTP server info, For AT Command update
+FTP_SERVER_ADDRESS : "192.168.13.100"
+FTP_USERNAME       : "user1"
+FTP_PASSWORD       : "12345"
+
+#Error attemp time
+ATTEMP_TIME         : 100
+ATTEMPT_VERIFY_TIME : 30
+
+#Timer for applying step
+TIMER:
+    LS  :
+       WAIT_PROCESS_FULL              : 240
+       WAIT_PROCESS_INCREAMENT        : 100       
+    GX  :
+       WAIT_PROCESS_FULL              : 150
+       WAIT_PROCESS_INCREAMENT        : 100
+    RM  : 10000
+
+#The Timer between each step       
+STEP_TIMER : 3 
+
+#==============================================================================#
+
+#==========================   Script needed info     ==========================#
+
+UPDATE_TYPE : ["ALEOS_Software","Radio_Module_Firmware"]
+ALEOS_VERSION_LIST: ["4.3.2","4.3.3","4.3.4","4.3.5","4.3.6"]
+
+
+#==========================Path upgrade configuration==========================#
+
+PATH_LIST : [PATH1,]
+PATH1 : [4.3.4.009,
+         4.3.4.010-I,
+         4.3.5.010,]
+
+#==============================================================================#
 
 #======================RM version for each device by ALEOS====================#
 
@@ -62,7 +128,6 @@ MDT: "YES"   #YES/NO
    DUT_ES440_MC7700_OSM:   ''
    DUT_GX440_MC7700_BEL:   ''
 
-#Add new things to HERE
 4.3.6 : 
    DUT_GX400_MC8705_ROW:   MC8705_OSM001_3552
    DUT_GX400_MC8705_ATT:   MC8705_ATT001_3553
@@ -83,17 +148,9 @@ MDT: "YES"   #YES/NO
    DUT_ES440_MC7700_ATT:   MC7700_ATT002_35102
    DUT_ES440_MC7710_OSM:   ''
    DUT_ES440_MC7700_OSM:   ''
-   DUT_GX440_MC7700_BEL: 
-
-#==============================================================================#
-
-#==========================Path upgrade configuration==========================#
-
-PATH_LIST : [PATH1,]
-
-PATH1 : [4.3.4.009,
-         4.3.4.010-I,
-         4.3.5.010,]
+   DUT_GX440_MC7700_BEL:   ''
+   
+#Add new things to HERE
 
 #==============================================================================#
 
@@ -112,39 +169,7 @@ RM_VER_NAME_MAP :
 
 #==============================================================================#
 
-#==========================Other Configuration=================================#
-# TODO these range values need to confirm
-UPDATE_TYPE : ["ALEOS_Software","Radio_Module_Firmware"]
-
-ALEOS_VERSION_LIST: ["4.3.2","4.3.3","4.3.4","4.3.5","4.3.6"]
-
-ALEOS_BUILD_FROM : "4.3.6.E06"
-ALEOS_BUILD_TO : "4.3.5.010"
-ROUNDTRIP_TIMES : 1
-DEVICE_NUMBER : 2 
-
-
-FTP_SERVER_ADDRESS: "192.168.13.100"
-FTP_USERNAME: user1
-FTP_PASSWORD: "12345"
-
-ATTEMP_TIME: 100
-
-#Timer for applying step
-TIMER:
-    LS  :
-       WAIT_PROCESS_FULL              : 240
-       WAIT_PROCESS_INCREAMENT        : 100       
-    GX  :
-       WAIT_PROCESS_FULL              : 150
-       WAIT_PROCESS_INCREAMENT        : 100
-    RM  : 10000
-
-#The Timer between each step       
-STEP_TIMER : 3 
-
-#==============================================================================#
-
+#==================================Test Case List==============================#
 
 LIST_TESTCASES:
            1  : 
@@ -169,7 +194,7 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate
            3  : 
               TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432009_432a010I"     
-              PRODUCT_VER : ["4.3.3","4.3.4"]
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
               RM_TYPE     : ["MC7700","MC7750","MC7710","MC8705","SL8090"]              
@@ -179,7 +204,7 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate
            4  : 
               TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_sp_GX400"     
-              PRODUCT_VER : ["4.3.3","4.3.4"]
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
               RM_TYPE     : ["MC7700","MC7750","MC7710","MC8705","SL8090","MC5728"]
@@ -190,7 +215,7 @@ LIST_TESTCASES:
                       
            5  : 
               TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432a010_432a010I"     
-              PRODUCT_VER : ["4.3.3","4.3.4"]
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
               RM_TYPE     : ["MC7700","MC7750","MC7710","MC8705","SL8090"]
@@ -200,7 +225,7 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate
            6  : 
               TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432a010I_434009"     
-              PRODUCT_VER : ["4.3.3","4.3.4"]
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
               RM_TYPE     : ["MC7700","MC7750","MC7710","MC8705","SL8090"]
@@ -210,7 +235,7 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate
            7  : 
               TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432009_433014"     
-              PRODUCT_VER : ["4.3.3","4.3.4"]
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
               RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
@@ -220,7 +245,7 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate
            8  : 
               TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432009_433a014"     
-              PRODUCT_VER : ["4.3.3","4.3.4"]
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
               RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
@@ -230,7 +255,7 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate
            9  : 
               TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432a010_433014"     
-              PRODUCT_VER : ["4.3.3","4.3.4"]
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
               RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
@@ -240,7 +265,7 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate
            10  : 
               TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432a010_433a014"     
-              PRODUCT_VER : ["4.3.3","4.3.4"]
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
               RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
@@ -250,7 +275,7 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate
            11  : 
               TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432a010_434009"     
-              PRODUCT_VER : ["4.3.3","4.3.4"]
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
               RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
@@ -260,7 +285,7 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate
            12  : 
               TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433a014_434009"     
-              PRODUCT_VER : ["4.3.3","4.3.4"]
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
               RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
@@ -270,7 +295,7 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate
            13  : 
               TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433014_434009"     
-              PRODUCT_VER : ["4.3.3","4.3.4"]
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
               RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
@@ -280,7 +305,7 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate
            14  : 
               TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432a010_434009"     
-              PRODUCT_VER : ["4.3.3","4.3.4"]
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
               RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
@@ -290,7 +315,7 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate
            15  : 
               TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433a014_434009"     
-              PRODUCT_VER : ["4.3.3","4.3.4"]
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
               RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
@@ -300,7 +325,7 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate
            16  : 
               TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433014_434009"     
-              PRODUCT_VER : ["4.3.3","4.3.4"]
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
               RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]

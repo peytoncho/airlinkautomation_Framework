@@ -24,7 +24,6 @@ import fwupdate_airlink
 import ssh_airlink
 import telnet_airlink
 
-ip_postfix = 1
 fail_flag = 0
 test_area = "Fwupdate"
 test_sub_area=""
@@ -49,21 +48,7 @@ class TsFwupdateUi(unittest.TestCase):
         self.fw_from = fwupdate_config_map["ALEOS_BUILD_FROM"]
         self.fw_to = fwupdate_config_map["ALEOS_BUILD_TO"]
         
-        if fwupdate_config_map["MDT"] == "YES":
-            combo_map = fwupdate_airlink.load_temp_tc_map()                       
-            self.ip_postfix = combo_map["PROCESSING_INDEX"]
-            dut_name = combo_map["COMBO_LIST"][int(self.ip_postfix)-1]
-            basic_airlink.cslog(dut_name, "RED")                       
-            self.dut_ip = "192.168.13."+str(self.ip_postfix)
-            self.fw_ins = fwupdate_airlink.FwupdateAirlink(dut_name,dut_ip=self.dut_ip)
-                               
-        else:
-#            dut_name =  tbd_config_map["DUTS"][0]
-            self.fw_ins = fwupdate_airlink.FwupdateAirlink()
-            #        check the connection between host and dut
-#            self.assertTrue(self.conn_ins.testbed_ready(), "DUT not Ready")
-#            self.assertTrue(self.fw_ins._device_check(), "Device does not match the one set in config file")
-    
+            
     def tearDown(self):
         ''' the test runner will invoke that method after each test
         
@@ -71,10 +56,22 @@ class TsFwupdateUi(unittest.TestCase):
         
         Returns: None
         '''
-        if fwupdate_config_map["MDT"] == "YES":
-            global ip_postfix
-            ip_postfix+=1
         return
+    
+    def testcase_setup(self,test_way):
+        if fwupdate_config_map["MDT_LOCAL"] == "YES" and test_way == "Local":
+            combo_map = fwupdate_airlink.load_temp_tc_map()                       
+            self.ip_postfix = combo_map["PROCESSING_INDEX"]
+            dut_name = combo_map["COMBO_LIST"][int(self.ip_postfix)-1]
+            basic_airlink.cslog(dut_name, "RED")                       
+            self.dut_ip = "192.168.13."+str(self.ip_postfix)
+            self.fw_ins = fwupdate_airlink.FwupdateAirlink(dut_name,dut_ip=self.dut_ip)
+                               
+        elif fwupdate_config_map["MDT_LOCAL"] == "NO" and test_way == "Local":
+            self.fw_ins = fwupdate_airlink.FwupdateAirlink()
+        elif test_way == "ota":
+            self.dut_ip = fwupdate_config_map["OTA_IP"]
+            self.fw_ins = fwupdate_airlink.FwupdateAirlink(dut_ip=self.dut_ip)
 
 #===========================================================================
 # Test Cases
@@ -86,16 +83,15 @@ class TsFwupdateUi(unittest.TestCase):
         
         Returns: None
         '''
-        basic_airlink.cslog("This is test 1", "RED")
-        ret = os.system('ping '+self.dut_ip)       
-#        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case:  ACEManager Firmware single upgrade ", "BLUE")        
-#         fw1 = fwupdate_config_map["ALEOS_BUILD_FROM"]
-#         result = self.fw_ins.fwupdate_ui_aleos(fw1) 
-#         if not "True" in result :
-#             self.fail("Test failed. Reason: "+result)
-#         else:
-#             basic_airlink.cslog(time.ctime(time.time())+" ===>> "+result, "GREEN")
-#             basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE")            
+        self.testcase_setup("Local")       
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case:  ACEManager Firmware single upgrade ", "BLUE")        
+        fw1 = fwupdate_config_map["ALEOS_BUILD_FROM"]
+        result = self.fw_ins.fwupdate_ui_aleos(fw1) 
+        if not "True" in result :
+            self.fail("Test failed. Reason: "+result)
+        else:
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> "+result, "GREEN")
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE")            
   
     def tc_fwupdate_local_roundtrip_aleos(self):
         '''  This method will run the round trip update
@@ -104,37 +100,97 @@ class TsFwupdateUi(unittest.TestCase):
         
         Returns: None
         '''
-        basic_airlink.cslog("This is test 2", "RED")
-#         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware Roundtrip upgrade ", "BLUE", "YELLOW")      
-#        
-#         self.fw_ins.fwrmupdate_ui_roundtrip(self.fw_from, self.fw_to)
-#                               
-#         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
+        self.testcase_setup("Local")
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware Roundtrip upgrade ", "BLUE", "YELLOW")      
+        
+        self.fw_ins.fwrmupdate_ui_roundtrip(self.fw_from, self.fw_to)
+                               
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
 
 
     def tc_fwupdate_local_single_rm(self):
-        basic_airlink.cslog("This is test 3", "RED")
+        self.testcase_setup("Local")
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case:  ACEManager Firmware single upgrade ", "BLUE")        
+        fw1 = fwupdate_config_map["ALEOS_BUILD_FROM"]
+        result = self.fw_ins.fwupdate_ui_aleos(fw1) 
+        if not "True" in result :
+            self.fail("Test failed. Reason: "+result)
+        else:
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> "+result, "GREEN")
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE") 
         pass
     
     def tc_fwupdate_local_roundtrip_rm(self):
-        basic_airlink.cslog("This is test 4", "RED")
+        self.testcase_setup("Local")
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware Roundtrip upgrade ", "BLUE", "YELLOW")      
+        
+        self.fw_ins.fwrmupdate_ui_roundtrip(self.fw_from, self.fw_to)
+                               
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
         pass
     
     def tc_fwupdate_ota_single_aleos(self):
-        basic_airlink.cslog("This is test 5", "RED")
-        pass
+        ''' This method will run the single update
+        
+        Args: None
+        
+        Returns: None
+        '''
+        self.testcase_setup("ota")
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case:  ACEManager Firmware single upgrade ", "BLUE")        
+        fw1 = fwupdate_config_map["ALEOS_BUILD_FROM"]
+        result = self.fw_ins.fwupdate_ui_aleos(fw1) 
+        if not "True" in result :
+            self.fail("Test failed. Reason: "+result)
+        else:
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> "+result, "GREEN")
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE") 
     
     def tc_fwupdate_ota_roundtrip_aleos(self):
-        basic_airlink.cslog("This is test 6", "RED")
-        pass
-    
+        '''  This method will run the round trip update
+        
+        Args: None
+        
+        Returns: None
+        '''
+        self.testcase_setup("ota")
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware Roundtrip upgrade ", "BLUE", "YELLOW")      
+        
+        self.fw_ins.fwrmupdate_ui_roundtrip(self.fw_from, self.fw_to)
+                               
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
+  
     def tc_fwupdate_ota_single_rm(self):
-        basic_airlink.cslog("This is test 7", "RED")
-        pass
+        ''' This method will run the single update
+        
+        Args: None
+        
+        Returns: None
+        '''
+        self.testcase_setup("ota")      
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case:  ACEManager Firmware single upgrade ", "BLUE")        
+        fw1 = fwupdate_config_map["ALEOS_BUILD_FROM"]
+        result = self.fw_ins.fwupdate_ui_aleos(fw1) 
+        if not "True" in result :
+            self.fail("Test failed. Reason: "+result)
+        else:
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> "+result, "GREEN")
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE") 
     
     def tc_fwupdate_ota_roundtrip_rm(self):
-        basic_airlink.cslog("This is test 8", "RED")
-        pass
+        '''  This method will run the round trip update
+        
+        Args: None
+        
+        Returns: None
+        '''
+        self.testcase_setup("ota")
+        self.dut_ip = fwupdate_config_map["OTA_IP"]
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware Roundtrip upgrade ", "BLUE", "YELLOW")      
+        
+        self.fw_ins.fwrmupdate_ui_roundtrip(self.fw_from, self.fw_to)
+                               
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
 
     def tc_fwupdate_local_sp_GX400(self):
         '''  This method will run the round trip update
