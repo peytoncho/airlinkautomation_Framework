@@ -52,13 +52,17 @@ class TsFwupdateAtCommands(unittest.TestCase):
         Returns: None
         '''
         update_fw_version = fwupdate_config_map["ALEOS_BUILD_TO"]
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test Case: At Command Firmware upgrade to "+update_fw_version, "BLUE", "YELLOW")
+        basic_airlink.cslog(time.ctime(time.time())+\
+                            " ===>> Test Case: At Command Firmware upgrade to "+\
+                            update_fw_version, "BLUE", "YELLOW")
         result = self.fw_ins.fw_update_at_command(update_fw_version)
         if result == "False":
             self.fail("FW update is not successfully")
         else:
-            basic_airlink.clog(time.ctime(time.time())+" ===>> Firmware version Verify: Pass", "GREEN")
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
+            basic_airlink.clog(time.ctime(time.time())+\
+                               " ===>> Firmware version Verify: Pass", "GREEN")
+            basic_airlink.cslog(time.ctime(time.time())+\
+                                " ===>> Test case Completed", "BLUE", "YELLOW")
     
     def tc_fwupdate_local_single_rm(self):
         ''' This method will run the single update using At Command
@@ -68,16 +72,20 @@ class TsFwupdateAtCommands(unittest.TestCase):
         
         Returns: None
         '''
-        update_rm_version = fwupdate_config_map["RM_VERSION"]
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test Case: At Command Radio Module upgrade to "+update_rm_version, "BLUE", "YELLOW")
+        update_rm_version = fwupdate_config_map["RM_TO"]
+        basic_airlink.cslog(time.ctime(time.time())+\
+                            " ===>> Test Case: At Command Radio Module upgrade to "+\
+                            update_rm_version, "BLUE", "YELLOW")
         result = self.fw_ins.rm_update_at_command(update_rm_version)
         if result == False:
             self.fail("RM update is not successfully")
         elif "failed" in result:
             self.fail(result)
         else:
-            basic_airlink.clog(time.ctime(time.time())+" ===>> Firmware version Verify: Pass", "GREEN")
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
+            basic_airlink.cslog(time.ctime(time.time())+\
+                               " ===>> Firmware version Verify: Pass", "GREEN")
+            basic_airlink.cslog(time.ctime(time.time())+\
+                                " ===>> Test case Completed", "BLUE", "YELLOW")
 
     def tc_fwupdate_local_single_aleos_rm(self):
         ''' This method will run the single update using At Command
@@ -88,14 +96,16 @@ class TsFwupdateAtCommands(unittest.TestCase):
         Returns: None
         '''
         update_fw_version = fwupdate_config_map["ALEOS_BUILD_TO"]
-        update_rm_version = fwupdate_config_map["RM_VERSION"]
+        update_rm_version = fwupdate_config_map["RM_TO"]
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test Case: At Command Firmware and Radio Module upgrade to "+update_fw_version+" and "+update_rm_version, "BLUE", "YELLOW")
         result = self.fw_ins.fw_rm_update_at_command(update_fw_version, update_rm_version)
         if result == "False":
             self.fail("FW and RM update is not successfully")
         else:
-            basic_airlink.clog(time.ctime(time.time())+" ===>> Firmware and Radio module version Verify: Pass", "GREEN")
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
+            basic_airlink.clog(time.ctime(time.time())+\
+                               " ===>> Firmware and Radio module version Verify: Pass", "GREEN")
+            basic_airlink.cslog(time.ctime(time.time())+\
+                                " ===>> Test case Completed", "BLUE", "YELLOW")
         pass
         
     

@@ -1,3 +1,12 @@
+################################################################################
+#
+# This file includes Multiple-Device test class, and implementation of mdt function
+# Company: Sierra Wireless
+# Time: Apr 10, 2014
+# Author: Airlink
+#
+################################################################################
+
 import at_utilities
 import telnet_airlink
 import selenium_utilities
@@ -12,8 +21,6 @@ airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_FRAMEWORK']
 with open(airlinkautomation_home_dirname+'\config\common_testbed_conf.yml','r') as stream:
     tbd_conf_map = yaml.load(stream)
 
-#DEVICE_NUMBER = int(tbd_conf_map["DEVICE_NUMBER"])
-
 class MdtAirlink(object):
     def __init__(self,device_number):        
         self.se_ins = selenium_utilities.SeleniumAcemanager()
@@ -21,7 +28,18 @@ class MdtAirlink(object):
         self.globalid_lst = []
         self.device_num = device_number      
             
-    def change_global_ip(self):        
+    def change_all_device_ip(self):
+        '''Change all connected devices LAN IP in order
+            eg: DUT1: 192.168.13.31 --> 192.168.13.1
+                DUT2: 192.168.13.31 --> 192.168.13.2
+                ...to 192.168.13.n
+                n is the number of device connected to test bed
+            All devices init IP should be 192.168.13.31
+            
+            Args: None
+            
+            Return: None
+        '''        
         globalid_lst = []
         reboot_fail_lst = []
         retry_counter = 0
@@ -32,9 +50,12 @@ class MdtAirlink(object):
             telnet_ins = telnet_airlink.TelnetAirlink(hostname = curr_ip)
             while retry_counter<=RETRY_TIMES:
                 try:
+                    #To identify the device use their global id
                     while not telnet_ins.connect():
                         print('connection fail')
                     global_id = self.at_ins.get_global_id(telnet_ins)
+                    
+                    #Append the global id to the list, to keep track what index(IP postfix) for the each device 
                     if (not global_id in self.globalid_lst) and (len(global_id)>10): 
                         self.globalid_lst.append(global_id)
                      
@@ -46,6 +67,8 @@ class MdtAirlink(object):
                     retry_counter+=1               
                     continue
                 
+                # The disconnect problem will happen sometimes while sending "atz". 
+                # Here is the error handling for this problem
                 try:    
                     if not self.at_ins.atz_reboot(telnet_ins):
                         if not global_id in reboot_fail_lst:
@@ -56,7 +79,6 @@ class MdtAirlink(object):
                             reboot_fail_lst.remove(global_id)
                             print("Remove "+global_id+" to reboot list")
     
-                    
                 except:
                     if not global_id in reboot_fail_lst:
                             reboot_fail_lst.append(global_id)
@@ -66,6 +88,7 @@ class MdtAirlink(object):
                 retry_counter = 0
                 break
             
+            #If telnet access is not working, this section will start ACEManager to change the IP 
             if retry_counter > RETRY_TIMES:     
                 print "retry done, UI change IP ..... "
                 retry_counter = 0
@@ -78,6 +101,13 @@ class MdtAirlink(object):
         print "Change IP Done!!...Wait for device reboot..."
        
     def ping_devices(self):
+        '''Try to ping each device after IP changed
+        
+        Args: None
+        
+        Return: True if all devices is connected
+        
+        '''
         result_lst = []
         result = True
         for i in range(self.device_num):
@@ -97,6 +127,8 @@ class MdtAirlink(object):
     
     
     def restore_device_ip(self):
+        '''Restore all device IP to 192.168.13.31 after testing
+        '''
         at_ins = at_utilities.AtCommands()
         
         for i in range(self.device_num):

@@ -46,7 +46,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         self.ftp_password = fwupdate_config_map["FTP_PASSWORD"]
         self.rm_update_flag = False
         
-        if fwupdate_config_map["MDT"] == "YES":
+        if fwupdate_config_map["MDT_LOCAL"] == "YES":
             self.conn_ins = telnet_airlink.TelnetAirlink(hostname=self.dut_ip)
         else:
             self.conn_ins = connectivity.Connectivity().connection_types()
@@ -301,14 +301,16 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                and (attempt_count<=fwupdate_config_map["ATTEMPT_VERIFY_TIME"]):
             aleos_version = -1
             attempt_count+=1
-            basic_airlink.clog(time.ctime(time.time())+" ===>> _verify_rm: Connection Failed, try again")
+            basic_airlink.clog(time.ctime(time.time())+\
+                               " ===>> _verify_rm: Connection Failed, try again")
         
         current_rm_version = at_ins.get_rm_version(self.conn_ins)
         rm_version_dict = rm_ver_dict[rm_version_rear]
         self.conn_ins.close()
         basic_airlink.cslog(time.ctime(time.time())+" ===>> "+current_rm_version)
         if (rm_version_dict == "") or (not rm_version_dict in current_rm_version):
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> rm_version_dict: "+rm_version_dict)
+            basic_airlink.cslog(time.ctime(time.time())+\
+                                " ===>> rm_version_dict: "+rm_version_dict)
             result = False
         
         return str(result)
@@ -327,23 +329,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
             device_prefix = "LS"
         
         return device_prefix
-    
-    def _network_state_ckeck(self):
-        
-        at_ins = at_utilities.AtCommands()
-        conn_ins = connectivity.Connectivity()
-        connect_instance = conn_ins.connection_types()
-        network_state = ""
-        while not connect_instance.connect():
-            network_state = "Error"
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> network_ready_ckeck: Connection Failed, retry after 30 seconds")
-            time.sleep(30)
-
-        network_state = at_ins.get_net_state(connect_instance)
-        basic_airlink.cslog(network_state)
-        connect_instance.close()
-        return network_state
-    
+   
     def _get_aleos_path(self, device_prefix, fw_version):
         '''To get aleos firmware file path in local PC
         
@@ -772,37 +758,48 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
     def _execute_at_fw_update(self, update_fw_version):
         ''' This method will call the firmware update function in the library
         
-        Args: None
+        Args: update_fw_version
         
         Returns: None
         '''
-        # future version should added in this list, the version before can not use specified file feature
-        version_list = ["4.3.5"]
         at_ins = at_utilities.AtCommands()
-        current_aleos_version = self._aleos_check()
+        self.current_fw_version = self._aleos_check()
 
         fw_filename = self._get_device_prefix()+"_"+update_fw_version+".bin"
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Step:  Start running the *fwupdate command")
+        basic_airlink.cslog(time.ctime(time.time())+\
+                            " ===>> Step:  Start running the *fwupdate command")
         attempt_count = 1
 
         while (not self.conn_ins.connect()) and (attempt_count<=5):
             aleos_version = -1
             attempt_count+=1
-            basic_airlink.clog(time.ctime(time.time())+" ===>> _execute_at_fw_update: Connection Failed, try again")
+            basic_airlink.clog(time.ctime(time.time())+\
+                               " ===>> _execute_at_fw_update: Connection Failed, try again")
         
-        for version in version_list:
-            if version in current_aleos_version:
-                basic_airlink.cslog(time.ctime(time.time())+" ===>> filename needed")
-                at_ins.fw_update(connect_instance, self.ftp_server_ip, self.ftp_username, self.ftp_password, fw_filename)
-            else:
-                basic_airlink.cslog(time.ctime(time.time())+" ===>> filename changed to fw.bin")
-                self._change_fw_filename(fw_filename)
-                at_ins.fw_update(self.conn_ins, self.ftp_server_ip, self.ftp_username, self.ftp_password)
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Step:  Finished update, wait reboot...")
-        time.sleep(tbd_config_map[self.device_name]["REBOOT_TIMEOUT"])
-        
+        version_match_result = re.match(r'[4]\.[3]\.[2-4]', self.current_fw_version)
+        basic_airlink.cslog(str(version_match_result), "RED")
+        if version_match_result is None:
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> filename needed")
+            at_ins.fw_update(connect_instance, \
+                             self.ftp_server_ip, \
+                             self.ftp_username, \
+                             self.ftp_password, \
+                             fw_filename)            
+        else:
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> filename changed to fw.bin")
+            self._change_fw_filename(fw_filename)
+            result = at_ins.fw_update(self.conn_ins, \
+                             self.ftp_server_ip, \
+                             self.ftp_username, \
+                             self.ftp_password)
 
-           
+
+        if not "failed" in result:
+            basic_airlink.cslog(time.ctime(time.time())+\
+                                " ===>> Step:  Finished update, wait reboot...")
+            time.sleep(tbd_config_map[self.device_name]["REBOOT_TIMEOUT"])
+        return str(result)
+          
     def _execute_at_rm_update(self, update_rm_version):
         ''' 
         This method will call the firmware update function in the library
@@ -812,25 +809,30 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         Returns: None
         '''
         at_ins = at_utilities.AtCommands()
-        current_aleos_version = self._aleos_check()
+        self.current_fw_version = self._aleos_check()
         rm_filename = update_rm_version + ".bin"
         attempt_count = 1
 
         while (not self.conn_ins.connect()) and (attempt_count<=5):
             aleos_version = -1
             attempt_count+=1
-            basic_airlink.clog(time.ctime(time.time())+" ===>> _execute_at_rm_update: Connection Failed, try again")
+            basic_airlink.clog(time.ctime(time.time())+\
+                               " ===>> _execute_at_rm_update: Connection Failed, try again")
             
         
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Step:  Start running the *rmupdate command")
-        result = at_ins.rm_update(self.conn_ins, self.ftp_server_ip, self.ftp_username, self.ftp_password, rm_filename)
-#        basic_airlink.cslog(time.ctime(time.time())+" ===>>Result: "+result)
+        basic_airlink.cslog(time.ctime(time.time())+\
+                            " ===>> Step:  Start running the *rmupdate command")
+        result = at_ins.rm_update(self.conn_ins, \
+                                  self.ftp_server_ip, \
+                                  self.ftp_username, \
+                                  self.ftp_password, \
+                                  rm_filename)
+        
         if not "failed" in result:
-            result = "pass"
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Step:  Finished update, wait reboot...")
-            time.sleep(700)
-        return result
-
+            basic_airlink.cslog(time.ctime(time.time())+\
+                                " ===>> Step:  Finished update, wait reboot...")
+            time.sleep(tbd_config_map[self.device_name]["RM_TIMEOUT"])
+        return str(result)
     
     def _execute_at_fw_rm_update(self, update_fw_version, update_rm_version):
         ''' 
@@ -853,16 +855,24 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         while (not self.conn_ins.connect()) and (attempt_count<=5):
             aleos_version = -1
             attempt_count+=1
-            basic_airlink.clog(time.ctime(time.time())+" ===>> _execute_at_fwrm_update: Connection Failed, try again")
+            basic_airlink.clog(time.ctime(time.time())+\
+                               " ===>> _execute_at_fwrm_update: Connection Failed, try again")
         
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Step:  Start running the *fwrmupdate command")
-        result = at_ins.fw_rm_update(self.conn_ins, self.ftp_server_ip, self.ftp_username, self.ftp_password, fw_filename, rm_filename)
+        basic_airlink.cslog(time.ctime(time.time())+\
+                            " ===>> Step:  Start running the *fwrmupdate command")
+        result = at_ins.fw_rm_update(self.conn_ins, \
+                                     self.ftp_server_ip, \
+                                     self.ftp_username, \
+                                     self.ftp_password, \
+                                     fw_filename, \
+                                     rm_filename)
         if not "failed" in result:
-            result = "pass"
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Step:  Finished update, wait reboot...")
-            time.sleep(700)     
-        return result
-               
+            basic_airlink.cslog(time.ctime(time.time())+\
+                                " ===>> Step:  Finished update, wait reboot...")
+            time.sleep(tbd_config_map[self.device_name]["RM_TIMEOUT"]+\
+                       tbd_config_map[self.device_name]["REBOOT_TIMEOUT"])
+        return str(result)
+              
     def _change_fw_filename(self,fw_filename):
         ''' 
         This method will change the firmware filename so that the name 

@@ -99,7 +99,7 @@ class Runner(object):
            
         test_cases = mySuite.countTestCases()   
         basic_airlink.slog("\x1b[0mTotal test cases: %d" % test_cases)
-#        test_result=runner.run(mySuite)
+        test_result=runner.run(mySuite)
         fpp.close()
         basic_airlink.slog("\x1b[0mTotal %d test cases PASS." % test_result.success_count )
         basic_airlink.slog("Total %d test cases FAILED." % test_result.failure_count )
