@@ -124,10 +124,13 @@ class MdtAirlink(object):
                 result = False
                 break
         return result
-    
-    
+        
     def restore_device_ip(self):
         '''Restore all device IP to 192.168.13.31 after testing
+        
+        Agrs: None
+        
+        Return: None
         '''
         at_ins = at_utilities.AtCommands()
         
@@ -145,6 +148,13 @@ class MdtAirlink(object):
         print("DONE!")
     
     def ui_change_ip(self,selenium_instance,global_id_list):
+        '''change the IP from ACEManager
+        
+        Args: selenium_instance
+             global id list
+             
+        Ruturn: None
+        '''
         retry_counter = 0
         seccess_flag = False
         while retry_counter <= RETRY_TIMES and seccess_flag == False:
@@ -194,6 +204,14 @@ class MdtAirlink(object):
             print(line)
     
     def form_device_fullname(self):
+        '''Create the device full name list from the test bed
+            eg: DUT_GX400_MC8705_ATT
+            this name will refer to the common_testbed_conf.yml naming role.
+            
+            Args: None
+            
+            Return: device_list
+        '''
         device_lst = []
         retry_flag = 1
         for i in range(self.device_num):

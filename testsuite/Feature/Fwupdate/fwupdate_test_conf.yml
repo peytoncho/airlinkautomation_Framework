@@ -52,11 +52,15 @@ ATTEMPT_VERIFY_TIME : 30
 #Timer for applying step
 TIMER:
     LS  :
-       WAIT_PROCESS_FULL              : 240
-       WAIT_PROCESS_INCREAMENT        : 100       
+       WAIT_PROCESS_FULL_LOCAL          : 240
+       WAIT_PROCESS_INCREAMENT_LOCAL    : 100
+       WAIT_PROCESS_FULL_OTA            : 300
+       WAIT_PROCESS_INCRETMENT_OTA      : 170      
     GX  :
-       WAIT_PROCESS_FULL              : 150
-       WAIT_PROCESS_INCREAMENT        : 100
+       WAIT_PROCESS_FULL_LOCAL          : 150
+       WAIT_PROCESS_INCREAMENT_LOCAL    : 100
+       WAIT_PROCESS_FULL_OTA            : 200
+       WAIT_PROCESS_INCRETMENT_OTA      : 170      
     RM  : 10000
 
 #The Timer between each step       

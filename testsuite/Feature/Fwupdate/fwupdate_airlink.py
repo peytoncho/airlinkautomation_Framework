@@ -560,14 +560,21 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
             
             basic_airlink.clog("WAIT_PROCESS_RM", "RED")
         
-        else:       
+        if not "192.168." in self.dut_ip:
+            #OTA
             if "I" in fw_version:
-                timer_wait_logout = fwupdate_config_map["TIMER"][device_prefix]["WAIT_PROCESS_INCREAMENT"]
+                timer_tag = "WAIT_PROCESS_INCREAMENT_OTA"
                 basic_airlink.cslog("Pick timer for waiting INCREMENT update process", "RED")
                 
             else:
+                timer_tag = "WAIT_PROCESS_FULL_OTA"
                 timer_wait_logout = fwupdate_config_map["TIMER"][device_prefix]["WAIT_PROCESS_FULL"]
-                basic_airlink.cslog("Pick timer for waiting FULL update process", "RED")
+                basic_airlink.cslog("Pick timer for waiting FULL update process", "RED")            
+          
+        else:
+            #LOCAL 
+                 
+        timer_wait_logout = fwupdate_config_map["TIMER"][device_prefix][timer_tag]
         basic_airlink.cslog("Wait Applyting Step", "BLUE")
         try:
             result = False
@@ -804,7 +811,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         ''' 
         This method will call the firmware update function in the library
         
-        Args: None
+        Args: update_rm_version
         
         Returns: None
         '''
@@ -818,8 +825,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
             attempt_count+=1
             basic_airlink.clog(time.ctime(time.time())+\
                                " ===>> _execute_at_rm_update: Connection Failed, try again")
-            
-        
+                  
         basic_airlink.cslog(time.ctime(time.time())+\
                             " ===>> Step:  Start running the *rmupdate command")
         result = at_ins.rm_update(self.conn_ins, \
