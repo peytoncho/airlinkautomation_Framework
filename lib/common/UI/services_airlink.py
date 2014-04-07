@@ -60,7 +60,6 @@ class LowpowerAirlink(selenium_utilities.SeleniumAcemanager):
             return self.set_element_by_name(driver, msciid_str, str(lpm))
         
         else:
-            
             basic_airlink.slog("No need change LPM " + ret)  
             return True
                   
@@ -118,8 +117,7 @@ class EmailAirlink(selenium_utilities.SeleniumAcemanager):
     def get_smtp_test_status(self,driver):
         msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_CFG_CMN_SMTP_TEST_STS)
         ret = self.get_element_by_id(driver, msciid_str)
-        return ret
-    
+        return ret    
     
     def set_smtp_ip_address(self,driver,value):
         pass
@@ -145,69 +143,7 @@ class EmailAirlink(selenium_utilities.SeleniumAcemanager):
         driver.switch_to_alert().accept()
     
     
-class TelnetSshAirlink(selenium_utilities.SeleniumAcemanager):
-    def __init__(self):
-        ''' TODO
-        '''        
-        selenium_utilities.SeleniumAcemanager.__init__(self)    
-    
-    def get_remote_login_server_mode(self, driver):
-        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_CFG_TELNET_SSH)
-        ret = self.get_element_by_name(driver, msciid_str)
-        return ret
-    
-    def get_remote_login_server_port(self,driver):
-        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_CFG_CMN_TELNET_PORT)
-        ret = self.get_element_by_name(driver, msciid_str)
-        return ret
 
-    def get_remote_login_server_port_timeout(self,driver):
-        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_CFG_CMN_TNET_TIMEOUT)
-        ret = self.get_element_by_name(driver, msciid_str)
-        return ret
-    
-    def get_maximum_login_attempts(self,driver):
-        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_CFG_SSH_MAX_LOGIN_TRY)
-        ret = self.get_element_by_name(driver, msciid_str)
-        return ret
-    
-    def get_telnet_ssh_echo(self,driver):
-        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_CFG_CMN_ECHO_TELNET)
-        ret = self.get_element_by_name(driver, msciid_str)
-        return ret
-    
-    def get_ssh_status(self,driver):
-        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_STS_SSH_STATUS)
-        ret = self.get_element_by_id(driver, msciid_str)
-        return ret
-    
-    
-    
-    def set_remote_login_server_mode(self, driver, option):
-        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_CFG_TELNET_SSH)
-        return self.select_item_by_visible_text(driver, msciid_str, "SSH")
-        
-    
-    def set_remote_login_server_port(self, driver, value):
-        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_CFG_CMN_TELNET_PORT)
-        return self.set_element_by_name(driver, msciid_str, value)
-
-    def set_remote_login_server_port_timeout(self, driver, value):
-        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_CFG_CMN_TNET_TIMEOUT)
-        return self.set_element_by_name(driver, msciid_str, value)
-    
-    def set_maximum_login_attempts(self, driver, value):
-        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_CFG_SSH_MAX_LOGIN_TRY)
-        return self.set_element_by_name(driver, msciid_str, value)
-    
-    def set_telnet_ssh_echo(self, driver, value):
-        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_CFG_CMN_ECHO_TELNET)
-        return self.set_element_by_name(driver, msciid_str, value)
-    
-    def click_make_ssh_key(self, driver, value):
-        msciid_str = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_CFG_MAKE_SSH_KEYS)
-        return self.set_element_by_name(driver, msciid_str, value)
-    
     
     
     

@@ -568,11 +568,17 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                 
             else:
                 timer_tag = "WAIT_PROCESS_FULL_OTA"
-                timer_wait_logout = fwupdate_config_map["TIMER"][device_prefix]["WAIT_PROCESS_FULL"]
                 basic_airlink.cslog("Pick timer for waiting FULL update process", "RED")            
           
         else:
-            #LOCAL 
+            #LOCAL
+            if "I" in fw_version:
+                timer_tag = "WAIT_PROCESS_INCREAMENT_LOCAL"
+                basic_airlink.cslog("Pick timer for waiting INCREMENT update process", "RED")
+                
+            else:
+                timer_tag = "WAIT_PROCESS_FULL_LOCAL"
+                basic_airlink.cslog("Pick timer for waiting FULL update process", "RED")
                  
         timer_wait_logout = fwupdate_config_map["TIMER"][device_prefix][timer_tag]
         basic_airlink.cslog("Wait Applyting Step", "BLUE")
@@ -739,7 +745,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                         if "warning.gif" in step_3_pic:
                             basic_airlink.cslog("Warning picture...", "RED")
                             error_element = self.driver.find_element_by_xpath(".//div[@id='file_upload']/center[2]/div/div[3]/div[2]")
-                            error_msg = error_element.text()
+                            error_msg = error_element.text
                             basic_airlink.cslog(error_msg, "RED")
                             continue
                         self.driver.quit()
