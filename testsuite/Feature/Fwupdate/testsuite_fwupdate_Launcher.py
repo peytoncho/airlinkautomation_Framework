@@ -115,14 +115,14 @@ class Launcher(object):
         if self.test_type == "mdt":
         
             #1, change all connected devices IP
-#            self.mdt_ins.change_global_ip()
-#            print "IP changed Waiting..."
-#            time.sleep(90)
+            self.mdt_ins.change_global_ip()
+            print "IP changed Waiting..."
+            time.sleep(90)
          
             #2, check devices connection
-#            check_connection_flag = self.mdt_ins.ping_devices()
-#            if not check_connection_flag:
-#                sys.exit(2)
+            check_connection_flag = self.mdt_ins.ping_devices()
+            if not check_connection_flag:
+                sys.exit(2)
         
             #3, form the devices list            
             combo_list = self.mdt_ins.form_device_fullname()
@@ -131,16 +131,18 @@ class Launcher(object):
             for device in combo_list:
                 i = combo_list.index(device)
                 dump_tc_list(combo_list,str(i+1))              
-                Runner(device = device, test_type = self.test_type).run()
+                Runner(device = device, test_type = self.test_type).run()           
         else:
              Runner(test_type = self.test_type).run()      
          
-#        self.mdt_ins.restore_device_ip()
+
 if __name__ == "__main__":
     if fwupdate_config_map["MDT_LOCAL"] == "YES" :
         test_type = "mdt"
     else:
         test_type = "single"
     Launcher(test_type).run()
-    #mdt_ins.restore_device_ip()
+    
+    if test_type == "mdt":
+        self.mdt_ins.restore_device_ip()
     

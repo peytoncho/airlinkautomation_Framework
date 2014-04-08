@@ -15,8 +15,8 @@ import time
 import htmlreport
 
 import basic_airlink
-import ts_telnet_ssh
-
+import ts_telnet
+import ts_ssh
 
 test_area = "Services"
 test_sub_area="TELNET_SSH"
@@ -29,26 +29,26 @@ tbd_config_map, telnetssh_config_map = basic_airlink.get_config_data(test_area,t
 # mapping info about test case/test module/testsuite class/selection
 #             test module . test class       test case          flag of  test case selected 
 tc_ts_map = {
-    1:      [ts_telnet_ssh.TsTelnetSsh,"tc_telnet_login_attempt_wrong_password",0],
-    2:      [ts_telnet_ssh.TsTelnetSsh,"tc_telnet_login_attempt_wrong_username",0],
-    3:      [ts_telnet_ssh.TsTelnetSsh,"tc_local_ui_telnet_change_ssh",0],
-    4:      [ts_telnet_ssh.TsTelnetSsh,"tc_local_ui_telnet_change_diff_port",0], 
-    5:      [ts_telnet_ssh.TsTelnetSsh,"tc_local_ui_ssh_change_diff_port",0],
-    6:      [ts_telnet_ssh.TsTelnetSsh,"tc_ota_telnet_change_ssh",0],
-    7:      [ts_telnet_ssh.TsTelnetSsh,"tc_ota_telnet_change_diff_port",0],
-    8:      [ts_telnet_ssh.TsTelnetSsh,"tc_ota_ssh_change_diff_port",0],
-    9:      [ts_telnet_ssh.TsTelnetSsh,"tc_local_ui_ssh_echo_disable",0],
-    10:     [ts_telnet_ssh.TsTelnetSsh,"tc_local_ui_ssh_check_state",0],     
-    11:     [ts_telnet_ssh.TsTelnetSsh,"tc_local_ssh_as_root",0],           
-    12:     [ts_telnet_ssh.TsTelnetSsh,"tc_dummy",0],                
-    13:     [ts_telnet_ssh.TsTelnetSsh,"tc_dummy",0],           
-    14:     [ts_telnet_ssh.TsTelnetSsh,"tc_dummy",0],           
-    15:     [ts_telnet_ssh.TsTelnetSsh,"tc_dummy",0],           
-    16:     [ts_telnet_ssh.TsTelnetSsh,"tc_dummy",0],         
-    17:     [ts_telnet_ssh.TsTelnetSsh,"tc_dummy",0],          
-    18:     [ts_telnet_ssh.TsTelnetSsh,"tc_dummy",0],           
-    19:     [ts_telnet_ssh.TsTelnetSsh,"tc_dummy",0],           
-    20:     [ts_telnet_ssh.TsTelnetSsh,"tc_dummy",0],           
+    1:      [ts_telnet.TsTelnet,"tc_telnet_login_attempt_wrong_password",0],
+    2:      [ts_telnet.TsTelnet,"tc_telnet_login_attempt_wrong_username",0],
+    3:      [ts_telnet.TsTelnet,"tc_local_ui_telnet_change_ssh",0],
+    4:      [ts_telnet.TsTelnet,"tc_local_ui_telnet_change_diff_port",0], 
+    5:      [ts_telnet.TsTelnet,"tc_local_ui_ssh_change_diff_port",0],
+    6:      [ts_telnet.TsTelnet,"tc_ota_telnet_change_ssh",0],
+    7:      [ts_telnet.TsTelnet,"tc_ota_telnet_change_diff_port",0],
+    8:      [ts_telnet.TsTelnet,"tc_ota_ssh_change_diff_port",0],
+    9:      [ts_telnet.TsTelnet,"tc_local_ui_ssh_echo_disable",0],
+    10:     [ts_telnet.TsTelnet,"tc_local_ui_ssh_check_state",0],     
+    11:     [ts_telnet.TsTelnet,"tc_local_ssh_as_root",0],           
+    12:     [ts_ssh.TsSsh,"tc_dummy",0],                
+    13:     [ts_ssh.TsSsh,"tc_dummy",0],           
+    14:     [ts_ssh.TsSsh,"tc_dummy",0],           
+    15:     [ts_ssh.TsSsh,"tc_dummy",0],           
+    16:     [ts_ssh.TsSsh,"tc_dummy",0],         
+    17:     [ts_ssh.TsSsh,"tc_dummy",0],          
+    18:     [ts_ssh.TsSsh,"tc_dummy",0],           
+    19:     [ts_ssh.TsSsh,"tc_dummy",0],           
+    20:     [ts_ssh.TsSsh,"tc_dummy",0],           
 #    21:     [ts_snmp_trap.TsSnmpTrap,"tc_dummy", 0],
 #    22:     [ts_snmp_version_2.TsSnmpVersion2,"tc_dummy",0],
 #    23:     [ts_snmp_version_3.TsSnmpVersion3,"tc_dummy",0],

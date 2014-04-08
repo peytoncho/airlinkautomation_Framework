@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 import logging
-import os
+import os,sys
 import time
 import basic_airlink
 import connectivity
@@ -63,7 +63,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         '''
         
         result = self._pre_fwupdate_rm(update_rm_version)
-        if result == 'complete':
+        if result == 'completed':
             if "True" in self._verify_rm(update_rm_version):
                 result = "RM verify: True"
             else:
@@ -96,7 +96,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                 result = "ALEOS verify: "+self._verify_aleos(update_fw_version)                
         return result
     
-    def fwrmupdate_ui_roundtrip(self, fw_from, fw_to):
+    def fwrmupdate_ui_aleos_roundtrip(self, fw_from, fw_to):
         '''This method will update ALEOS with the version in parameter
         
         Args:fw_version
@@ -121,6 +121,37 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
             
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Downgrade to: "+fw_from, "BLUE")
             result = self.fwupdate_ui_aleos(fw_from)
+            if not "True" in result :
+                self.fail("Test failed. Reason: "+result)
+            else:
+                basic_airlink.cslog(time.ctime(time.time())+" ===>> "+result, "GREEN")
+                basic_airlink.cslog(time.ctime(time.time())+" ===>> Round: "+str(round+1)+" Completed", "BLUE")
+    
+    def fwrmupdate_ui_rm_roundtrip(self, rm_from, rm_to):
+        '''This method will update ALEOS with the version in parameter
+        
+        Args:fw_version
+        
+        Return:result, If there are any issues during the update process, 
+        the result will return the error code from the specific point
+        
+        Notes: Keep the browser closed before calling this function
+        '''
+             
+        times_count = fwupdate_config_map["ROUNDTRIP_TIMES"]
+        for round in range(times_count):
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Round: "+str(round+1)+" Started", "BLUE")
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Upgrade to: "+rm_to, "BLUE")
+            
+            result = self.fwupdate_ui_rm(rm_to)
+            if not "True" in result :
+                self.fail("Test failed. Reason: "+result)
+            else:
+                basic_airlink.cslog(time.ctime(time.time())+" ===>> "+result, "GREEN")
+                basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE") 
+            
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Downgrade to: "+rm_from, "BLUE")
+            result = self.fwupdate_ui_rm(rm_from)
             if not "True" in result :
                 self.fail("Test failed. Reason: "+result)
             else:
@@ -443,7 +474,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         #Because the update type DOM index is changed after 4.3.5,
         #here is checking the ALEOS version to determine which index should be used.
         result = re.match(r'[4]\.[3]\.[2-4]', self.current_fw_version)
-        basic_airlink.cslog(str(result), "RED")
+#        basic_airlink.cslog(str(result), "RED")
         if result is None:
             update_type_element_index = 1
                 
@@ -529,12 +560,12 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                     pass
                 basic_airlink.cslog(time.ctime(time.time())+" ===>> Applying Firmware ...")
                 self.rm_update_flag = True
-
+                timer_wait_logout = fwupdate_config_map["TIMER"]["RM"]
                 try:
                     result = True          
-#                    WebDriverWait(driver, timeout=tbd_config_map[self.device_name]["RM_TIMEOUT"]).until(\
-#                                               EC.visibility_of_element_located((By.ID, "aceMasterInn")))
-                    dirver.implicity_wait(tbd_config_map[self.device_name]["RM_TIMEOUT"])
+                    WebDriverWait(driver, timeout=int(timer_wait_logout)).\
+                                until(EC.visibility_of_element_located((By.ID, "aceMasterInn")))
+                    time.sleep()
                 except:
                     basic_airlink.cslog(time.ctime(time.time())+" ===>> Fail on RM update")
                     result = False                    
@@ -556,43 +587,50 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         device_prefix = self._get_device_prefix()
         wait_rm_frame = 45
         if update_type == 'Radio_Module_Firmware':
-            timer_wait_logout = fwupdate_config_map["TIMER"]['RM']
-            
-            basic_airlink.clog("WAIT_PROCESS_RM", "RED")
+            timer_wait_logout = fwupdate_config_map["TIMER"]["RM"]
+#            timer_wait_logout = tbd_config_map[self.device_name]["RM_TIMEOUT"]
+            basic_airlink.cslog("WAIT_PROCESS_RM", "RED")
         
-        if not "192.168." in self.dut_ip:
-            #OTA
-            if "I" in fw_version:
-                timer_tag = "WAIT_PROCESS_INCREAMENT_OTA"
-                basic_airlink.cslog("Pick timer for waiting INCREMENT update process", "RED")
+        else:      
+            if not "192.168." in self.dut_ip:
+                #OTA
+                if "I" in fw_version:
+                    timer_tag = "WAIT_PROCESS_INCREAMENT_OTA"
+                    basic_airlink.cslog("Pick timer for waiting INCREMENT update process", "RED")
                 
-            else:
-                timer_tag = "WAIT_PROCESS_FULL_OTA"
-                basic_airlink.cslog("Pick timer for waiting FULL update process", "RED")            
+                else:
+                    timer_tag = "WAIT_PROCESS_FULL_OTA"
+                    basic_airlink.cslog("Pick timer for waiting FULL update process", "RED")            
           
-        else:
-            #LOCAL
-            if "I" in fw_version:
-                timer_tag = "WAIT_PROCESS_INCREAMENT_LOCAL"
-                basic_airlink.cslog("Pick timer for waiting INCREMENT update process", "RED")
-                
             else:
-                timer_tag = "WAIT_PROCESS_FULL_LOCAL"
-                basic_airlink.cslog("Pick timer for waiting FULL update process", "RED")
+                #LOCAL
+                if "I" in fw_version:
+                    timer_tag = "WAIT_PROCESS_INCREAMENT_LOCAL"
+                    basic_airlink.cslog("Pick timer for waiting INCREMENT update process", "RED")
+                
+                else:
+                    timer_tag = "WAIT_PROCESS_FULL_LOCAL"
+                    basic_airlink.cslog("Pick timer for waiting FULL update process", "RED")
                  
-        timer_wait_logout = fwupdate_config_map["TIMER"][device_prefix][timer_tag]
+            timer_wait_logout = fwupdate_config_map["TIMER"][device_prefix][timer_tag]
+        
         basic_airlink.cslog("Wait Applyting Step", "BLUE")
         try:
             result = False
             WebDriverWait(driver, timeout=wait_rm_frame).until(EC.visibility_of_element_located((By.ID, "main1")))            
             basic_airlink.cslog(time.ctime(time.time())+" ===>> RM frame shows") 
         except:
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> no RM frame")        
+            if update_type == 'Radio_Module_Firmware':
+                basic_airlink.cslog(time.ctime(time.time())+" ===>> Applying RM...")
+                
+            else: 
+                basic_airlink.cslog(time.ctime(time.time())+" ===>> no RM frame")        
             try:
                 result = True          
-                WebDriverWait(driver, timeout=timer_wait_logout-wait_rm_frame).until(EC.visibility_of_element_located((By.ID, "aceMasterInn")))
-
+                WebDriverWait(driver, timeout=int(timer_wait_logout-wait_rm_frame)).\
+                until(EC.visibility_of_element_located((By.ID, "aceMasterInn")))
             except:
+                basic_airlink.cslog(str(sys.exc_info()))
                 basic_airlink.cslog(time.ctime(time.time())+" ===>> Fail on wait log out")
                 result = False
          

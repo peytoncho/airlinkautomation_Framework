@@ -1,13 +1,16 @@
 ################################################################################
-# This basic configuration and methods applies for all tests.
+# This basic configuration and methods apply for all tests.
 #
 # Company: Sierra Wireless
-# Time: Feb 14, 2013
-# Author: Airlink
-# Change History: 
-#       Mar 12, 2014 msciids package instead of single msciids.py file.
-#       Mar 13, 2014 got MSCIID_ALL dynamically.
-#
+# Time   : Feb 14, 2013
+# Author : Airlink
+# History: 
+#       Mar 12, 2014 msciids folder instead of single msciids.py file.
+#       Mar 13, 2014 dynamic MSCIID_ALL instead of static MSCIID_ALL;
+#                    added msciids_path.
+#       Mar 27, 2014 merged feature_telnet_path and feature_ssh_path to 
+#                    feature_telnet_ssh_path,
+#                    added feature_email_path, setup_suite_mdt().
 ################################################################################
 
 import logging
@@ -19,13 +22,11 @@ import os
 import sys
 import argparse
 
-from multiprocessing import Process
 import time
 import ftplib
-#import msciids
 import re
 
-airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_FRAMEWORK'] 
+airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME'] 
 
 slash = "\\" if sys.platform == 'win32' else "/"
 
@@ -47,12 +48,12 @@ feature_security_path  = slash+'testsuite'+slash+'Feature'+slash+'Security'
 feature_apps_path      = slash+'testsuite'+slash+'Feature'+slash+'Applications' 
 feature_datausage_path = slash+'testsuite'+slash+'Feature'+slash+'Applications'+slash+'Data_Usage' 
 feature_services_path  = slash+'testsuite'+slash+'Feature'+slash+'Services' 
-feature_telnet_path    = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'Telnet_SSH' 
-feature_ssh_path       = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'SSH' 
+feature_telnet_ssh_path= slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'Telnet_SSH' 
 feature_snmp_path      = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'SNMP' 
 feature_sms_path       = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'SMS' 
-feature_lpm_path       = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'LPM'
-feature_email_path       = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'Email'
+feature_lpm_path       = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'LPM' 
+feature_email_path     = slash+'testsuite'+slash+'Feature'+slash+'Services'+slash+'Email'
+
 testclass_path         = slash+'testsuite'+slash+'Feature'+slash+'TestClass' 
 smoke_path             = slash+'testsuite'+slash+'Smoke' 
 performance_path       = slash+'testsuite'+slash+'Performance'
@@ -85,10 +86,10 @@ shortVersionList=lambda chars: chars.split("_")[1]
 addDotModuleKeyList = lambda element:reduce(lambda a,b: str(a)+"."+str(b), element)   
 MSCIID_ALL=dict(zip(map(addDotModuleKeyList, map(shortVersionList, map(filenameToModuleNameList, files))),\
                     map(__import__, map(filenameToModuleNameList, files))))
-TAB_ALL  = ["Status","WAN_Cellular","LAN","Security","VPN","Services","GPS","Events_Reporting", "Serial", "Applications", "I_O", "Admin"]
 
+TAB_ALL  = ["Status","WAN_Cellular","LAN","Security","VPN","Services","GPS","Events_Reporting", "Serial", "Applications", "I_O", "Admin"]
 FEATURE_AREA     = ["WAN","LAN","Security","VPN","GPS","Template","FWupdate","Services","Serial", "Admin"]
-FEATUTE_SUB_AREA = ["LPM", "Telnet","SNMP","SMS"]
+FEATUTE_SUB_AREA = ["LPM", "Telnet_SSH","SNMP","SMS", "EMAIL"]
 
 #Valid WnsRemoteEx Commands to control Anritsu callbox:
 WNS_START_SS_APP           = 0   #Starts up SmartStudio application 
@@ -175,9 +176,6 @@ verbosity_map ={ \
 yes_no_map  ={"Yes": 1, "No": 0}
 
 display_map ={"Display": 1, "No Display": 0}
-
-
-
 
  
 def slog(msg):
@@ -546,9 +544,9 @@ def get_config_data(area_name, sub_area_name):
     elif area_name == "Serial":
         fo=open(airlinkautomation_home_dirname+feature_serial_path+slash+\
                 'serial_test_conf.yml','r')
-    elif area_name == "Services" and sub_area_name == "SSH":
-        fo=open(airlinkautomation_home_dirname+feature_ssh_path+slash+\
-                'ssh_test_conf.yml','r')
+    elif area_name == "Services" and sub_area_name == "Telnet_SSH":
+        fo=open(airlinkautomation_home_dirname+feature_telnet_ssh_path+slash+\
+                'telnet_test_conf.yml','r')
     elif area_name == "Services" and sub_area_name == "SNMP":
         fo=open(airlinkautomation_home_dirname+feature_snmp_path+slash+\
                 'snmp_test_conf.yml','r')
@@ -561,9 +559,6 @@ def get_config_data(area_name, sub_area_name):
     elif area_name == "Services" and sub_area_name == "EMAIL":
         fo=open(airlinkautomation_home_dirname+feature_email_path+slash+\
                 'email_test_conf.yml','r')
-    elif area_name == "Services" and sub_area_name == "TELNET_SSH":
-        fo=open(airlinkautomation_home_dirname+feature_telnet_path+slash+\
-                'telnet_ssh_test_conf.yml','r')     
     elif area_name == "TestClass":
         fo=open(airlinkautomation_home_dirname+testclass_path+slash+\
                 'testclass_test_conf.yml','r')
@@ -599,7 +594,7 @@ def get_ace_config_data():
         None
         
     Returns: 
-        ace_config_data : list, main configuration data from testbed yaml file 
+        ace_config_data : list, main configuration data from yaml file 
     '''
             
     stream = open(airlinkautomation_home_dirname+slash+'lib'+slash+\
@@ -627,25 +622,24 @@ def get_parent_msciid_dict(aleos_version_short_format):
     
     return parent_msciid_dict
 
-def get_ele_config_data(aleos_version_short):
+
+def get_ele_config_data(aleos_version_short_format):
     ''' 
-    read ACEmanager page yaml file
+    read acemanager_msciids.xyz.yaml (msciid => TAB/SUBTAB/MINITAB) file, xyx is aleos version short format
     Args: 
-        aleos_version_short   ALEOS release version short format,e.g 4.3.5
+        aleos_version_short_format   ALEOS release version short format,e.g 435
         
     Returns: 
-        ele_config_data : list, all elements' msciids from testbed yaml file 
+        ele_config_data : list, all elements' msciids from yaml file 
     '''
-            
+    
     stream = open(airlinkautomation_home_dirname+slash+'lib'+slash+\
-                  'common'+slash+'UI'+slash+'acemanager_msciids_'+aleos_version_short+'.yml', 'r')
+                  'common'+slash+'UI'+slash+'acemanager_msciids_'+aleos_version_short_format+'.yml', 'r')
     ele_config_data = yaml.load(stream)
     stream.close()   
     
     return ele_config_data
 
-
-         
 def append_sys_path():
     ''' Append path to system
     '''
@@ -666,12 +660,11 @@ def append_sys_path():
     sys.path.append(airlinkautomation_home_dirname+feature_admin_path)
     sys.path.append(airlinkautomation_home_dirname+feature_status_path)
     sys.path.append(airlinkautomation_home_dirname+feature_services_path)
-    sys.path.append(airlinkautomation_home_dirname+feature_telnet_path)
-    sys.path.append(airlinkautomation_home_dirname+feature_ssh_path)
+    sys.path.append(airlinkautomation_home_dirname+feature_telnet_ssh_path)
     sys.path.append(airlinkautomation_home_dirname+feature_snmp_path)
-    sys.path.append(airlinkautomation_home_dirname+feature_email_path)
     sys.path.append(airlinkautomation_home_dirname+feature_sms_path)
     sys.path.append(airlinkautomation_home_dirname+feature_lpm_path)
+    sys.path.append(airlinkautomation_home_dirname+feature_email_path)
     sys.path.append(airlinkautomation_home_dirname+feature_fwupdate_path)
     sys.path.append(airlinkautomation_home_dirname+feature_template_path)
     sys.path.append(airlinkautomation_home_dirname+feature_security_path)
@@ -843,8 +836,6 @@ def setup_suite_v2(area_config_map, tc_ts_map):
                 
         
     return test_suite    
-
-
 
 def setup_suite_v3(tbd_config_map, area_config_map, tc_ts_map):
     """  Gather all the tests from this test module into a test suite.  
@@ -1040,14 +1031,6 @@ def setup_suite_v3(tbd_config_map, area_config_map, tc_ts_map):
         
     return test_suite   
 
-def setup_suite_mdt(tc_ts_map, tc_pick_list):
-    test_suite = unittest.TestSuite()
-    for i in tc_pick_list:
-        test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
-        tc_ts_map[i][2]=1
-    return test_suite
-
-
 def setup_suite(tbd_config_map, area_config_map, tc_ts_map, dut_name=None):
     """  Gather all the tests from this test module into a test suite.  
     Handle the different arguments from test suite launcher command line:
@@ -1066,11 +1049,12 @@ def setup_suite(tbd_config_map, area_config_map, tc_ts_map, dut_name=None):
         test suite, including the selected testcases
         
     """
-    if dut_name is None: 
-        device_name = tbd_config_map["DUTS"][0]
+    if dut_name == None:
+		device_name = tbd_config_map["DUTS"][0]
     else:
-        device_name = dut_name
-    aleos_sw_ver= tbd_config_map[device_name]["ALEOS_FW_VER"][:6]
+		device_name = dut_name
+       
+    aleos_sw_ver= tbd_config_map[device_name]["ALEOS_FW_VER"][:6]   
     if aleos_sw_ver[5]==' ' or aleos_sw_ver[5]=='.': 
         aleos_sw_ver=aleos_sw_ver[:5]
     device_model= tbd_config_map[device_name]["MODEL"]
@@ -1119,8 +1103,8 @@ def setup_suite(tbd_config_map, area_config_map, tc_ts_map, dut_name=None):
                 and (not aleos_sw_ver in area_config_map["LIST_TESTCASES"][i]["OBSOLETE_VER"]):
                     test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
                     tc_ts_map[i][2]=1
-                    print '\n,',i, tc_ts_map[i][1] 
-                    
+                    print '\n,', i, tc_ts_map[i][1] 
+
         return test_suite   
                     
     if args.tc_no_range_arg:
@@ -1158,7 +1142,7 @@ def setup_suite(tbd_config_map, area_config_map, tc_ts_map, dut_name=None):
                      
                     test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
                     tc_ts_map[i][2]=1
-                    print '\n',i, tc_ts_map[i][1]
+                    print '\n', i, tc_ts_map[i][1]
 
     elif args.prd_ver_arg:
         
@@ -1168,7 +1152,11 @@ def setup_suite(tbd_config_map, area_config_map, tc_ts_map, dut_name=None):
             tc_type_list  = area_config_map["LIST_TESTCASES"][i]["TEST_TYPE"]
             dut_type_list = area_config_map["LIST_TESTCASES"][i]["DEVICE_TYPE"]     
             rm_type_list  = area_config_map["LIST_TESTCASES"][i]["RM_TYPE"]
-            
+ 
+            abso_ver_list = area_config_map["LIST_TESTCASES"][i]["OBSOLETE_VER"]
+            if args.prd_ver_arg in abso_ver_list or args.prd_ver_arg < prd_ver_list[0]:
+                tc_ts_map[i][2]=1   #skip flag   
+                                   
             if not dut_type_list:    #empty
                 dut_type_list = tbd_config_map["DUT_MODELS"]["ALL"]
             if not rm_type_list:     #empty
@@ -1177,14 +1165,13 @@ def setup_suite(tbd_config_map, area_config_map, tc_ts_map, dut_name=None):
             if tc_ts_map[i][2]==0 \
                 and (device_model in dut_type_list) \
                 and (not aleos_sw_ver in area_config_map["LIST_TESTCASES"][i]["OBSOLETE_VER"])\
-                and args.prd_ver_arg in prd_ver_list \
                 and (not args.tc_type_arg  or args.tc_type_arg  in tc_type_list)  \
                 and (not args.dut_type_arg or args.dut_type_arg in dut_type_list) \
                 and (not args.rm_type_arg  or args.rm_type_arg  in rm_type_list) :
             
                 test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
                 tc_ts_map[i][2]=1
-                print i, tc_ts_map[i][1]
+                print '\n', i, tc_ts_map[i][1]
 
 
     elif args.tc_type_arg:
@@ -1209,7 +1196,7 @@ def setup_suite(tbd_config_map, area_config_map, tc_ts_map, dut_name=None):
                 
                 test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
                 tc_ts_map[i][2]=1
-                print i, tc_ts_map[i][1]
+                print '\n', i, tc_ts_map[i][1]
 
     elif args.dut_type_arg:
        
@@ -1230,7 +1217,7 @@ def setup_suite(tbd_config_map, area_config_map, tc_ts_map, dut_name=None):
                 
                 test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
                 tc_ts_map[i][2]=1
-                print i, tc_ts_map[i][1]
+                print '\n', i, tc_ts_map[i][1]
                 
     elif args.rm_type_arg:
        
@@ -1250,7 +1237,7 @@ def setup_suite(tbd_config_map, area_config_map, tc_ts_map, dut_name=None):
                 
                 test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
                 tc_ts_map[i][2]=1
-                print '\n',i, tc_ts_map[i][1]
+                print '\n', i, tc_ts_map[i][1]
                 
     return test_suite 
 
@@ -1380,14 +1367,15 @@ def make_csv(csv_file_path, test_result, area_config_map):
     
     return result
 
-#def get_msciid_name(msciid):
-#    ''' Get msciid name given value
-#    TODO
-#    ARGS: 
-#        msciid: value 
-#    RETURNS:
-#        msciid's key: string
-#    '''    
+def get_msciid_name(aleos_sw_ver_short, msciid):
+    ''' Get msciid name given value
+    TODO
+    ARGS: 
+        msciid: value 
+    RETURNS:
+        msciid's key: string
+    '''    
+    pass
 #    ret = [key for key, val in msciids__dict__.iteritems() if val == int(msciid) and "MSCIID" in key]
 #    if len(ret) == 0:
 #        logging.debug("No Key found for MSCIID:" + str(msciid))
@@ -1397,5 +1385,10 @@ def make_csv(csv_file_path, test_result, area_config_map):
 #    else:  
 #        txt = "".join(ret)
 #        return '/'.join(re.findall('.', txt))
-    
 
+def setup_suite_mdt(tc_ts_map, tc_pick_list):
+    test_suite = unittest.TestSuite()
+    for i in tc_pick_list:
+        test_suite.addTest(tc_ts_map[i][0](tc_ts_map[i][1])) 
+        tc_ts_map[i][2]=1
+    return test_suite

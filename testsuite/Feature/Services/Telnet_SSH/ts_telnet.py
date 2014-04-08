@@ -22,20 +22,14 @@ sys.path.append(airlinkautomation_home_dirname+"/lib/common")
 ba.append_sys_path()
 tbd_config_map, telnetssh_config_map = ba.get_config_data(test_area,test_sub_area)
 
-
-class TsTelnetSsh(unittest.TestCase):
+class TsTelnet(unittest.TestCase):
     def setUp(self):
         #Pick info from config file        
         self.device = tbd_config_map["DUTS"][0]
         connectivity_ins = connectivity.Connectivity(device_name = self.device)
-        
-        if telnetssh_config_map["OTA"] is True:
-            self.ip_addr = telnetssh_config_map["OTA_IP"]
-            self.url = "HTTP://"+self.ip_addr+":9191"
-        else:
-            self.ip_addr = connectivity_ins.address()
-            self.url = connectivity_ins.get_url()
-        
+        conn_ins = connectivity_ins.connection_types()
+        self.ip_addr = connectivity_ins.address()
+        self.url = connectivity_ins.get_url()       
         self.username = tbd_config_map[self.device]["USERNAME"]
         self.password = tbd_config_map[self.device]["PASSWORD"]
         #Ping device
