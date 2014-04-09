@@ -18,6 +18,7 @@ import basic_airlink
 import mdt_airlink
 import yaml
 
+
 import ts_fwupdate_ui
 import ts_fwupdate_at_commands
 
@@ -93,7 +94,8 @@ class Runner(object):
                 description = description_text
                 )
         if self.test_type == "mdt":
-            mySuite = basic_airlink.setup_suite(tbd_config_map,fwupdate_config_map, self.tc_ts_map, dut_name = self.device_name)
+            tbd_config_map["DUTS"][0] = self.device_name
+            mySuite = basic_airlink.setup_suite(tbd_config_map,fwupdate_config_map, self.tc_ts_map)
         else:
             mySuite = basic_airlink.setup_suite(tbd_config_map,fwupdate_config_map, self.tc_ts_map)
            
@@ -115,7 +117,7 @@ class Launcher(object):
         if self.test_type == "mdt":
         
             #1, change all connected devices IP
-            self.mdt_ins.change_global_ip()
+            self.mdt_ins.change_all_device_ip()
             print "IP changed Waiting..."
             time.sleep(90)
          
@@ -131,18 +133,15 @@ class Launcher(object):
             for device in combo_list:
                 i = combo_list.index(device)
                 dump_tc_list(combo_list,str(i+1))              
-                Runner(device = device, test_type = self.test_type).run()           
+                Runner(device = device, test_type = self.test_type).run()
+            self.mdt_ins.restore_device_ip()           
         else:
              Runner(test_type = self.test_type).run()      
          
-
 if __name__ == "__main__":
-    if fwupdate_config_map["MDT_LOCAL"] == "YES" :
-        test_type = "mdt"
-    else:
-        test_type = "single"
-    Launcher(test_type).run()
-    
-    if test_type == "mdt":
-        self.mdt_ins.restore_device_ip()
-    
+     if fwupdate_config_map["MDT_LOCAL"] == "YES" :
+         test_type = "mdt"
+     else:
+         test_type = "single"
+     Launcher(test_type).run()
+#    mdt_airlink.MdtAirlink(fwupdate_config_map["DEVICE_NUMBER"]).restore_device_ip()

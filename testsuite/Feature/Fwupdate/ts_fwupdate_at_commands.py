@@ -32,6 +32,21 @@ class TsFwupdateAtCommands(unittest.TestCase):
         '''
         basic_airlink.cslog(time.ctime(time.time())+" ===>> ============ Test Completed====================")
     
+    def testcase_setup(self,test_way):
+        if fwupdate_config_map["MDT_LOCAL"] == "YES" and test_way == "Local":
+            combo_map = fwupdate_airlink.load_temp_tc_map()                       
+            self.ip_postfix = combo_map["PROCESSING_INDEX"]
+            dut_name = combo_map["COMBO_LIST"][int(self.ip_postfix)-1]
+            basic_airlink.cslog(dut_name, "RED")                       
+            self.dut_ip = "192.168.13."+str(self.ip_postfix)
+            self.fw_ins = fwupdate_airlink.FwupdateAirlink(dut_name,dut_ip=self.dut_ip)
+                               
+        elif fwupdate_config_map["MDT_LOCAL"] == "NO" and test_way == "Local":
+            self.fw_ins = fwupdate_airlink.FwupdateAirlink()
+        elif test_way == "ota":
+            self.dut_ip = fwupdate_config_map["OTA_IP"]
+            self.fw_ins = fwupdate_airlink.FwupdateAirlink(dut_ip=self.dut_ip)
+    
 #===============================================================================
 # Test cases
 #===============================================================================
@@ -39,6 +54,7 @@ class TsFwupdateAtCommands(unittest.TestCase):
         ''' This method will run the single update using At Command
         The firmware version to be updated is read from "fwupdate_test_conf.yml" with label "ALEOS_BUILD_TO"  
         '''
+        self.testcase_setup('Local')
         update_fw_version = fwupdate_config_map["ALEOS_BUILD_TO"]
         basic_airlink.cslog(time.ctime(time.time())+\
                             " ===>> Test Case: At Command Firmware upgrade to "+\
@@ -56,6 +72,7 @@ class TsFwupdateAtCommands(unittest.TestCase):
         ''' This method will run the single update using At Command
         The Radio Module version to be updated is read from "fwupdate_test_conf.yml" with label RM_VERSION 
         '''
+        self.testcase_setup('Local')
         update_rm_version = fwupdate_config_map["RM_TO"]
         basic_airlink.cslog(time.ctime(time.time())+\
                             " ===>> Test Case: At Command Radio Module upgrade to "+\
@@ -75,6 +92,7 @@ class TsFwupdateAtCommands(unittest.TestCase):
         ''' This method will run the single update using At Command
         The firmware and Radio Module version to be updated is read from "fwupdate_test_conf.yml" with label RM_VERSION 
         '''
+        self.testcase_setup('Local')
         update_fw_version = fwupdate_config_map["ALEOS_BUILD_TO"]
         update_rm_version = fwupdate_config_map["RM_TO"]
         basic_airlink.cslog(time.ctime(time.time())+\
@@ -92,6 +110,7 @@ class TsFwupdateAtCommands(unittest.TestCase):
     def tc_fwupdate_local_roundtrip_aleos(self):
         ''' This test case method will repeat the firmware update as round trip. 
         '''
+        self.testcase_setup('Local')
         round_count = fwupdate_config_map["ROUNDTRIP_TIMES"]
         fw1 = fwupdate_config_map["ALEOS_BUILD_FROM"]
         fw2 = fwupdate_config_map["ALEOS_BUILD_TO"]
@@ -120,6 +139,7 @@ class TsFwupdateAtCommands(unittest.TestCase):
     def tc_fwupdate_local_roundtrip_rm(self):
         ''' This test case method will repeat the firmware update as round trip. 
         '''
+        self.testcase_setup('Local')
         round_count = fwupdate_config_map["ROUNDTRIP_TIMES"]
         rm1 = fwupdate_config_map["RM_FROM"]
         rm2 = fwupdate_config_map["RM_TO"]
@@ -146,6 +166,7 @@ class TsFwupdateAtCommands(unittest.TestCase):
     def tc_fwupdate_local_roundtrip_aleos_rm(self):
         ''' This test case method will repeat the firmware update as round trip. 
         '''
+        self.testcase_setup('Local')
         round_count = fwupdate_config_map["ROUNDTRIP_TIMES"]
         fw1 = fwupdate_config_map["ALEOS_BUILD_FROM"]
         fw2 = fwupdate_config_map["ALEOS_BUILD_TO"]
@@ -172,6 +193,7 @@ class TsFwupdateAtCommands(unittest.TestCase):
         ''' This method will run the single update using At Command
         The firmware version to be updated is read from "fwupdate_test_conf.yml" with label "ALEOS_BUILD_TO"  
         '''
+        self.testcase_setup('ota')
         update_fw_version = fwupdate_config_map["ALEOS_BUILD_TO"]
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test Case: At Command Firmware upgrade to "+update_fw_version, "BLUE", "YELLOW")
         result = self.fw_ins.fw_update_at_command(update_fw_version)
@@ -184,6 +206,7 @@ class TsFwupdateAtCommands(unittest.TestCase):
         ''' This method will run the single update using At Command
         The Radio Module version to be updated is read from "fwupdate_test_conf.yml" with label RM_VERSION 
         '''
+        self.testcase_setup('ota')
         update_rm_version = fwupdate_config_map["RM_VERSION"]
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test Case: At Command Radio Module upgrade to "+update_rm_version, "BLUE", "YELLOW")
         result = self.fw_ins.rm_update_at_command(update_rm_version)
@@ -198,6 +221,7 @@ class TsFwupdateAtCommands(unittest.TestCase):
         ''' This method will run the single update using At Command
         The Radio Module version to be updated is read from "fwupdate_test_conf.yml" with label RM_VERSION 
         '''
+        self.testcase_setup('ota')
         update_rm_version = fwupdate_config_map["RM_VERSION"]
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test Case: At Command Radio Module upgrade to "+update_rm_version, "BLUE", "YELLOW")
         result = self.fw_ins.fw_rm_update_at_command(update_rm_version)
@@ -211,6 +235,7 @@ class TsFwupdateAtCommands(unittest.TestCase):
     def tc_fwupdate_ota_roundtrip_aleos(self):
         ''' This test case method will repeat the firmware update as round trip. 
         '''
+        self.testcase_setup('ota')
         round_count = fwupdate_config_map["ROUNDTRIP_TIMES"]
         fw1 = fwupdate_config_map["ALEOS_BUILD_FROM"]
         fw2 = fwupdate_config_map["ALEOS_BUILD_TO"]
@@ -237,6 +262,7 @@ class TsFwupdateAtCommands(unittest.TestCase):
     def tc_fwupdate_ota_roundtrip_rm(self):
         ''' This test case method will repeat the firmware update as round trip. 
         '''
+        self.testcase_setup('ota')
         round_count = fwupdate_config_map["ROUNDTRIP_TIMES"]
         fw1 = fwupdate_config_map["ALEOS_BUILD_FROM"]
         fw2 = fwupdate_config_map["ALEOS_BUILD_TO"]
@@ -264,6 +290,7 @@ class TsFwupdateAtCommands(unittest.TestCase):
     def tc_fwupdate_ota_roundtrip_aleos_rm(self):
         ''' This test case method will repeat the firmware update as round trip. 
         '''
+        self.testcase_setup('ota')
         round_count = fwupdate_config_map["ROUNDTRIP_TIMES"]
         fw1 = fwupdate_config_map["ALEOS_BUILD_FROM"]
         fw2 = fwupdate_config_map["ALEOS_BUILD_TO"]

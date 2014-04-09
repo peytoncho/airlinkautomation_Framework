@@ -1863,7 +1863,7 @@ class AtCommands(object):
         cmd="AT*EVDODIVERSITY="+flag
         return self.assign(instance,cmd)    
 
-    def fw_update(self, instance, ftp_server_ip, username, password):
+    def fw_update(self, instance, ftp_server_ip, username, password, fw_filename=""):
         ''' FW update by internal AT command AT*FWUPDATA=<server_ip>,<username>,<password>
         need to rename build *.bin file to fw.bin in FTP server shared folder
         
@@ -1878,7 +1878,7 @@ class AtCommands(object):
         '''
         
         basic_airlink.slog("Step:  Update FW by AT command")
-        cmd="AT*FWUPDATE= "+ftp_server_ip +","+username+","+password
+        cmd="AT*FWUPDATE= "+ftp_server_ip +","+username+","+password+","+fw_filename
         return self.assign(instance,cmd)    
  
     def fw_rm_update(self, instance, ftp_server_ip, username, password, fw_filename, rm_filename):
@@ -1951,7 +1951,7 @@ class AtCommands(object):
         
         basic_airlink.slog("Step:  get global ID by AT command")
         cmd="AT*GLOBALID?"
-        return self.assign(instance,cmd)       
+        return self.query(instance,cmd)       
         
     def get_gps_data(self, instance):
         ''' Get GPS data by AT command  AT*GPSDATA?
@@ -2083,7 +2083,7 @@ class AtCommands(object):
         
         basic_airlink.slog("Step:  get IP manager update interval by AT command")
         cmd="AT*IPMGRUPDATE"+ip_manager_server_num+"?"
-        return self.assign(instance,cmd)       
+        return self.query(instance,cmd)       
     
     def set_ip_manager_update_interval(self, instance, ip_manager_server_num, ip_manager_update_interval):
         '''Set IP manager update interval by AT command 

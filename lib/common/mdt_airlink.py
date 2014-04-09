@@ -10,14 +10,14 @@
 import at_utilities
 import telnet_airlink
 import selenium_utilities
-import os
+import os,sys
 import time
 import yaml
 import connectivity
 
 RETRY_TIMES = 10
 
-airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_FRAMEWORK']
+airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME']
 with open(airlinkautomation_home_dirname+'\config\common_testbed_conf.yml','r') as stream:
     tbd_conf_map = yaml.load(stream)
 
@@ -54,7 +54,7 @@ class MdtAirlink(object):
                     while not telnet_ins.connect():
                         print('connection fail')
                     global_id = self.at_ins.get_global_id(telnet_ins)
-                    
+                    print str(global_id)
                     #Append the global id to the list, to keep track what index(IP postfix) for the each device 
                     if (not global_id in self.globalid_lst) and (len(global_id)>10): 
                         self.globalid_lst.append(global_id)
@@ -64,6 +64,7 @@ class MdtAirlink(object):
                                          
                     self.at_ins.set_ethernet_device_ip(telnet_ins, change_ip)
                 except:
+                    print str(sys.exc_info())
                     retry_counter+=1               
                     continue
                 

@@ -21,6 +21,7 @@ import at_utilities
 import shutil
 import yaml
 import re
+import gc
 
 test_area = "Fwupdate"
 test_sub_area=""
@@ -93,7 +94,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                     result = "ALEOS and RM verify: False"
                     self.rm_update_flag = False
             else: 
-                result = "ALEOS verify: "+self._verify_aleos(update_fw_version)                
+                result = "ALEOS verify: "+self._verify_aleos(update_fw_version)               
         return result
     
     def fwrmupdate_ui_aleos_roundtrip(self, fw_from, fw_to):
@@ -560,17 +561,11 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                     pass
                 basic_airlink.cslog(time.ctime(time.time())+" ===>> Applying Firmware ...")
                 self.rm_update_flag = True
-                timer_wait_logout = fwupdate_config_map["TIMER"]["RM"]
-                try:
-                    result = True          
-                    WebDriverWait(driver, timeout=int(timer_wait_logout)).\
-                                until(EC.visibility_of_element_located((By.ID, "aceMasterInn")))
-                    time.sleep()
-                except:
-                    basic_airlink.cslog(time.ctime(time.time())+" ===>> Fail on RM update")
-                    result = False                    
-#                time.sleep(tbd_config_map[self.device_name]["RM_TIMEOUT"])
-                
+                timer_wait_logout = tbd_config_map[self.device_name]["RM_TIMEOUT"]
+                gc.disable()              
+                time.sleep(timer_wait_logout)
+                gc.enable()
+                result = True               
         except:
             result = False
             basic_airlink.cslog(time.ctime(time.time())+" ===>> No RM update required")
@@ -769,6 +764,8 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
             
             #check the update window if is still in the browser
             quit_flag = False
+            error_flag = False
+            error_msg = ""
             if not self._wait_update_process(self.driver, update_type, fw_version):
                 if not "check.gif" in self._get_step_pic_name(self.driver, 1):
                     self.driver.quit()
@@ -781,25 +778,28 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                 if not "check.gif" in step_3_pic:
                     if not self._rm_update(self.driver, path_list[1]):
                         if "warning.gif" in step_3_pic:
-                            basic_airlink.cslog("Warning picture...", "RED")
+                            basic_airlink.cslog("Applying Step ===> Warning picture...", "RED")
                             error_element = self.driver.find_element_by_xpath(".//div[@id='file_upload']/center[2]/div/div[3]/div[2]")
                             error_msg = error_element.text
-                            basic_airlink.cslog(error_msg, "RED")
-                            continue
+                            basic_airlink.cslog("Applying Step ===> "+error_msg, "RED")
+                            error_flag = True
                         self.driver.quit()
                     quit_flag = True
                     break
             break
         
-        time.sleep(step_timer)                   
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Done ALEOS Updating")
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Rebooting ...")
-        reboot_time= tbd_config_map[self.device_name]["REBOOT_TIMEOUT"]
-        time.sleep(reboot_time)
+        if not error_flag is True:
+            time.sleep(step_timer)                   
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Done ALEOS Updating")
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Rebooting ...")
+            reboot_time= tbd_config_map[self.device_name]["REBOOT_TIMEOUT"]
+            time.sleep(reboot_time)
+            result = "completed"
+        else:
+            basic_airlink.cslog("Error, test case failed...", "RED")
+            result = "Error message: "+ error_msg
         if quit_flag != True:
-            self.driver.quit()
-
-        result = "completed"
+            self.driver.quit()     
         return result
     
 
@@ -831,11 +831,11 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         basic_airlink.cslog(str(version_match_result), "RED")
         if version_match_result is None:
             basic_airlink.cslog(time.ctime(time.time())+" ===>> filename needed")
-            at_ins.fw_update(connect_instance, \
+            result = at_ins.fw_update(self.conn_ins, \
                              self.ftp_server_ip, \
                              self.ftp_username, \
                              self.ftp_password, \
-                             fw_filename)            
+                             fw_filename=fw_filename)            
         else:
             basic_airlink.cslog(time.ctime(time.time())+" ===>> filename changed to fw.bin")
             self._change_fw_filename(fw_filename)
@@ -844,8 +844,8 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                              self.ftp_username, \
                              self.ftp_password)
 
-
-        if not "failed" in result:
+        result = str(result)
+        if not "False" in result:
             basic_airlink.cslog(time.ctime(time.time())+\
                                 " ===>> Step:  Finished update, wait reboot...")
             time.sleep(tbd_config_map[self.device_name]["REBOOT_TIMEOUT"])
@@ -877,8 +877,8 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                                   self.ftp_username, \
                                   self.ftp_password, \
                                   rm_filename)
-        
-        if not "failed" in result:
+        result = str(result)
+        if not "False" in result:
             basic_airlink.cslog(time.ctime(time.time())+\
                                 " ===>> Step:  Finished update, wait reboot...")
             time.sleep(tbd_config_map[self.device_name]["RM_TIMEOUT"])
@@ -916,7 +916,8 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                                      self.ftp_password, \
                                      fw_filename, \
                                      rm_filename)
-        if not "failed" in result:
+        result = str(result)
+        if not "False" in result:
             basic_airlink.cslog(time.ctime(time.time())+\
                                 " ===>> Step:  Finished update, wait reboot...")
             time.sleep(tbd_config_map[self.device_name]["RM_TIMEOUT"]+\
