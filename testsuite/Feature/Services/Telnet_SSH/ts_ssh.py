@@ -85,14 +85,7 @@ class TsSsh(unittest.TestCase):
 #         ba.cslog(str6)        
         pass
     
-    def tc_telnet_login_attempt_wrong_username(self):
-        '''Change the value of Maximum login attempt to other number, to see if the wrong login attempt 
-        can match the number set in the ACEManager 
-        '''        
-        #1, Navigate to services->telnet/ssh page, change the Maximum login attempt time, apply, reboot
-        #2, Login with Telnet, try incorrect password for the times which was set in the previous step
-        #3, verify the time after trying login
-        pass
+
     
     def tc_local_ssh_as_root(self):
         ssh_ins = ssh_airlink.SshAirlink(username="root", password="v3r1fym3")
@@ -108,13 +101,13 @@ class TsSsh(unittest.TestCase):
 # Local, UI
 #===============================================================================
     
-    def tc_local_ui_telnet_change_ssh(self):
+    def tc_local_ui_ssh_change_telnet(self):
         '''Change the value of Maximum login attempt to other number, to see if the wrong login attempt 
         can match the number set in the ACEManager 
         '''
         #1, Navigate to services->telnet/ssh page, change to SSH mode, apply, reboot
         self.driver = self.telnetssh_ins.login(self.url, self.username, self.password)
-        self.telnetssh_ins.set_remote_login_server_mode(self.driver, "SSH")
+        self.telnetssh_ins.set_remote_login_server_mode(self.driver, "Telnet")
         self.telnetssh_ins.apply_reboot(self.driver)
         
         time.sleep(tbd_config_map[self.device]["REBOOT_TIMEOUT"])
@@ -148,39 +141,7 @@ class TsSsh(unittest.TestCase):
         self.telnetssh_ins.set_remote_login_server_mode(self.driver, "Telnet")
         self.telnetssh_ins.apply_reboot(self.driver)
         self.driver.close()
-    
-    def tc_local_ui_telnet_change_diff_port(self):
-        '''Change the value of port, to see if the connection with new port is working 
-        '''
-        #1, Navigate to services->telnet/ssh page, change to SSH mode, apply, reboot
-        self.driver = self.telnetssh_ins.login(self.url, self.username, self.password)
-        port = telnetssh_config_map["CONFIG_PORT"]
-        origin_port = tbd_config_map[self.device]["CONNECTION_PORT"]
-        ba.cslog("Change to port: "+str(port))
-        self.telnetssh_ins.set_remote_login_server_port(self.driver, port)
-        self.telnetssh_ins.apply_reboot(self.driver)
-        time.sleep(tbd_config_map[self.device]["REBOOT_TIMEOUT"])
-        ret = os.system('ping '+self.ip_addr)
-        while ret!=0:
-            ret = os.system('ping '+self.ip_addr)     
-        
-        ba.cslog("Device up...")
-        
-        #2, Try telnet to device with the new port
-        telnet_ins = telnet_airlink.TelnetAirlink(port=int(port))
-        if not telnet_ins.connect():
-            ba.cslog("Telnet access failed..", "RED")
-            self.fail("Telnet access failed..")
-        else:
-            ba.cslog("Telnet access success", "GREEN")
-        
-        ba.cslog("Change back to original port: "+str(origin_port))
-        self.driver = self.telnetssh_ins.login(self.url, self.username, self.password)
-        self.telnetssh_ins.set_remote_login_server_port(self.driver, origin_port)
-        self.telnetssh_ins.apply_reboot(self.driver)
-        time.sleep(tbd_config_map[self.device]["REBOOT_TIMEOUT"])
-        self.driver.close()
-        ba.cslog("Test case Done", "BLUE")                 
+                    
                 
     def tc_local_ui_ssh_change_diff_port(self):
         '''Change the value of port, to see if the connection with new port is working 
@@ -224,9 +185,6 @@ class TsSsh(unittest.TestCase):
         self.telnetssh_ins.click_make_ssh_key(driver, value)
         pass
     
-    def tc_local_ui_telnet_echo_disable(self):
-        pass
-
     def tc_local_ui_ssh_echo_disable(self):
         ssh_ins = ssh_airlink.SshAirlink(port=22)
         if not ssh_ins.connect():

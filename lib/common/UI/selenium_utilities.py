@@ -1555,16 +1555,6 @@ class SeleniumAcemanager(unittest.TestCase):
         
         return ret
     
-    def set_device_ip(self, driver, value):
-        '''Set device IP in ACEManager
-        
-        Args: driver
-              value
-        Return: True/False    
-        '''
-        id = str(basic_airlink.MSCIID_ALL[self.aleos_sw_ver].MSCIID_CFG_CMN_HOST_LOCAL_IP)
-        return self.set_element_by_name(driver, id, value)  
-    
     def status_page(self, driver):
         ''' ACEmanager navigates to status page
 

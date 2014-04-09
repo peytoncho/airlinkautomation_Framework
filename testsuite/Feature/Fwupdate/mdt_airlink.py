@@ -14,6 +14,7 @@ import os,sys
 import time
 import yaml
 import connectivity
+import lan_airlink
 
 RETRY_TIMES = 10
 
@@ -25,6 +26,7 @@ class MdtAirlink(object):
     def __init__(self,device_number):        
         self.se_ins = selenium_utilities.SeleniumAcemanager()
         self.at_ins = at_utilities.AtCommands()
+        self.lan_ins = lan_airlink.LanAirlink()
         self.globalid_lst = []
         self.device_num = device_number      
             
@@ -93,7 +95,7 @@ class MdtAirlink(object):
             if retry_counter > RETRY_TIMES:     
                 print "retry done, UI change IP ..... "
                 retry_counter = 0
-                operated_global_id = self.ui_change_ip(self.se_ins,self.globalid_lst)
+                operated_global_id = self.ui_change_ip(self.lan_ins,self.globalid_lst)
                 if operated_global_id in reboot_fail_lst:
                     reboot_fail_lst.remove(operated_global_id)
             
@@ -148,7 +150,7 @@ class MdtAirlink(object):
          
         print("DONE!")
     
-    def ui_change_ip(self,selenium_instance,global_id_list):
+    def ui_change_ip(self,lan_instance,global_id_list):
         '''change the IP from ACEManager
         
         Args: selenium_instance
@@ -160,9 +162,9 @@ class MdtAirlink(object):
         seccess_flag = False
         while retry_counter <= RETRY_TIMES and seccess_flag == False:
            
-            driver = selenium_instance.login('http://192.168.13.31:9191','user','12345')
+            driver = lan_instance.login('http://192.168.13.31:9191','user','12345')
             time.sleep(5)
-            global_id = selenium_instance.get_global_id(driver)
+            global_id = lan_instance.get_global_id(driver)
             
             if global_id == '':
                 continue
@@ -172,11 +174,11 @@ class MdtAirlink(object):
                 global_id_index = global_id_list.index(global_id)
             else:
                 global_id_index = global_id_list.index(global_id)
-            if not selenium_instance.set_device_ip(driver, "192.168.13."+str(global_id_index+1)):
+            if not lan_instance.set_ethernet_device_ip(driver, "192.168.13."+str(global_id_index+1)):
                 retry_counter+=1
                 driver.close()
                 continue
-            selenium_instance.apply_reboot(driver)
+            lan_instance.apply_reboot(driver)
                 
             time.sleep(5)
             driver.close()
