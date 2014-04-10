@@ -13,7 +13,7 @@
 #If set "YES", the IP will be dynamically assigned to device and test all devices connected to switch
 #If set "NO", only ONE device will be tested. 
 
-MDT_LOCAL : "YES"   #YES/NO
+MDT_LOCAL : "NO"   #YES/NO
 
 #Multiple device testing in OTA way
 #If set "YES", all device list in "OTA_IP_LIST" will be tested
@@ -27,7 +27,7 @@ MDT_OTA : "NO"   #YES/NO
 
 #For single update and roundtrip update
 ALEOS_BUILD_FROM : "4.3.4.009"
-ALEOS_BUILD_TO : "4.3.6.E06"
+ALEOS_BUILD_TO : "4.3.6.E09"
 
 RM_FROM : "MC8705_ATT001_1032" 
 RM_TO : "MC8705_ATT001_3553"
@@ -160,7 +160,7 @@ PATH1 : [4.3.4.009,
    DUT_ES440_MC7700_OSM:   ''
    DUT_GX440_MC7700_BEL:   ''
    
-#Add new things to HERE
+#Add new release to HERE
 
 #==============================================================================#
 
