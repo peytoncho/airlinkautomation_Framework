@@ -10,10 +10,12 @@ lan_ins = la.LanAirlink()
 ta_ins = ta.TelnetAirlink()
 at_ins = at_utilities.AtCommands()
 
+#ta_ins.read_until_safe(expected_key)
+
 ftp_ip = "192.168.13.101"
-ftp_username = "user"
+ftp_username = "user1"
 ftp_pwd = "12345"
-rm_filename = "fw.bin"
+rm_filename = "MC8705_ATT001_3553.bin"
 
 while not ta_ins.connect():
     print "connection fail"

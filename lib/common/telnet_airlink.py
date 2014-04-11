@@ -4,7 +4,7 @@ import time
 import sys
 import inspect
 
-class TelnetAirlink:
+class TelnetAirlink():
     """TelnetAirlink class provides a simple telnet connection with default
 	connection parameters. In this class all timeout exception are caught to
 	prevent termination.
@@ -161,8 +161,9 @@ class TelnetAirlink:
                 
             else:
                 keep_catching = False
-
+            print str(rcv)
         return rcved_list
+
 
     def expect_safe(self, expected_keys):
         """expect_safe is the same as expect method, already implemented in
@@ -181,7 +182,7 @@ class TelnetAirlink:
             The third element is the received string till expected key.
         """
         try:
-            rcv = self.tn.expect(expected_keys)
+            rcv = self.tn.expect(expected_keys,timeout=60)
             return rcv
 
         except EOFError:

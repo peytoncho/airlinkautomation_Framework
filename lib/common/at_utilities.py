@@ -1899,7 +1899,7 @@ class AtCommands(object):
         
         basic_airlink.slog("Step:  Update FW and RM by AT command")
         cmd="AT*FWRMUPDATE="+ftp_server_ip +","+username+","+password +"," +fw_filename+","+rm_filename
-        ret = instance.command(at_cmd)
+        ret = instance.command(cmd)
         ret_str = ''.join(ret)
         basic_airlink.cslog(ret_str, "RED")
         return ret_str     
@@ -1921,9 +1921,9 @@ class AtCommands(object):
         
         basic_airlink.slog("Step:  Update RM by AT command")
         cmd="AT*RMUPDATE="+ftp_server_ip +","+username+","+password +"," +rm_filename
-        ret = instance.command(at_cmd)
+        ret = instance.command(cmd)
         ret_str = ''.join(ret)
-        basic_airlink.cslog(ret_str, "RED")
+#        basic_airlink.cslog(ret_str, "RED")
         return ret_str      
 
     def template_upload(self, instance, ftp_server_ip, username, password, template_filename):
