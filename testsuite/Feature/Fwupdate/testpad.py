@@ -15,7 +15,7 @@ at_ins = at_utilities.AtCommands()
 ftp_ip = "192.168.13.101"
 ftp_username = "user1"
 ftp_pwd = "12345"
-rm_filename = "MC8705_ATT001_3553.bin"
+rm_filename = "MC8705_ATT001_1032.bin"
 
 while not ta_ins.connect():
     print "connection fail"

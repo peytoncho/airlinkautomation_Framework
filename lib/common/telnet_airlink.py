@@ -75,18 +75,18 @@ class TelnetAirlink():
                 
             else:
                 logging.error("login time out")
-#                self.tn.close()
+                self.tn.close()
                 return False
         
         if len(self.password):
 
             if self.read_until_safe("Password: "):
-#                self.tn.write(self.password + "\n")
-                print self.command(self.password+ "\n")
+                self.tn.write(self.password + "\n")
+                
                 
             else:
                 logging.error("password time out")
-#                self.tn.close()
+                self.tn.close()
                 return False
 
         return True
@@ -182,7 +182,7 @@ class TelnetAirlink():
             The third element is the received string till expected key.
         """
         try:
-            rcv = self.tn.expect(expected_keys,timeout=60)
+            rcv = self.tn.expect(expected_keys,timeout=200)
             return rcv
 
         except EOFError:

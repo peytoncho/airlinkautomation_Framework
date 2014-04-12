@@ -36,6 +36,8 @@ def load_temp_tc_map():
 
 class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
     def __init__(self, dut_name=tbd_config_map["DUTS"][0], dut_ip="192.168.13.31"):
+        '''Initialization
+        '''
         selenium_utilities.SeleniumAcemanager.__init__(self)
         self.device_name = dut_name
         self.dut_ip = dut_ip
@@ -84,8 +86,6 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         '''
         update_rm_version = self._match_rm(update_fw_version)
         result = self._pre_fwupdate_aleos(update_fw_version, update_rm_version)
-#         result = "completed"
-#         self.rm_update_flag = True
         if result == "completed":
             if self.rm_update_flag:
                 if "True" in self._verify_aleos(update_fw_version) and "True" in self._verify_rm(update_rm_version):
@@ -100,7 +100,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
     def fwrmupdate_ui_aleos_roundtrip(self, fw_from, fw_to):
         '''This method will update ALEOS with the version in parameter
         
-        Args:fw_version
+        Args:fw_version_to, fw_version_from
         
         Return:result, If there are any issues during the update process, 
         the result will return the error code from the specific point
@@ -131,7 +131,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
     def fwrmupdate_ui_rm_roundtrip(self, rm_from, rm_to):
         '''This method will update ALEOS with the version in parameter
         
-        Args:fw_version
+        Args:rm_version_from, rm_version_to
         
         Return:result, If there are any issues during the update process, 
         the result will return the error code from the specific point
@@ -774,6 +774,9 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                     self.driver.quit()
                     continue
                 
+                #check Applying step if there is an error, then fail the test case.
+                #If the RM update prompt appeared, then select the matched RM file and click update
+                #Wait for the RM update, the rainbow chase light can be observed from the device.
                 step_3_pic = self._get_step_pic_name(self.driver, 3)
                 if not "check.gif" in step_3_pic:
                     if not self._rm_update(self.driver, path_list[1]):
