@@ -681,10 +681,10 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         attemp_count_switch_content = 0 
                  
         while True:
-            #Set everything up, login to ACEManager      
+            #Step1: Login to ACEManager      
             self._startUp()
             
-            #Click firmware update button
+            #Step2: Click firmware update button
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Clicking firmware update button")
             time.sleep(step_timer)
             if self._fw_btn_click(self.driver) != True:
@@ -696,6 +696,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                     self.driver.close()
                     continue
             
+            #Step3: Switch to update frame
             time.sleep(step_timer)
             if self._fw_frame_switch(self.driver) != True:
                 if attemp_count_switch_frame >= attempt_time:
@@ -704,8 +705,9 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                 else:
                     attemp_count_switch_frame+=1
                     self.driver.close()
-                    continue  
-                
+                    continue
+            
+            #Step4: Get update type
             time.sleep(step_timer)
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Getting update type")
             if len(path_list) == 1:
@@ -723,9 +725,9 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                     self.driver.close()
                     continue                    
             
+            #Step5: Browse update file from local machine
             time.sleep(step_timer)           
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Browsing ALEOS Build file")
-       
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Browsing update file")
             if self._browse_fw_file(self.driver, path_list[0]) != True:
                 if attemp_count_browse_file >= attempt_time:
                     result = "err_browse_file"
@@ -735,6 +737,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                     self.driver.close()
                     continue
             
+            #Step6: Click "Update" button
             time.sleep(step_timer)           
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Clicking Go")
             if self._fw_go_click(self.driver) != True:
@@ -746,11 +749,13 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                     self.driver.close()
                     continue
             
+            #For RM update sometime it will popup a window to ask you, click OK            
             try:
                 self.driver.switch_to_alert().accept()
             except:
                 pass
             
+            #Step7: Switch to Default content frame
             time.sleep(step_timer)
             basic_airlink.clog(time.ctime(time.time())+" ===>> Waiting for updating process")                       
             if self._default_content_switch(self.driver) != True:
@@ -762,7 +767,8 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                     self.driver.close()
                     continue
             
-            #check the update window if is still in the browser
+            #Step8: Pick the timer according to the update type, and wait for the defined time, if timeout, script will check 
+            #the picture showing in each step and return which step has problem. 
             quit_flag = False
             error_flag = False
             error_msg = ""
@@ -779,6 +785,8 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                 #Wait for the RM update, the rainbow chase light can be observed from the device.
                 step_3_pic = self._get_step_pic_name(self.driver, 3)
                 if not "check.gif" in step_3_pic:
+                    
+                    #If the RM prompt is showing at the third step. The script will pick the RM file and click "Update"
                     if not self._rm_update(self.driver, path_list[1]):
                         if "warning.gif" in step_3_pic:
                             basic_airlink.cslog("Applying Step ===> Warning picture...", "RED")
@@ -791,6 +799,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                     break
             break
         
+        #Once the date is done, jump back to login page, the reboot timer starts
         if not error_flag is True:
             time.sleep(step_timer)                   
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Done ALEOS Updating")
@@ -829,6 +838,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
             attempt_count+=1
             basic_airlink.clog(time.ctime(time.time())+\
                                " ===>> _execute_at_fw_update: Connection Failed, try again")
+        
         
         version_match_result = re.match(r'[4]\.[3]\.[2-4]', self.current_fw_version)
         basic_airlink.cslog(str(version_match_result), "RED")
