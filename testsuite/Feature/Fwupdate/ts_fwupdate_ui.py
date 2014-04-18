@@ -94,7 +94,18 @@ class TsFwupdateUi(unittest.TestCase):
             self.fail("Test failed. Reason: "+result)
         else:
             basic_airlink.cslog(time.ctime(time.time())+" ===>> "+result, "GREEN")
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE")            
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE")
+    
+    def tc_fwupdate_local_single_aleos_skip_rm(self):
+        self.testcase_setup("Local")       
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case:  ACEManager Firmware single upgrade ", "BLUE")        
+        fw1 = fwupdate_config_map["ALEOS_BUILD_TO"]
+        result = self.fw_ins.fwupdate_ui_aleos(fw1, skip_rm=True) 
+        if not "True" in result :
+            self.fail("Test failed. Reason: "+result)
+        else:
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> "+result, "GREEN")
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE")          
   
     def tc_fwupdate_local_roundtrip_aleos(self):
         '''  This method will run the round trip update
@@ -104,6 +115,17 @@ class TsFwupdateUi(unittest.TestCase):
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware Roundtrip upgrade ", "BLUE", "YELLOW")      
         
         self.fw_ins.fwrmupdate_ui_aleos_roundtrip(self.fw_from, self.fw_to)
+                               
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
+        
+    def tc_fwupdate_local_roundtrip_aleos_skip_rm(self):
+        '''  This method will run the round trip update
+        
+        '''
+        self.testcase_setup("Local")
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware Roundtrip upgrade ", "BLUE", "YELLOW")      
+        
+        self.fw_ins.fwrmupdate_ui_aleos_roundtrip(self.fw_from, self.fw_to, skip_rm=True)
                                
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
 
@@ -322,22 +344,5 @@ class TsFwupdateUi(unittest.TestCase):
         pass       
     
         
-    def tc_fwupdate_GX400_MC8705_OSM(self):
-        basic_airlink.cslog(self.dut_ip, "GREEN")
-        basic_airlink.cslog("tc_fwupdate_GX400_MC8705_OSM", "RED")
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware Roundtrip upgrade ", "BLUE", "YELLOW")      
-       
-        self.fw_ins.fwrmupdate_ui_roundtrip(self.fw_from, self.fw_to)
-                              
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
-            
-    def tc_fwupdate_GX400_MC8705_ATT(self):
-        basic_airlink.cslog(self.dut_ip, "GREEN")
-        basic_airlink.cslog("tc_fwupdate_GX400_MC8705_ATT", "GREEN")
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware Roundtrip upgrade ", "BLUE", "YELLOW")      
-       
-        self.fw_ins.fwrmupdate_ui_roundtrip(self.fw_from, self.fw_to)
-                              
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
         
  

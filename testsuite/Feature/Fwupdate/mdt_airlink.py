@@ -6,21 +6,23 @@
 # Author: Airlink
 #
 ################################################################################
-
+import os
+import sys
 import at_utilities
 import telnet_airlink
 import selenium_utilities
-import os,sys
 import time
 import yaml
 import connectivity
 import lan_airlink
+
 
 RETRY_TIMES = 10
 
 airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME']
 with open(airlinkautomation_home_dirname+'\config\common_testbed_conf.yml','r') as stream:
     tbd_conf_map = yaml.load(stream)
+
 
 class MdtAirlink(object):
     def __init__(self,device_number):        

@@ -3,26 +3,38 @@ import lan_airlink as la
 import telnet_airlink as ta
 import at_utilities
 import time
+import sys
+import os
+import basic_airlink
+
+airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME']
+basic_airlink.append_sys_path()
 
 
-fa_ins = fa.FwupdateAirlink()
-lan_ins = la.LanAirlink()
-ta_ins = ta.TelnetAirlink()
-at_ins = at_utilities.AtCommands()
 
-#ta_ins.read_until_safe(expected_key)
 
-ftp_ip = "192.168.13.101"
-ftp_username = "user1"
-ftp_pwd = "12345"
-rm_filename = "MC8705_ATT001_1032.bin"
+# 
+# fa_ins = fa.FwupdateAirlink()
+# lan_ins = la.LanAirlink()
+# ta_ins = ta.TelnetAirlink()
+# at_ins = at_utilities.AtCommands()
+# 
+# #ta_ins.read_until_safe(expected_key)
+# 
+# ftp_ip = "192.168.13.101"
+# ftp_username = "user1"
+# ftp_pwd = "12345"
+# rm_filename = "MC8705_ATT001_1032.bin"
+# 
+# while not ta_ins.connect():
+#     print "connection fail"
+# 
+# ret = at_ins.rm_update(ta_ins, ftp_ip, ftp_username, ftp_pwd, rm_filename)
+# print ret
+airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME']
 
-while not ta_ins.connect():
-    print "connection fail"
-
-ret = at_ins.rm_update(ta_ins, ftp_ip, ftp_username, ftp_pwd, rm_filename)
-print ret
-
+basic_airlink.append_sys_path()
+print sys.path
 
 #fa_ins._verify_rm("MC8705_ATT001_3553")
 

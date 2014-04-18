@@ -13,7 +13,7 @@
 #If set "YES", the IP will be dynamically assigned to device and test all devices connected to switch
 #If set "NO", only ONE device will be tested. 
 
-MDT_LOCAL : "YES"   #YES/NO
+MDT_LOCAL : "NO"   #YES/NO
 
 #Multiple device testing in OTA way
 #If set "YES", all device list in "OTA_IP_LIST" will be tested
@@ -27,14 +27,14 @@ MDT_OTA : "NO"   #YES/NO
 
 #For single update and roundtrip update
 ALEOS_BUILD_FROM : "4.3.4.009"
-ALEOS_BUILD_TO : "4.3.6.E06"
+ALEOS_BUILD_TO : "4.3.6.E10"
 
 RM_FROM : "MC8705_ATT001_1032" 
-RM_TO : "MC8705_ATT001_3553"
+RM_TO : "MC8705_ATT001_1032"
 ROUNDTRIP_TIMES : 2
 
 #For MDT_LOCAL update
-DEVICE_NUMBER : 10 
+DEVICE_NUMBER : 2 
 
 #For OTA update
 OTA_IP      : 184.151.218.226
@@ -61,7 +61,7 @@ TIMER:
        WAIT_PROCESS_INCREAMENT_LOCAL    : 100
        WAIT_PROCESS_FULL_OTA            : 200
        WAIT_PROCESS_INCRETMENT_OTA      : 170      
-    RM  : 10000
+    RM  : 1800
 
 #The Timer between each step       
 STEP_TIMER : 3 
@@ -87,14 +87,45 @@ PATH1 : [4.3.4.009,
 
 4.3.2:
    DUT_GX400_MC8705_ROW:   MC8705_OSM001_T1043D
+   DUT_GX400_MC8705_ATT:   MC8705_ATT001_1032
+   DUT_GX440_MC7750_VZW:   MC7750_1101341_35106
+   DUT_GX400_MC5728_SPT:   MC5728_1101205_13301
+   DUT_GX440_MC7700_ATT:   MC7700_ATT002_35102
+   DUT_GX400_MC8705_TLS:   ''
+   DUT_GX400_MC8705_BEL:   MC8705_OSM001_T1043D
+   DUT_LS300_SL5011_VZW:   SL5011_VZW003_156
+   DUT_LS300_SL5011_SPT:   SL5011_SPT002_153
+   DUT_LS300_SL8090_ATT:   SL8090_ATT003_P1008
+   DUT_LS300_SL8090_BEL:   SL8090_BCA003_P1008
+   DUT_LS300_SL8092_OSM:   SL8092_OSM002_P1008   
+   DUT_ES440_MC7750_VZW:   ''
+   DUT_ES440_MC7700_ATT:   ''
+   DUT_ES440_MC7710_OSM:   ''
+   DUT_ES440_MC7700_OSM:   '' 
 
 4.3.3:
    DUT_GX400_MC8705_ROW:   MC8705_OSM001_T1043D
+   DUT_GX400_MC8705_ATT:   MC8705_ATT001_1032
+   DUT_GX440_MC7750_VZW:   MC7750_1101341_35106
+   DUT_GX400_MC5728_SPT:   MC5728_1101205_13301
+   DUT_GX440_MC7700_ATT:   MC7700_ATT002_35102
+   DUT_GX400_MC8705_TLS:   ''
+   DUT_GX400_MC8705_BEL:   MC8705_OSM001_T1043D
+   DUT_LS300_SL5011_VZW:   SL5011_VZW003_156
+   DUT_LS300_SL5011_SPT:   SL5011_SPT002_153
+   DUT_LS300_SL8090_ATT:   SL8090_ATT003_P1008
+   DUT_LS300_SL8090_BEL:   SL8090_BCA003_P1008
+   DUT_LS300_SL8092_OSM:   SL8092_OSM002_P1008   
+   DUT_ES440_MC7750_VZW:   ''
+   DUT_ES440_MC7700_ATT:   ''
+   DUT_ES440_MC7710_OSM:   ''
+   DUT_ES440_MC7700_OSM:   ''
+      
 
 4.3.4:
    DUT_GX400_MC8705_ROW:   MC8705_OSM001_T1043D
    DUT_GX400_MC8705_ATT:   MC8705_ATT001_1032
-   DUT_GX400_MC8705_BEL:   ''
+   DUT_GX400_MC8705_BEL:   MC8705_OSM001_T1043D
    DUT_GX400_MC8705_TLS:   ''
    DUT_GX400_MC8705_OSM:   MC8705_OSM001_T1043D
    DUT_LS300_SL5011_VZW:   SL5011_VZW003_156
@@ -141,10 +172,10 @@ PATH1 : [4.3.4.009,
    DUT_GX400_MC8705_ROW:   MC8705_OSM001_3552
    DUT_GX400_MC8705_ATT:   MC8705_ATT001_3553
    DUT_GX400_MC8705_BEL:   MC8705_BCA001_3552
-   DUT_GX400_MC8705_TLS:   ''
+   DUT_GX400_MC8705_TLS:   MC8705_TLA001_3541
    DUT_GX400_MC8705_OSM:   MC8705_OSM001_3552
    DUT_LS300_SL5011_VZW:   SL5011_VZW003_11301
-   DUT_LS300_SL5011_SPT:   SL5011_SPT003_11301
+   DUT_LS300_SL5011_SPT:   SL5011_SPT003_153
    DUT_LS300_SL8090_ATT:   SL8090_ATT003_P1008
    DUT_LS300_SL8090_BEL:   SL8090_BCA003_P1008
    DUT_LS300_SL8092_OSM:   SL8092_OSM002_P10018A
@@ -160,7 +191,7 @@ PATH1 : [4.3.4.009,
    DUT_ES440_MC7700_OSM:   ''
    DUT_GX440_MC7700_BEL:   ''
    
-#Add new things to HERE <========
+#Add new release to HERE <========
 
 #==============================================================================#
 
@@ -176,6 +207,7 @@ RM_VER_NAME_MAP :
           "11301"   : p3111301
           "153"     : p3110503
           "156"     : p3110506
+          "35205"   : SWI9200X_03.05.20.05ap
 
 #==============================================================================#
 
@@ -355,7 +387,7 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate
            18  : 
               TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433a014_434009"     
-              PRODUCT_VER : ["4.3.3","4.3.4"]
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
               RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
@@ -365,10 +397,42 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate
            19  : 
               TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433014_434009"     
-              PRODUCT_VER : ["4.3.3","4.3.4"]
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
               RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+           20  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433014_434009"     
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+              
+           21  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433014_434009"     
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090","MC8705"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
+              
+           22  : 
+              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433014_434009"     
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090","MC8705"]
               TEST_TYPE   : ["Functional","FUNCTIONAL"]
               DESCRIPTION : "Test firmware update by AT commands"
               PRIORIY     : HIGH

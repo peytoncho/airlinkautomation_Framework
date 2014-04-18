@@ -26,8 +26,8 @@ import gc
 test_area = "Fwupdate"
 test_sub_area=""
 airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME']
-basic_airlink.append_sys_path()
 tbd_config_map, fwupdate_config_map = basic_airlink.get_config_data(test_area,"")
+basic_airlink.append_sys_path()
 
 def load_temp_tc_map():
     with open('temp_fwupdate_tc_info.yml','r') as stream:
@@ -74,7 +74,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         return result    
             
         
-    def fwupdate_ui_aleos(self,update_fw_version):
+    def fwupdate_ui_aleos(self,update_fw_version,skip_rm=False):
         '''This method will update ALEOS with the version in parameter
         
         Args:update_fw_version
@@ -84,8 +84,12 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         
         Notes: Keep the browser closed before calling this function
         '''
+        
+        if skip_rm is True:
+            basic_airlink.cslog("Note: The RM update will be skiped", "RED")
+        
         update_rm_version = self._match_rm(update_fw_version)
-        result = self._pre_fwupdate_aleos(update_fw_version, update_rm_version)
+        result = self._pre_fwupdate_aleos(update_fw_version, update_rm_version, skip_rm)
         if result == "completed":
             if self.rm_update_flag:
                 if "True" in self._verify_aleos(update_fw_version) and "True" in self._verify_rm(update_rm_version):
@@ -97,7 +101,10 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                 result = "ALEOS verify: "+self._verify_aleos(update_fw_version)               
         return result
     
-    def fwrmupdate_ui_aleos_roundtrip(self, fw_from, fw_to):
+
+              
+    
+    def fwrmupdate_ui_aleos_roundtrip(self, fw_from, fw_to, skip_rm=False):
         '''This method will update ALEOS with the version in parameter
         
         Args:fw_version_to, fw_version_from
@@ -107,13 +114,15 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         
         Notes: Keep the browser closed before calling this function
         '''
-             
+        if skip_rm is True:
+            basic_airlink.cslog("Note: The RM update will be skiped", "RED")
+           
         times_count = fwupdate_config_map["ROUNDTRIP_TIMES"]
         for round in range(times_count):
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Round: "+str(round+1)+" Started", "BLUE")
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Upgrade to: "+fw_to, "BLUE")
             
-            result = self.fwupdate_ui_aleos(fw_to)
+            result = self.fwupdate_ui_aleos(fw_to,skip_rm=skip_rm)
             if not "True" in result :
                 self.fail("Test failed. Reason: "+result)
             else:
@@ -121,7 +130,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                 basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE") 
             
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Downgrade to: "+fw_from, "BLUE")
-            result = self.fwupdate_ui_aleos(fw_from)
+            result = self.fwupdate_ui_aleos(fw_from, skip_rm=skip_rm)
             if not "True" in result :
                 self.fail("Test failed. Reason: "+result)
             else:
@@ -185,7 +194,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         Notes: Set FTP server before running this function
         '''
         result = self._execute_at_rm_update(update_rm_version)
-        if "pass" in result:
+        if "OK" in result:
             result = self._verify_rm(update_rm_version)
         return result
     
@@ -200,7 +209,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         Notes: Set FTP server before running this function
         '''
         result = self._execute_at_fw_rm_update(update_fw_version, update_rm_version)
-        if "pass" in result:
+        if "OK" in result:
             if "True" in self._verify_aleos(update_fw_version) and "True" in self._verify_rm(update_rm_version):
                 result = "True"
             else:
@@ -238,11 +247,12 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         
         return:result str: True/False 
         '''
+        basic_airlink.cslog("step: Verify ALEOS version")
         result = True
         attempt_verify_times = fwupdate_config_map["ATTEMPT_VERIFY_TIME"]
         while attempt_verify_times > 0:
             aleos_version = self._aleos_check()
-            basic_airlink.cslog("Current fw version: "+aleos_version)
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Current ALEOS version: "+aleos_version)
             if aleos_version != fw_version:
                 result = False
                 attempt_verify_times=attempt_verify_times-1
@@ -263,14 +273,16 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         aleos_version = ""
         at_ins = at_utilities.AtCommands()
         attempt_count = 1
-
+        basic_airlink.cslog("step: Check current ALEOS version") 
         while not self.conn_ins.connect():
             aleos_version = "connection fail"
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> aleos_check: Connection Failed, retry after 30 seconds")
+            basic_airlink.cslog(time.ctime(time.time())+\
+                                " ===>> aleos_check: Connection Failed, retry after 30 seconds")
             time.sleep(30)          
         
-        aleos_version = at_ins.get_fw_version(self.conn_ins)
-        self.conn_ins.close()
+        while (aleos_version == "ERROR" or aleos_version =="") and attempt_count>=0:
+            aleos_version = at_ins.get_fw_version(self.conn_ins)
+            self.conn_ins.close()
         
         return aleos_version
     
@@ -281,6 +293,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         
         Returns: result: True/False
         '''
+        basic_airlink.cslog("step: Check device model") 
         result = True       
         at_ins = at_utilities.AtCommands()
         while not self.conn_ins.connect():
@@ -304,6 +317,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         
         Return: rm_name 
         '''
+        basic_airlink.cslog("step: Match the RM within ALEOS and device") 
         fw1_version = ""
         fw_lst = fwupdate_config_map["ALEOS_VERSION_LIST"]
         for version in fw_lst:
@@ -311,7 +325,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                 fw1_version = version
         
         rm1_name = fwupdate_config_map[fw1_version][self.device_name]        
-        basic_airlink.clog(time.ctime(time.time())+" ===>> rm1_version: "+rm1_name)
+        basic_airlink.clog(time.ctime(time.time())+" ===>> rm_version: "+rm1_name)
         
         return rm1_name
         
@@ -322,7 +336,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         
         Return: result string Ture/False
         '''
-
+        basic_airlink.cslog("step: Verify Radio Module")
         rm_version_rear = rm_version.split("_")[2]
         rm_ver_dict = fwupdate_config_map["RM_VER_NAME_MAP"]
         result = True
@@ -339,7 +353,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         current_rm_version = at_ins.get_rm_version(self.conn_ins)
         rm_version_dict = rm_ver_dict[rm_version_rear]
         self.conn_ins.close()
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> "+current_rm_version)
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Current RM version "+current_rm_version)
         if (rm_version_dict == "") or (not rm_version_dict in current_rm_version):
             basic_airlink.cslog(time.ctime(time.time())+\
                                 " ===>> rm_version_dict: "+rm_version_dict)
@@ -393,7 +407,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         Return: update result
         '''
         self.current_fw_version = self._aleos_check()
-        basic_airlink.clog(time.ctime(time.time())+" ===>> Current Firmware Version: "+self.current_fw_version)
+        basic_airlink.clog(time.ctime(time.time())+" ===>> Current ALEOS Version: "+self.current_fw_version)
         rm_build_path = self._get_rm_path(rm_version)
         basic_airlink.cslog(time.ctime(time.time())+" ===>> RM Build: "+rm_build_path)
         path_list = [rm_build_path]
@@ -402,7 +416,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
 
         return result
                 
-    def _pre_fwupdate_aleos(self, fw_version, rm_version=""):
+    def _pre_fwupdate_aleos(self, fw_version, rm_version="",skip_rm=False):
         ''' 
         This method will check the ALEOS version and decide 
         which update type should be used, call update execute function
@@ -414,13 +428,18 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         device_prefix = self._get_device_prefix()
 
         self.current_fw_version = self._aleos_check()      #would take some time to access.
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Current Firmware Version: "+self.current_fw_version)        
+        result = "ERROR when getting the current ALEOS version, Please run again..."
+        if self.current_fw_version == "ERROR":
+            basic_airlink.cslog(result, "RED")
+            return result
+        
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Current ALEOS Version: "+self.current_fw_version)        
         aleos_build_path = self._get_aleos_path(device_prefix, fw_version)      
         rm_build_path = self._get_rm_path(rm_version)  
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> ALEOS Build: "+aleos_build_path)
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> RM Build: "+rm_build_path)
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> ALEOS Build path: "+aleos_build_path)
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> RM Build path: "+rm_build_path)
         path_list = [aleos_build_path,rm_build_path]       
-        result = self._fw_update(path_list, fw_version)
+        result = self._fw_update(path_list, skip_rm, fw_version)
         return result
           
     def _fw_btn_click(self, driver):
@@ -529,7 +548,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         finally:
             return result
             
-    def _rm_update(self, driver, rm_build_path):
+    def _rm_update(self, driver, rm_build_path, skip_rm):
         '''To update radio module
         
         Args: driver: browser
@@ -552,20 +571,25 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                 result = False
                 basic_airlink.cslog(time.ctime(time.time())+" ===>> Frame not found!", "RED")
             else:
-                driver.find_element_by_name("image").send_keys(rm_build_path)
-                driver.find_element_by_name("go").click()
-                try:
-                    driver.switch_to_alert().accept()
-                    basic_airlink.cslog(time.ctime(time.time())+"===>> Warning windows prompt!", "RED")
-                except:
-                    pass
-                basic_airlink.cslog(time.ctime(time.time())+" ===>> Applying Firmware ...")
-                self.rm_update_flag = True
-                timer_wait_logout = tbd_config_map[self.device_name]["RM_TIMEOUT"]
-                gc.disable()              
-                time.sleep(timer_wait_logout)
-                gc.enable()
-                result = True               
+                
+                if skip_rm is True:
+                    basic_airlink.cslog(time.ctime(time.time())+"===>> Skip RM update...", "RED")
+                    driver.find_element_by_name("gonnot").click()
+                    driver.switch_to_alert().accept()                   
+                    result = True
+                else:               
+                    driver.find_element_by_name("image").send_keys(rm_build_path)
+                    driver.find_element_by_name("go").click()
+                    try:
+                        driver.switch_to_alert().accept()
+                        basic_airlink.cslog(time.ctime(time.time())+"===>> Warning windows prompt!", "RED")
+                    except:
+                        pass
+                    basic_airlink.cslog(time.ctime(time.time())+" ===>> Applying Firmware ...")
+                    self.rm_update_flag = True
+                    timer_wait_logout = tbd_config_map[self.device_name]["RM_TIMEOUT"]
+                    time.sleep(timer_wait_logout)
+                    result = True               
         except:
             result = False
             basic_airlink.cslog(time.ctime(time.time())+" ===>> No RM update required")
@@ -657,11 +681,16 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         
         Return: picture name
         '''
-        pic_elem = driver.find_element_by_xpath(".//div[@id='file_upload']/center[2]/div/div["+str(step_num)+"]/img")
-        pic_name = pic_elem.get_attribute("src").split('/')[-1]
-        return pic_name
+        try:
+            pic_name = ""
+            pic_elem = driver.find_element_by_xpath(".//div[@id='file_upload']/center[2]/div/div["+str(step_num)+"]/img")
+            pic_name = pic_elem.get_attribute("src").split('/')[-1]
+        except:
+            basic_airlink.cslog("Can't get the picture", "RED")
+        finally:
+            return pic_name
         
-    def _fw_update(self, path_list, fw_version=""):
+    def _fw_update(self, path_list, skip_rm, fw_version=""):
         ''' This method will operate the update process in UI
         
         Args: ALEOSBuild
@@ -672,7 +701,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         '''
         attempt_time = fwupdate_config_map["ATTEMP_TIME"]
         step_timer = fwupdate_config_map["STEP_TIMER"]
-        #Attempt count if the step is fail       
+        #Attempt count if the step is fail
         attemp_count_click_fw_btn = 0
         attemp_count_switch_frame = 0 
         attemp_count_get_type = 0 
@@ -687,7 +716,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
             #Step2: Click firmware update button
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Clicking firmware update button")
             time.sleep(step_timer)
-            if self._fw_btn_click(self.driver) != True:
+            if not self._fw_btn_click(self.driver):
                 if attemp_count_click_fw_btn >= attempt_time:
                     result = "err_fw_btn_click"
                     break                    
@@ -698,7 +727,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
             
             #Step3: Switch to update frame
             time.sleep(step_timer)
-            if self._fw_frame_switch(self.driver) != True:
+            if not self._fw_frame_switch(self.driver):
                 if attemp_count_switch_frame >= attempt_time:
                     result = "err_switch_frame"
                     break                    
@@ -728,7 +757,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
             #Step5: Browse update file from local machine
             time.sleep(step_timer)           
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Browsing update file")
-            if self._browse_fw_file(self.driver, path_list[0]) != True:
+            if not self._browse_fw_file(self.driver, path_list[0]):
                 if attemp_count_browse_file >= attempt_time:
                     result = "err_browse_file"
                     break
@@ -740,7 +769,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
             #Step6: Click "Update" button
             time.sleep(step_timer)           
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Clicking Go")
-            if self._fw_go_click(self.driver) != True:
+            if not self._fw_go_click(self.driver):
                 if attemp_count_click_go >= attempt_time:
                     result = "err_click_go"
                     break
@@ -758,7 +787,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
             #Step7: Switch to Default content frame
             time.sleep(step_timer)
             basic_airlink.clog(time.ctime(time.time())+" ===>> Waiting for updating process")                       
-            if self._default_content_switch(self.driver) != True:
+            if not self._default_content_switch(self.driver):
                 if attemp_count_switch_content >= attempt_time:
                     result = "err_switch_content"
                     break
@@ -787,10 +816,11 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                 if not "check.gif" in step_3_pic:
                     
                     #If the RM prompt is showing at the third step. The script will pick the RM file and click "Update"
-                    if not self._rm_update(self.driver, path_list[1]):
+                    if not self._rm_update(self.driver, path_list[1], skip_rm=skip_rm):
                         if "warning.gif" in step_3_pic:
                             basic_airlink.cslog("Applying Step ===> Warning picture...", "RED")
-                            error_element = self.driver.find_element_by_xpath(".//div[@id='file_upload']/center[2]/div/div[3]/div[2]")
+                            error_element = self.driver.find_element_by_xpath(\
+                                            ".//div[@id='file_upload']/center[2]/div/div[3]/div[2]")
                             error_msg = error_element.text
                             basic_airlink.cslog("Applying Step ===> "+error_msg, "RED")
                             error_flag = True
@@ -839,9 +869,9 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
             basic_airlink.clog(time.ctime(time.time())+\
                                " ===>> _execute_at_fw_update: Connection Failed, try again")
         
-        
+        #Check what current ALEOS version is, the command format is different between 4.3.4 and 4.3.5 
         version_match_result = re.match(r'[4]\.[3]\.[2-4]', self.current_fw_version)
-        basic_airlink.cslog(str(version_match_result), "RED")
+#        basic_airlink.cslog(str(version_match_result), "RED")
         if version_match_result is None:
             basic_airlink.cslog(time.ctime(time.time())+" ===>> filename needed")
             result = at_ins.fw_update(self.conn_ins, \
@@ -858,7 +888,8 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                              self.ftp_password)
 
         result = str(result)
-        if not "False" in result:
+        if not "Failed" in result:
+            basic_airlink.cslog("Result: "+result)
             basic_airlink.cslog(time.ctime(time.time())+\
                                 " ===>> Step:  Finished update, wait reboot...")
             time.sleep(tbd_config_map[self.device_name]["REBOOT_TIMEOUT"])
@@ -892,6 +923,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                                   rm_filename)
         result = str(result)
         if not "False" in result:
+            basic_airlink.cslog("Result: "+result)
             basic_airlink.cslog(time.ctime(time.time())+\
                                 " ===>> Step:  Finished update, wait reboot...")
             time.sleep(tbd_config_map[self.device_name]["RM_TIMEOUT"])
@@ -931,6 +963,7 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
                                      rm_filename)
         result = str(result)
         if not "False" in result:
+            basic_airlink.cslog("Result: "+result)
             basic_airlink.cslog(time.ctime(time.time())+\
                                 " ===>> Step:  Finished update, wait reboot...")
             time.sleep(tbd_config_map[self.device_name]["RM_TIMEOUT"]+\
@@ -949,38 +982,14 @@ class FwupdateAirlink(selenium_utilities.SeleniumAcemanager):
         result = True
         device_prefix = self._get_device_prefix()
         try:
+            basic_airlink.cslog(time.ctime(time.time())+\
+                                " ===>> Change file name:"+fw_filename+" to fw.bin")
 #            os.remove(airlinkautomation_home_dirname + '\\data\\builds\\RmFwImages\\fw.bin')
-            shutil.copyfile(airlinkautomation_home_dirname + '\\data\\builds\\RmFwImages\\' + fw_filename, 
-                            airlinkautomation_home_dirname + '\\data\\builds\\RmFwImages\\fw.bin')
+            shutil.copyfile(airlinkautomation_home_dirname + '\\data\\builds\\' + fw_filename, 
+                            airlinkautomation_home_dirname + '\\data\\builds\\fw.bin')
         except:
             result = False
             basic_airlink.cslog("Fail on change filename", "RED")
         
         return result
-    
-    def _at_commands_fwupdate(self,fw_version):
-        ''' This method will check which version should be updated and run update function 
-        
-        Args: fw_version: firmware 1
-        
-        Returns: None
-        '''
-        retry_count = 0
-        filename_change_check = True
-        device_prefix = self.get_device_prefix()
-#         current_fw_version = self.at_ins.get_fw_version(self.connect_instance)
 
-#         self.assertNotEqual(retry_count, 5, "Firmware update fail")
-            
-        filename_change_check = self.change_fw_filename(device_prefix+"_"+fw_version+".bin")
-        self.assertEqual(filename_change_check, True, "Fail on change filename "+fw_version)
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> filename changed"+fw_version)
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> at update start...")
-        self._execute_at_command_fwupdate()
-        
-#         if self.aleos_verify(fw1) != True:
-#             retry_count+=1
-#             continue
-#         else:
-#             basic_airlink.cslog(time.ctime(time.time())+" ===>> Verify current version: "+fw1+ " Pass", "GREEN")            
-#             break

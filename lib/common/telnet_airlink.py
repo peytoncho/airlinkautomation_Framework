@@ -125,8 +125,8 @@ class TelnetAirlink():
         if len(self.password):
 
             if self.read_until_safe("Password: "):
-#                self.tn.write(self.password + "\n")
-                pwd_ret = self.command(self.password+ "\n")
+                self.tn.write(self.password + "\n")
+#                pwd_ret = self.command(self.password+ "\n")
                 
             else:
                 logging.error("password time out")
@@ -182,7 +182,7 @@ class TelnetAirlink():
             The third element is the received string till expected key.
         """
         try:
-            rcv = self.tn.expect(expected_keys,timeout=200)
+            rcv = self.tn.expect(expected_keys)
             return rcv
 
         except EOFError:

@@ -18,7 +18,6 @@ import basic_airlink
 import mdt_airlink
 import yaml
 
-
 import ts_fwupdate_ui
 import ts_fwupdate_at_commands
 
@@ -69,7 +68,9 @@ class Runner(object):
                         17:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ota_single_rm",0],
                         18:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ota_roundtrip_rm",0],
                         19:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ota_single_aleos_rm",0],                       
-                        20:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ota_roundtrip_aleos_rm",0],
+                        20:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ota_roundtrip_aleos_rm",0],                       
+                        21:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_single_aleos_skip_rm",0],
+                        22:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_roundtrip_aleos_skip_rm",0],
                         }
     
     def create_log_name(self):
@@ -79,7 +80,6 @@ class Runner(object):
     def create_report_name(self):
         time_stamp = time.strftime("%b-%d-%Y_%H-%M")
         report_filename=basic_airlink.get_report_filename(tbd_config_map, test_area,"")
-#        report_file_name = report_filename.split('/')[-1]
         return report_filename
     
     def run(self):
@@ -101,11 +101,15 @@ class Runner(object):
            
         test_cases = mySuite.countTestCases()   
         basic_airlink.slog("\x1b[0mTotal test cases: %d" % test_cases)
-        test_result=runner.run(mySuite)
+        test_result=runner.run(mySuite,fail_flag=tbd_config_map["TERMINATE_ON_FAIL"])
         fpp.close()
         basic_airlink.slog("\x1b[0mTotal %d test cases PASS." % test_result.success_count )
         basic_airlink.slog("Total %d test cases FAILED." % test_result.failure_count )
-        basic_airlink.slog("Total %d test cases has ERROR." % test_result.error_count )   
+        basic_airlink.slog("Total %d test cases has ERROR." % test_result.error_count )
+        
+        airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME']
+        csv_file_path = airlinkautomation_home_dirname+'/results/csv/'
+        basic_airlink.make_csv(csv_file_path, test_result, fwupdate_config_map)   
 
 class Launcher(object):
     def __init__(self,test_type):
@@ -124,6 +128,7 @@ class Launcher(object):
             #2, check devices connection
             check_connection_flag = self.mdt_ins.ping_devices()
             if not check_connection_flag:
+                #should be changed
                 sys.exit(2)
         
             #3, form the devices list            

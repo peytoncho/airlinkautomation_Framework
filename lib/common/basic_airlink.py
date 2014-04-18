@@ -669,6 +669,7 @@ def append_sys_path():
     sys.path.append(airlinkautomation_home_dirname+feature_template_path)
     sys.path.append(airlinkautomation_home_dirname+feature_security_path)
     sys.path.append(airlinkautomation_home_dirname+feature_serial_path)
+    sys.path.append(airlinkautomation_home_dirname+msciids_path)
     
 
 def setup_suite_v2(area_config_map, tc_ts_map):
