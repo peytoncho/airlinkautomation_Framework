@@ -25,7 +25,7 @@ import ts_testClass1
 
 test_area = "TestClass"
 test_sub_area=""
-airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_FRAMEWORK'] 
+airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME'] 
 sys.path.append(airlinkautomation_home_dirname+"/lib/common")
 
 basic_airlink.append_sys_path()
@@ -89,19 +89,8 @@ def pickTestcase(combo_list):
 
 if __name__ == "__main__":
     
-#     basic_airlink.slog(str(testclass_config_map["DEVICE_COMBO1"]))
-#     basic_airlink.slog(str(testclass_config_map["DEVICE_COMBO2"]))
-#     basic_airlink.slog(str(testclass_config_map["DEVICE_COMBO3"]))
-#     basic_airlink.slog(str(testclass_config_map["DEVICE_COMBO4"]))
 
-
-    if testclass_config_map["MDT"] == "YES":
-        combo_list = readCombo(testing_combo)
-        pick_list = pickTestcase(combo_list)
-        mySuite = basic_airlink.setup_suite_mdt(tc_ts_map, pick_list)
-    else:
-        mySuite = basic_airlink.setup_suite(tbd_config_map,testclass_config_map, tc_ts_map)
-    
+   
     log_filename=basic_airlink.get_log_filename(tbd_config_map, "TESTCLASS","")
     FORMAT ='%(asctime)-15s => %(levelname)-8s => %(message)s'
     if tbd_config_map["LOG_LEVEL"]=="DEBUG":
@@ -122,7 +111,9 @@ if __name__ == "__main__":
                 stream = fpp,
                 title = 'TestClass Test Report', 
                 description = description_text
-                )   
+                ) 
+    
+    mySuite = basic_airlink.setup_suite(tbd_config_map, testclass_config_map, tc_ts_map) 
     test_cases = mySuite.countTestCases()
      
     print "\x1b[0mTotal test cases: %d" % test_cases 
@@ -134,7 +125,8 @@ if __name__ == "__main__":
     print "Total %d test cases FAILED." % test_result.failure_count 
     print "Total %d test cases has ERROR." % test_result.error_count
     fpp.close()
-     
+    csv_file_path = airlinkautomation_home_dirname+'/results/csv/'
+    basic_airlink.make_csv(csv_file_path, test_result, testclass_config_map,tc_ts_map) 
     
     
 #     os.chdir("C:\\airlinkautomation\\results")

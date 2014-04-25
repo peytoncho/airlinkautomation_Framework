@@ -1879,7 +1879,10 @@ class AtCommands(object):
         
         basic_airlink.slog("Step:  Update FW by AT command")
         cmd="AT*FWUPDATE= "+ftp_server_ip +","+username+","+password+","+fw_filename
-        return self.assign(instance,cmd)    
+        ret = instance.command(cmd)
+        ret_str = ''.join(ret)
+        basic_airlink.cslog(ret_str, "RED")
+        return ret_str    
  
     def fw_rm_update(self, instance, ftp_server_ip, username, password, fw_filename, rm_filename):
         ''' Update FW and RM by internal new AT command 

@@ -76,14 +76,8 @@ class TsSsh(unittest.TestCase):
             ret = telnet_ins.connect_test()
         time.sleep(15)
         str1 = at_ins.get_device_id(telnet_ins)
-        ba.cslog(str1)
-#         ba.cslog(str1)
-#         ba.cslog(str2)
-#         ba.cslog(str3)
-#         ba.cslog(str4)
-#         ba.cslog(str5)
-#         ba.cslog(str6)        
-        pass
+        ba.cslog(str1)       
+
     
 
     

@@ -55,9 +55,9 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate
             2 : 
               TC_ID       : "LinALEOS/peyton_testcases/testsuite1/testsuite1_tc2"           
-              PRODUCT_VER : ["4.3.3","4.3.4"]
-              DEVICE_TYPE : ["GX440","ES440","LS300"]
-              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090","SL5011"]
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
+              DEVICE_TYPE : ["GX440","ES440","LS300","GX400"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090","SL5011","MC8705"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Functional","FUNCTIONAL"]
               DESCRIPTION : "Test firmware update using UI"
@@ -65,19 +65,19 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate
             3 : 
               TC_ID       : "LinALEOS/peyton_testcases/testsuite1/testsuite1_tc3"           
-              PRODUCT_VER : ["4.3.3","4.3.4"]
-              DEVICE_TYPE : ["GX440","ES440","LS300"]
-              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090","SL5011"]
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
+              DEVICE_TYPE : ["GX440","ES440","LS300","GX400"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090","SL5011","MC8705"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Functional","FUNCTIONAL"]
               DESCRIPTION : "Test firmware update using UI"
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
             4 : 
-              TC_ID       : "/Feature/testClass/tc_test4"            
-              PRODUCT_VER : ["4.3.3","4.3.4"]
-              DEVICE_TYPE : ["GX440","ES440","LS300"]
-              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090","SL5011"]
+              TC_ID       : "LinALEOS/peyton_testcases/testsuite1/testsuite1_tc4"            
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
+              DEVICE_TYPE : ["GX440","ES440","LS300","GX400"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090","SL5011","MC8705"]
               OBSOLETE_VER: []
               TEST_TYPE   : ["Functional","FUNCTIONAL"]
               DESCRIPTION : "Test firmware update using UI"

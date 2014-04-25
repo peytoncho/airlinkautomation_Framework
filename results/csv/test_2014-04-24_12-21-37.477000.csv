@@ -1,0 +1,3 @@
+ID,RESULT,NOTES
+Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_ACEManager/ Local_RM_update_single,pass,DUT_GX400_MC8705_ATT
+Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_ACEManager/ Local_RM_update_roundtrip,pass,DUT_GX400_MC8705_ATT

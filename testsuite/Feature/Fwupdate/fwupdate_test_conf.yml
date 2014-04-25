@@ -15,22 +15,14 @@
 
 MDT_LOCAL : "NO"   #YES/NO
 
-#Multiple device testing in OTA way
-#If set "YES", all device list in "OTA_IP_LIST" will be tested
-#If set "NO", just test one device which IP set by "OTA_IP" below
-
-OTA     : "NO"    #YES/NO    Enable OTA or not
-MDT_OTA : "NO"   #YES/NO
- 
-
 #==========================Fwupdate Main Configuration=================================#
 
 #For single update and roundtrip update
 ALEOS_BUILD_FROM : "4.3.4.009"
-ALEOS_BUILD_TO : "4.3.6.E10"
+ALEOS_BUILD_TO : "4.3.6.E11"
 
 RM_FROM : "MC8705_ATT001_1032" 
-RM_TO : "MC8705_ATT001_1032"
+RM_TO : "MC8705_ATT001_3553"
 ROUNDTRIP_TIMES : 2
 
 #For MDT_LOCAL update
@@ -38,7 +30,6 @@ DEVICE_NUMBER : 2
 
 #For OTA update
 OTA_IP      : 184.151.218.226
-OTA_IP_LIST : ["184.151.218.226"] 
 
 #FTP server info, For AT Command update
 FTP_SERVER_ADDRESS : "192.168.13.101"
@@ -46,7 +37,7 @@ FTP_USERNAME       : "user1"
 FTP_PASSWORD       : "12345"
 
 #Error attemp time
-ATTEMP_TIME         : 100
+ATTEMPT_TIME        : 20
 ATTEMPT_VERIFY_TIME : 15
 
 #Timer for applying step
@@ -209,6 +200,8 @@ RM_VER_NAME_MAP :
           "156"     : p3110506
           "35205"   : SWI9200X_03.05.20.05ap
 
+ 
+
 #==============================================================================#
 
 #==================================Test Case List==============================#
@@ -235,7 +228,7 @@ LIST_TESTCASES:
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
            3  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432009_432a010I"     
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_ACEManager/ Local_RM_update_single"     
               PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
@@ -245,7 +238,7 @@ LIST_TESTCASES:
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
            4  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_sp_GX400"     
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_ACEManager/ Local_RM_update_roundtrip"     
               PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
@@ -256,7 +249,7 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate           
                       
            5  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432a010_432a010I"     
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_AT_Command/ Local_ALEOS_Update_Single_AT"     
               PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
@@ -266,7 +259,7 @@ LIST_TESTCASES:
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
            6  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432a010I_434009"     
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_AT_Command/ Local_ALEOS_Update_Roundtrip_AT"     
               PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
@@ -276,7 +269,7 @@ LIST_TESTCASES:
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
            7  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432009_433014"     
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_AT_Command/ Local_RM_Update_Single_AT"     
               PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
@@ -286,7 +279,7 @@ LIST_TESTCASES:
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
            8  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432009_433a014"     
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_AT_Command/ Local_RM_Update_Roundtrip_AT"     
               PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
@@ -296,7 +289,7 @@ LIST_TESTCASES:
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
            9  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432a010_433014"     
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_AT_Command/ Local_ALEOS_RM_Update_Single_AT"     
               PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
@@ -306,7 +299,7 @@ LIST_TESTCASES:
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
            10  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432a010_433a014"     
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_AT_Command/ Local_ALEOS_RM_Update_Roundtrip_AT"     
               PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
@@ -316,7 +309,7 @@ LIST_TESTCASES:
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
            11  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432a010_434009"     
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_ACEManager/ OTA_ALEOS_update_single"     
               PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
@@ -326,7 +319,7 @@ LIST_TESTCASES:
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
            12  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433a014_434009"     
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_ACEManager/ OTA_ALEOS_update_roundtrip"     
               PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
@@ -336,7 +329,7 @@ LIST_TESTCASES:
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
            13  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433014_434009"     
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_ACEManager/ OTA_RM_update_single"     
               PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
@@ -346,7 +339,7 @@ LIST_TESTCASES:
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
            14  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432a010_434009"     
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_ACEManager/ OTA_RM_update_roundtrip"     
               PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
@@ -356,7 +349,7 @@ LIST_TESTCASES:
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
            15  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433a014_434009"     
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_AT_Command/ OTA_ALEOS_Update_Single_AT"     
               PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
@@ -366,7 +359,7 @@ LIST_TESTCASES:
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
            16  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433014_434009"     
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_AT_Command/ OTA_ALEOS_Update_Roundtrip_AT"     
               PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
@@ -376,7 +369,7 @@ LIST_TESTCASES:
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
            17  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_432a010_434009"     
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_AT_Command/ OTA_RM_Update_Single_AT"     
               PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
@@ -386,7 +379,7 @@ LIST_TESTCASES:
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
            18  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433a014_434009"     
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_AT_Command/ OTA_RM_Update_Roundtrip_AT"     
               PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
@@ -396,7 +389,7 @@ LIST_TESTCASES:
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
            19  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433014_434009"     
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_AT_Command/ OTA_ALEOS_RM_Update_Single_AT"     
               PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
@@ -406,7 +399,7 @@ LIST_TESTCASES:
               PRIORIY     : HIGH
               TEST_AREA   : Fwupdate
            20  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433014_434009"     
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_AT_Command/ OTA_ALEOS_RM_Update_Roundtrip_AT"     
               PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
@@ -417,7 +410,7 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate
               
            21  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433014_434009"     
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_ACEManager/ Local_ALEOS_update_single_skip_RM"     
               PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
@@ -428,7 +421,7 @@ LIST_TESTCASES:
               TEST_AREA   : Fwupdate
               
            22  : 
-              TC_ID       : "/Feature/Fwupdate/tc_fwupdate_local_433014_434009"     
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_ACEManager/ Local_ALEOS_update_roundtrip_skip_RM"     
               PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
               OBSOLETE_VER: []
               DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
@@ -436,6 +429,25 @@ LIST_TESTCASES:
               TEST_TYPE   : ["Functional","FUNCTIONAL"]
               DESCRIPTION : "Test firmware update by AT commands"
               PRIORIY     : HIGH
-              TEST_AREA   : Fwupdate           
-   
+              TEST_AREA   : Fwupdate
+           23  :
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_ACEManager/ Local_RM_update_single_designate"     
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090","MC8705"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate          
+           24  :
+              TC_ID       : "Feature/ ACEmgr_Functions/ FW_update_ALEOS_and_RMFU/ ALEOS_FW_update_Peyton/ Using_ACEManager/ Local_RM_update_roundtrip_designate"     
+              PRODUCT_VER : ["4.3.3","4.3.4","4.3.5","4.3.6"]
+              OBSOLETE_VER: []
+              DEVICE_TYPE : ["GX400","GX440","ES440","LS300"]
+              RM_TYPE     : ["MC7700","MC7750","MC7710","SL8090","MC8705"]
+              TEST_TYPE   : ["Functional","FUNCTIONAL"]
+              DESCRIPTION : "Test firmware update by AT commands"
+              PRIORIY     : HIGH
+              TEST_AREA   : Fwupdate
  

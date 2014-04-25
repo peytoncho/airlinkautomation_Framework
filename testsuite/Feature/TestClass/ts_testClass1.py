@@ -113,7 +113,7 @@ class TsTestClass1 (unittest.TestCase):
 #         except Exception:
 #             self.skipTest("DUT not ready")
                      
-        self.se_ins = selenium_utilities.SeleniumAcemanager()
+#        self.se_ins = selenium_utilities.SeleniumAcemanager()
 #         self.at_ins = at_utilities.AtCommands()
 #         self.ssh_ins = ssh_airlink.SshAirlink()
         
@@ -128,12 +128,15 @@ class TsTestClass1 (unittest.TestCase):
 #         self.connect_instance = self.conn_ins.connection_types()
 #         if not self.connect_instance.connect(): 
 #             basic_airlink.slog("Problem: testbed not ready yet")
-        self.driver = self.se_ins.login(self.url, self.username, self.password)
-        self.device_name = self.se_ins.form_device_name(self.driver)   
+#        self.driver = self.se_ins.login(self.url, self.username, self.password)
+#        self.device_name = self.se_ins.form_device_name(self.driver)   
         return
     def tearDown(self):
-        self.driver.quit()
-        return
+        try:
+            self.driver.quit()
+        except:
+            pass
+        
 
        
     def test_1(self):
@@ -152,7 +155,7 @@ class TsTestClass1 (unittest.TestCase):
         basic_airlink.cslog("This is tc_test 3")
         pass
     
-    @unittest.skipIf(fail_flag ==1, Exception("tc1"))   
+#    @unittest.skipIf(fail_flag ==1, Exception("tc1"))   
     def test_4(self):
         basic_airlink.cslog("This is tc_test 4")
         self.assertEqual(True, False, "tc4 fail")      

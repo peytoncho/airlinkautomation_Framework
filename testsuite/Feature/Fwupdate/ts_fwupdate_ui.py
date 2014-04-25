@@ -31,8 +31,6 @@ airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME']
 basic_airlink.append_sys_path()
 tbd_config_map, fwupdate_config_map = basic_airlink.get_config_data(test_area,"")
 
-
-
 class TsFwupdateUi(unittest.TestCase):
     """TsFwupdateUi class provides a firmware update automation using Selenium UI test features.
     """
@@ -58,6 +56,7 @@ class TsFwupdateUi(unittest.TestCase):
         
         Returns: None
         '''
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE")
         return
     
     def testcase_setup(self,test_way):
@@ -94,7 +93,6 @@ class TsFwupdateUi(unittest.TestCase):
             self.fail("Test failed. Reason: "+result)
         else:
             basic_airlink.cslog(time.ctime(time.time())+" ===>> "+result, "GREEN")
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE")
     
     def tc_fwupdate_local_single_aleos_skip_rm(self):
         self.testcase_setup("Local")       
@@ -104,8 +102,7 @@ class TsFwupdateUi(unittest.TestCase):
         if not "True" in result :
             self.fail("Test failed. Reason: "+result)
         else:
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> "+result, "GREEN")
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE")          
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> "+result, "GREEN")          
   
     def tc_fwupdate_local_roundtrip_aleos(self):
         '''  This method will run the round trip update
@@ -115,9 +112,7 @@ class TsFwupdateUi(unittest.TestCase):
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware Roundtrip upgrade ", "BLUE", "YELLOW")      
         
         self.fw_ins.fwrmupdate_ui_aleos_roundtrip(self.fw_from, self.fw_to)
-                               
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
-        
+                                      
     def tc_fwupdate_local_roundtrip_aleos_skip_rm(self):
         '''  This method will run the round trip update
         
@@ -127,10 +122,8 @@ class TsFwupdateUi(unittest.TestCase):
         
         self.fw_ins.fwrmupdate_ui_aleos_roundtrip(self.fw_from, self.fw_to, skip_rm=True)
                                
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
-
-
-    def tc_fwupdate_local_single_rm(self):
+    @unittest.skipIf(fwupdate_config_map["MDT_LOCAL"] == "YES", "can not run in MDT mode")
+    def tc_fwupdate_local_single_rm_customize(self):
         self.testcase_setup("Local")
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case:  ACEManager Firmware single upgrade ", "BLUE")        
         rm1 = fwupdate_config_map["RM_TO"]
@@ -139,17 +132,36 @@ class TsFwupdateUi(unittest.TestCase):
             self.fail("Test failed. Reason: "+result)
         else:
             basic_airlink.cslog(time.ctime(time.time())+" ===>> "+result, "GREEN")
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE")
          
-    
-    def tc_fwupdate_local_roundtrip_rm(self):
+    @unittest.skipIf(fwupdate_config_map["MDT_LOCAL"] == "YES", "can not run in MDT mode")
+    def tc_fwupdate_local_roundtrip_rm_customize(self):
         self.testcase_setup("Local")
         basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware Roundtrip upgrade ", "BLUE", "YELLOW")      
         
         self.fw_ins.fwrmupdate_ui_rm_roundtrip(self.rm_from, self.rm_to)
                                
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
     
+#    @unittest.skipIf(fwupdate_airlink.FwupdateAirlink()._compare_rm(fw_to = fwupdate_config_map["ALEOS_BUILD_TO"]),"Skip")    
+    def tc_fwupdate_local_single_rm_designate(self):
+        self.testcase_setup("Local")
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case:  ACEManager Firmware single upgrade ", "BLUE")       
+        rm1 = self.fw_ins._match_rm(self.fw_to)
+        result = self.fw_ins.fwupdate_ui_rm(rm1) 
+        if not "True" in result :
+            self.fail("Test failed. Reason: "+result)
+        else:
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> "+result, "GREEN")
+    
+#    @unittest.skipIf(self.fw_ins._compare_rm(fw_from = self.fw_from, fw_to = self.fw_to))
+    def tc_fwupdate_local_roundtrip_rm_designate(self):
+        self.testcase_setup("Local")
+        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case: ACEManager Firmware Roundtrip upgrade ", "BLUE", "YELLOW")      
+        rm1 = self.fw_ins._match_rm(self.fw_from)
+        rm2 = self.fw_ins._match_rm(self.fw_to)
+        self.fw_ins.fwrmupdate_ui_rm_roundtrip(rm1, rm2)
+                               
+       
+
     def tc_fwupdate_ota_single_aleos(self):
         ''' This method will run the single update
 
@@ -162,7 +174,6 @@ class TsFwupdateUi(unittest.TestCase):
             self.fail("Test failed. Reason: "+result)
         else:
             basic_airlink.cslog(time.ctime(time.time())+" ===>> "+result, "GREEN")
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE") 
     
     def tc_fwupdate_ota_roundtrip_aleos(self):
         '''  This method will run the round trip update
@@ -176,7 +187,6 @@ class TsFwupdateUi(unittest.TestCase):
         
         self.fw_ins.fwrmupdate_ui_roundtrip(self.fw_from, self.fw_to)
                                
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
   
     def tc_fwupdate_ota_single_rm(self):
         ''' This method will run the single update
@@ -193,7 +203,6 @@ class TsFwupdateUi(unittest.TestCase):
             self.fail("Test failed. Reason: "+result)
         else:
             basic_airlink.cslog(time.ctime(time.time())+" ===>> "+result, "GREEN")
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE") 
     
     def tc_fwupdate_ota_roundtrip_rm(self):
         '''  This method will run the round trip update
@@ -204,7 +213,6 @@ class TsFwupdateUi(unittest.TestCase):
         
         self.fw_ins.fwrmupdate_ui_rm_roundtrip(self.rm_from, self.rm_to)
                                
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")
 
     def tc_fwupdate_local_sp_GX400(self):
         '''  This method will run the round trip update
@@ -236,8 +244,7 @@ class TsFwupdateUi(unittest.TestCase):
             else:
                 basic_airlink.cslog(time.ctime(time.time())+" ===>> Firmware version Verify: Pass", "GREEN")
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Round: "+str(round+1)+" Completed", "BLUE")
-                              
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE", "YELLOW")        
+                                    
 
     def tc_fwupdate_local_sp_LS300(self):
         #special internal function for this test case
@@ -288,7 +295,6 @@ class TsFwupdateUi(unittest.TestCase):
             #Downgrade path, built by tester, it depense on the downgrade process
             
             basic_airlink.cslog(time.ctime(time.time())+" ===>> Round: "+str(round+1)+" Completed", "BLUE")
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE")
     
     def tc_fwupdate_custom_path_example(self):
         #This example is simulating the path:
@@ -339,9 +345,7 @@ class TsFwupdateUi(unittest.TestCase):
             
             #Downgrade path, built by tester, it depense on the downgrade process
                        
-            basic_airlink.cslog(time.ctime(time.time())+" ===>> Round: "+str(round+1)+" Completed", "BLUE")
-        basic_airlink.cslog(time.ctime(time.time())+" ===>> Test case Completed", "BLUE")
-        pass       
+            basic_airlink.cslog(time.ctime(time.time())+" ===>> Round: "+str(round+1)+" Completed", "BLUE")      
     
         
         

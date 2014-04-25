@@ -3,7 +3,7 @@
 # This module is main part of Firmware update test automation, 
 # and run the specified testcases.
 # Company: Sierra Wireless
-# Time: Jun 26, 2013
+# Time: Apr 25, 2014
 # Author: Airlink
 # 
 #################################################################################
@@ -17,6 +17,7 @@ import htmlreport
 import basic_airlink
 import mdt_airlink
 import yaml
+import datetime
 
 import ts_fwupdate_ui
 import ts_fwupdate_at_commands
@@ -24,6 +25,7 @@ import ts_fwupdate_at_commands
 test_area = "Fwupdate"
 test_sub_area=""
 tbd_config_map, fwupdate_config_map = basic_airlink.get_config_data(test_area,"")
+
 
 def dump_tc_list(combo_list,processing_index):
     combo_map = {'COMBO_LIST' : combo_list,
@@ -36,7 +38,7 @@ def dump_tc_list(combo_list,processing_index):
 #  Firmware Update test automation main
 ####################################################
 class Runner(object):
-    def __init__(self,device = None, test_type = None):
+    def __init__(self,device = tbd_config_map["DUTS"][0], test_type = None):
         self.device_name = device
         self.test_type = test_type
         if tbd_config_map["LOG_LEVEL"]=="DEBUG":
@@ -49,8 +51,8 @@ class Runner(object):
                         #Local test cases for UI and AT Command
                         1:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_single_aleos",0],
                         2:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_roundtrip_aleos",0],
-                        3:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_single_rm",0],
-                        4:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_roundtrip_rm",0],
+                        3:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_single_rm_customize",0], 
+                        4:   [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_roundtrip_rm_customize",0],
                         5:   [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_local_single_aleos",0],
                         6:   [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_local_roundtrip_aleos",0],
                         7:   [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_local_single_rm",0],
@@ -69,8 +71,12 @@ class Runner(object):
                         18:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ota_roundtrip_rm",0],
                         19:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ota_single_aleos_rm",0],                       
                         20:  [ts_fwupdate_at_commands.TsFwupdateAtCommands,"tc_fwupdate_ota_roundtrip_aleos_rm",0],                       
+
+                        #Additional test cases
                         21:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_single_aleos_skip_rm",0],
                         22:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_roundtrip_aleos_skip_rm",0],
+#                        23:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_single_rm_designate",0], 
+#                        24:  [ts_fwupdate_ui.TsFwupdateUi,"tc_fwupdate_local_roundtrip_rm_designate",0],                                         
                         }
     
     def create_log_name(self):
@@ -79,7 +85,16 @@ class Runner(object):
     
     def create_report_name(self):
         time_stamp = time.strftime("%b-%d-%Y_%H-%M")
-        report_filename=basic_airlink.get_report_filename(tbd_config_map, test_area,"")
+        current_date_str = str(datetime.datetime.now().date())
+        current_time_str = str(datetime.datetime.now().time()).replace(":","-")
+        airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME']
+        slash = "\\" if sys.platform == 'win32' else "/"
+        device_name = self.device_name
+                
+        report_filename = airlinkautomation_home_dirname+slash+"results"+slash+current_date_str+"_"+ \
+                            current_time_str+"_"+ device_name +"_" + \
+                            tbd_config_map[device_name]["ALEOS_FW_VER"]+ "_"+ \
+                            "Fwupdate_testsuite.html"
         return report_filename
     
     def run(self):
@@ -87,7 +102,8 @@ class Runner(object):
         report_filename = self.create_report_name()
         fpp = file(report_filename, 'wb')
         logging.basicConfig(level = self.LEVEL,filename = log_filename, format=self.FORMAT,  filemode='w')
-        description_text= r""" ***"""+ "log file name " +log_filename
+#        description_text= r""" ***"""+ "log file name " +log_filename
+        description_text=""
         runner = htmlreport.HTMLTestRunner(
                 stream = fpp,
                 title = 'Firmware Update Test Report', 
@@ -109,7 +125,7 @@ class Runner(object):
         
         airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME']
         csv_file_path = airlinkautomation_home_dirname+'/results/csv/'
-        basic_airlink.make_csv(csv_file_path, test_result, fwupdate_config_map)   
+        basic_airlink.make_csv(csv_file_path, test_result, fwupdate_config_map, self.tc_ts_map, note=self.device_name)   
 
 class Launcher(object):
     def __init__(self,test_type):
@@ -123,18 +139,12 @@ class Launcher(object):
             #1, change all connected devices IP
             self.mdt_ins.change_all_device_ip()
             print "IP changed Waiting..."
-            time.sleep(90)
+            time.sleep(110)
          
-            #2, check devices connection
-            check_connection_flag = self.mdt_ins.ping_devices()
-            if not check_connection_flag:
-                #should be changed
-                sys.exit(2)
-        
-            #3, form the devices list            
+            #2, form the devices list            
             combo_list = self.mdt_ins.form_device_fullname()
                 
-            #4,write the list to yml             
+            #3,write the list to yml             
             for device in combo_list:
                 i = combo_list.index(device)
                 dump_tc_list(combo_list,str(i+1))              
@@ -149,4 +159,3 @@ if __name__ == "__main__":
      else:
          test_type = "single"
      Launcher(test_type).run()
-#    mdt_airlink.MdtAirlink(fwupdate_config_map["DEVICE_NUMBER"]).restore_device_ip()

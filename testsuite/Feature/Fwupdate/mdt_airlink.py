@@ -23,6 +23,7 @@ airlinkautomation_home_dirname = os.environ['AIRLINKAUTOMATION_HOME']
 with open(airlinkautomation_home_dirname+'\config\common_testbed_conf.yml','r') as stream:
     tbd_conf_map = yaml.load(stream)
 
+sys.path.append(airlinkautomation_home_dirname+'/lib/common/UI')
 
 class MdtAirlink(object):
     def __init__(self,device_number):        
@@ -178,12 +179,12 @@ class MdtAirlink(object):
                 global_id_index = global_id_list.index(global_id)
             if not lan_instance.set_ethernet_device_ip(driver, "192.168.13."+str(global_id_index+1)):
                 retry_counter+=1
-                driver.close()
+                driver.quit()
                 continue
             lan_instance.apply_reboot(driver)
                 
             time.sleep(5)
-            driver.close()
+            driver.quit()
             seccess_flag = True
         
         return global_id
@@ -219,9 +220,10 @@ class MdtAirlink(object):
         '''
         device_lst = []
         retry_flag = 1
+        attempt_count = 10
         for i in range(self.device_num):
             retry_flag = 1
-            while retry_flag == 1 or retry_flag == 2:
+            while (retry_flag == 1 or retry_flag == 2) and attempt_count > 0:
                 ace_url = 'http://192.168.13.'+str(i+1)+':9191'
                 driver = self.se_ins.login(ace_url, 'user', '12345')
                 time.sleep(5)
@@ -229,21 +231,25 @@ class MdtAirlink(object):
             
                 if device_model == "":
                     retry_flag = 2
-                    driver.close()
+                    driver.quit()
+                    attempt_count -=1
+                    print("Get device information failed, retry "+str(attempt_count)+"times left...\n")
                     continue
                 
                 device_rm = self.se_ins.get_radio_module_type(driver)
                 device_rmid = self.se_ins.get_rmid(driver)
                 time.sleep(3)
-                driver.close()
+                driver.quit()
             
                 device_fullname = "DUT_"+device_model+"_"+device_rm+"_"+device_rmid[0:3]
             
                 device_lst.append(str(device_fullname))
                 retry_flag = 0
-            
+        
+        print("\n================ The devices below are to be tested ================")     
         for device in device_lst:
             print device
+        print ("================ END ================\n")
         return device_lst    
 
 

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Firmware Update Test Report</title>
+    <meta name="generator" content="HTMLTestRunner 0.8.1"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    
+<style type="text/css" media="screen">
+body        { font-family: verdana, arial, helvetica, sans-serif; font-size: 80%; }
+table       { font-size: 100%; }
+pre         { }
+
+/* -- heading ---------------------------------------------------------------------- */
+h1 {
+}
+.heading {
+    margin-top: 0ex;
+    margin-bottom: 1ex;
+}
+
+.heading .attribute {
+    margin-top: 1ex;
+    margin-bottom: 0;
+}
+
+.heading .description {
+    margin-top: 4ex;
+    margin-bottom: 6ex;
+}
+
+/* -- report ------------------------------------------------------------------------ */
+#show_detail_line {
+    margin-top: 3ex;
+    margin-bottom: 1ex;
+}
+#result_table {
+    width: 80%;
+    border-collapse: collapse;
+    border: medium solid #777;
+}
+#header_row {
+    font-weight: bold;
+    color: white;
+    background-color: #777;
+}
+#result_table td {
+    border: thin solid #777;
+    padding: 2px;
+}
+#total_row  { font-weight: bold; }
+.passClass  { background-color: #6c6; }
+.failClass  { background-color: #c60; }
+.errorClass { background-color: #c00; }
+.passCase   { color: #6c6; }
+.failCase   { color: #c60; font-weight: bold; }
+.errorCase  { color: #c00; font-weight: bold; }
+.hiddenRow  { display: none; }
+.testcase   { margin-left: 2em; }
+
+
+/* -- ending ---------------------------------------------------------------------- */
+#ending {
+}
+
+</style>
+
+</head>
+<body>
+<script language="javascript" type="text/javascript"><!--
+output_list = Array();
+
+/* level - 0:Summary; 1:Failed; 2:All */
+function showCase(level) {
+    trs = document.getElementsByTagName("tr");
+    for (var i = 0; i < trs.length; i++) {
+        tr = trs[i];
+        id = tr.id;
+        if (id.substr(0,2) == 'ft') {
+            if (level < 1) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+            }
+        }
+        if (id.substr(0,2) == 'pt') {
+            if (level > 1) {
+                tr.className = '';
+            }
+            else {
+                tr.className = 'hiddenRow';
+            }
+        }
+    }
+}
+
+function showClassDetail(cid, count) {
+    var id_list = Array(count);
+    var toHide = 1;
+    for (var i = 0; i < count; i++) {
+        tid0 = 't' + cid.substr(1) + '.' + (i+1);
+        tid = 'f' + tid0;
+        tr = document.getElementById(tid);
+        if (!tr) {
+            tid = 'p' + tid0;
+            tr = document.getElementById(tid);
+        }
+        id_list[i] = tid;
+        if (tr.className) {
+            toHide = 0;
+        }
+    }
+    for (var i = 0; i < count; i++) {
+        tid = id_list[i];
+        if (toHide) {
+            document.getElementById(tid).className = 'hiddenRow';
+        }
+        else {
+            document.getElementById(tid).className = '';
+        }
+    }
+}
+
+function html_escape(s) {
+    s = s.replace(/&/g,'&amp;');
+    s = s.replace(/</g,'&lt;');
+    s = s.replace(/>/g,'&gt;');
+    return s;
+}
+
+function showOutput(id, name) {
+    var w = window.open("", //url
+                    "",
+                    "resizable,scrollbars,status,width=800,height=450");
+    d = w.document;
+    d.write("<pre>");
+    d.write(html_escape(output_list[id]));
+    d.write("\n");
+    d.write("<a href='javascript:window.close()'>close</a>\n");
+    d.write("</pre>\n");
+    d.close();
+}
+--></script>
+
+<div class='heading'>
+<h1>Firmware Update Test Report</h1>
+<p class='attribute'><strong>Start Time:</strong> 2014-04-23 16:38:35</p>
+<p class='attribute'><strong>Duration:</strong> 2:30:13.706000</p>
+<p class='attribute'><strong>Status:</strong> Pass 3 Error 2</p>
+
+<p class='description'></p>
+</div>
+
+
+
+<p id='show_detail_line'>Show
+<a href='javascript:showCase(0)'>Summary</a>
+<a href='javascript:showCase(1)'>Failed</a>
+<a href='javascript:showCase(2)'>All</a>
+</p>
+<table id='result_table'>
+<colgroup>
+<col align='left' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+</colgroup>
+<tr id='header_row'>
+    <td>Test Group/Test case</td>
+    <td>Count</td>
+    <td>Pass</td>
+    <td>Fail</td>
+    <td>Error</td>
+    <td>View</td>
+</tr>
+
+<tr class='errorClass'>
+    <td>ts_fwupdate_ui.TsFwupdateUi: TsFwupdateUi class provides a firmware update automation using Selenium UI test features.</td>
+    <td>4</td>
+    <td>2</td>
+    <td>0</td>
+    <td>2</td>
+    <td><a href="javascript:showClassDetail('c1',4)">Detail</a></td>
+</tr>
+
+<tr id='pt1.1' class='hiddenRow'>
+    <td class='none'><div class='testcase'>tc_fwupdate_local_single_aleos: This method will run the single update</div></td>
+    <td colspan='5' align='center'><a href="javascript:showOutput('pt1.1', 'tc_fwupdate_local_single_aleos: This method will run the single update')">pass</a>
+<script language="javascript" type="text/javascript">output_list['pt1.1'] = '\nWed Apr 23 16:38:39 2014 ===\x3E\x3E Test case:  ACEManager Firmware single upgrade \n\n\nstep: Match the RM within ALEOS and device\n\n\nstep: Check current ALEOS version\n\n\nStep:  get ALEOS FW version by AT command  ATI1\n(0, \x3C_sre.SRE_Match object at 0x04687BF0\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687BB8\x3E, \'ATI1\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687BF0\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687C28\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687BF0\x3E, \'4.3.6.E11\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687C28\x3E, \'12180306000700000000000000000000\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687C60\x3E, \'Boot v1.0.9\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687C28\x3E, \'   (c) 2009-2014 Sierra Wireless, Inc.\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687C60\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.6.E11\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2014 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\nWed Apr 23 16:38:43 2014 ===\x3E\x3E Current ALEOS Version: 4.3.6.E11\n\n\nWed Apr 23 16:38:43 2014 ===\x3E\x3E ALEOS Build path: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\data\\builds\\GX_4.3.6.E11.bin\n\n\nWed Apr 23 16:38:43 2014 ===\x3E\x3E RM Build path: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\data\\builds\\MC8705_ATT001_3553.bin\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 16:38:52 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 16:39:01 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 16:39:04 2014 ===\x3E\x3E Browsing update file\n\n\nWed Apr 23 16:39:07 2014 ===\x3E\x3E Clicking Go\n\n\nPick timer for waiting FULL update process\n\n\nWait Applyting Step\n\n\nWed Apr 23 16:39:53 2014 ===\x3E\x3E RM frame shows\n\n\nWed Apr 23 16:39:53 2014 ===\x3E\x3E Applying ...\n\n\nWed Apr 23 16:40:27 2014 ===\x3E\x3E Applying Firmware ...\n\n\nWed Apr 23 16:50:30 2014 ===\x3E\x3E Done ALEOS Updating\n\n\nWed Apr 23 16:50:30 2014 ===\x3E\x3E Rebooting ...\n\n\nstep: Verify ALEOS version\n\n\nstep: Check current ALEOS version\n\n\nStep:  get ALEOS FW version by AT command  ATI1\n(0, \x3C_sre.SRE_Match object at 0x05E352F8\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35410\x3E, \'ATI1\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35330\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35410\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35330\x3E, \'4.3.6.E11\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E352F8\x3E, \'12180306000700000000000000000000\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35330\x3E, \'Boot v1.0.9\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35410\x3E, \'   (c) 2009-2014 Sierra Wireless, Inc.\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35330\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.6.E11\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2014 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\nWed Apr 23 16:53:04 2014 ===\x3E\x3E Current ALEOS version: 4.3.6.E11\n\n\nstep: Verify Radio Module\n\n\nStep:  get radio version by AT command  ATI2\n(0, \x3C_sre.SRE_Match object at 0x05E35330\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35790\x3E, \'ATI2\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35410\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35790\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35410\x3E, \'T3_5_5_3AP R703 CNSZXD00000155 2013/09/28 16:32:14\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35790\x3E, \'MC8705\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35410\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI2\r\nOK\r\n\r\r\nT3_5_5_3AP R703 CNSZXD00000155 2013/09/28 16:32:14\r\r\nMC8705\r\r\nOK\r\r\n\n\nWed Apr 23 16:53:08 2014 ===\x3E\x3E Current RM version T3_5_5_3AP R703 CNSZXD00000155 2013/09/28 16:32:14\n\n\nWed Apr 23 16:53:08 2014 ===\x3E\x3E ALEOS and RM verify: True\n\n\nWed Apr 23 16:53:08 2014 ===\x3E\x3E Test case Completed\n\n';</script>
+</td>
+</tr>
+
+<tr id='pt1.2' class='hiddenRow'>
+    <td class='none'><div class='testcase'>tc_fwupdate_local_roundtrip_aleos: This method will run the round trip update</div></td>
+    <td colspan='5' align='center'><a href="javascript:showOutput('pt1.2', 'tc_fwupdate_local_roundtrip_aleos: This method will run the round trip update')">pass</a>
+<script language="javascript" type="text/javascript">output_list['pt1.2'] = '\nWed Apr 23 16:53:14 2014 ===\x3E\x3E Test case: ACEManager Firmware Roundtrip upgrade \n\n\nWed Apr 23 16:53:14 2014 ===\x3E\x3E Round: 1 Started\n\n\nWed Apr 23 16:53:14 2014 ===\x3E\x3E Upgrade to: 4.3.6.E11\n\n\nstep: Match the RM within ALEOS and device\n\n\nstep: Check current ALEOS version\n\n\nStep:  get ALEOS FW version by AT command  ATI1\n(0, \x3C_sre.SRE_Match object at 0x04687D08\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0468E218\x3E, \'ATI1\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687D08\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0468EC60\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687D08\x3E, \'4.3.6.E11\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0468EC60\x3E, \'12180306000700000000000000000000\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687D08\x3E, \'Boot v1.0.9\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0468EC60\x3E, \'   (c) 2009-2014 Sierra Wireless, Inc.\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687D08\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.6.E11\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2014 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\nWed Apr 23 16:53:17 2014 ===\x3E\x3E Current ALEOS Version: 4.3.6.E11\n\n\nWed Apr 23 16:53:17 2014 ===\x3E\x3E ALEOS Build path: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\data\\builds\\GX_4.3.6.E11.bin\n\n\nWed Apr 23 16:53:17 2014 ===\x3E\x3E RM Build path: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\data\\builds\\MC8705_ATT001_3553.bin\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 16:53:27 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 16:53:37 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 16:53:40 2014 ===\x3E\x3E Browsing update file\n\n\nWed Apr 23 16:53:43 2014 ===\x3E\x3E Clicking Go\n\n\nPick timer for waiting FULL update process\n\n\nWait Applyting Step\n\n\nWed Apr 23 16:54:53 2014 ===\x3E\x3E no RM frame\n\n\nWed Apr 23 16:54:56 2014 ===\x3E\x3E Done ALEOS Updating\n\n\nWed Apr 23 16:54:56 2014 ===\x3E\x3E Rebooting ...\n\n\nstep: Verify ALEOS version\n\n\nstep: Check current ALEOS version\n\n\nStep:  get ALEOS FW version by AT command  ATI1\n(0, \x3C_sre.SRE_Match object at 0x05E35F00\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35DE8\x3E, \'ATI1\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35F00\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35EC8\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35F00\x3E, \'4.3.6.E11\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35EC8\x3E, \'12180306000700000000000000000000\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35560\x3E, \'Boot v1.0.9\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35EC8\x3E, \'   (c) 2009-2014 Sierra Wireless, Inc.\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35560\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.6.E11\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2014 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\nWed Apr 23 16:57:30 2014 ===\x3E\x3E Current ALEOS version: 4.3.6.E11\n\n\nWed Apr 23 16:57:30 2014 ===\x3E\x3E ALEOS verify: True\n\n\nWed Apr 23 16:57:30 2014 ===\x3E\x3E Test case Completed\n\n\nWed Apr 23 16:57:30 2014 ===\x3E\x3E Downgrade to: 4.3.4.009\n\n\nstep: Match the RM within ALEOS and device\n\n\nstep: Check current ALEOS version\n\n\nStep:  get ALEOS FW version by AT command  ATI1\n(0, \x3C_sre.SRE_Match object at 0x05E35EC8\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35560\x3E, \'ATI1\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35EC8\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35F00\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35EC8\x3E, \'4.3.6.E11\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35F00\x3E, \'12180306000700000000000000000000\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35BF0\x3E, \'Boot v1.0.9\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35F00\x3E, \'   (c) 2009-2014 Sierra Wireless, Inc.\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35BF0\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.6.E11\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2014 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\nWed Apr 23 16:57:33 2014 ===\x3E\x3E Current ALEOS Version: 4.3.6.E11\n\n\nWed Apr 23 16:57:33 2014 ===\x3E\x3E ALEOS Build path: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\data\\builds\\GX_4.3.4.009.bin\n\n\nWed Apr 23 16:57:33 2014 ===\x3E\x3E RM Build path: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\data\\builds\\MC8705_ATT001_1032.bin\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 16:57:47 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 16:57:57 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 16:58:00 2014 ===\x3E\x3E Browsing update file\n\n\nWed Apr 23 16:58:03 2014 ===\x3E\x3E Clicking Go\n\n\nPick timer for waiting FULL update process\n\n\nWait Applyting Step\n\n\nWed Apr 23 16:58:43 2014 ===\x3E\x3E RM frame shows\n\n\nWed Apr 23 16:58:43 2014 ===\x3E\x3E Applying ...\n\n\nWed Apr 23 16:59:15 2014 ===\x3E\x3E Applying Firmware ...\n\n\nWed Apr 23 17:09:18 2014 ===\x3E\x3E Done ALEOS Updating\n\n\nWed Apr 23 17:09:18 2014 ===\x3E\x3E Rebooting ...\n\n\nstep: Verify ALEOS version\n\n\nstep: Check current ALEOS version\n\n\nWed Apr 23 17:11:51 2014 ===\x3E\x3E aleos_check: Connection Failed, retry after 30 seconds\n\n\nWed Apr 23 17:12:24 2014 ===\x3E\x3E aleos_check: Connection Failed, retry after 30 seconds\n\n\nWed Apr 23 17:12:54 2014 ===\x3E\x3E Current ALEOS version: connection fail\n\n\nfw version does not match\n\n\nstep: Check current ALEOS version\n\n\nStep:  get ALEOS FW version by AT command  ATI1\n(0, \x3C_sre.SRE_Match object at 0x05E35C28\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35D78\x3E, \'ATI1\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E354B8\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35D78\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E354B8\x3E, \'4.3.4.009\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35C28\x3E, \'12180306000700000000000000000000\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E354B8\x3E, \'Boot v1.0.9\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35D78\x3E, \'   (c) 2009-2013 Sierra Wireless, Inc.\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E354B8\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.4.009\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2013 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\nWed Apr 23 17:12:58 2014 ===\x3E\x3E Current ALEOS version: 4.3.4.009\n\n\nstep: Verify Radio Module\n\n\nStep:  get radio version by AT command  ATI2\n(0, \x3C_sre.SRE_Match object at 0x05E354B8\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35560\x3E, \'ATI2\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E354B8\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35D78\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E354B8\x3E, \'T1_0_3_2AP R361 CNSZXD00000061 2011/04/15 17:40:48\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35D78\x3E, \'MC8705\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E354B8\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI2\r\nOK\r\n\r\r\nT1_0_3_2AP R361 CNSZXD00000061 2011/04/15 17:40:48\r\r\nMC8705\r\r\nOK\r\r\n\n\nWed Apr 23 17:13:02 2014 ===\x3E\x3E Current RM version T1_0_3_2AP R361 CNSZXD00000061 2011/04/15 17:40:48\n\n\nWed Apr 23 17:13:02 2014 ===\x3E\x3E ALEOS and RM verify: True\n\n\nWed Apr 23 17:13:02 2014 ===\x3E\x3E Round: 1 Completed\n\n\nWed Apr 23 17:13:02 2014 ===\x3E\x3E Round: 2 Started\n\n\nWed Apr 23 17:13:02 2014 ===\x3E\x3E Upgrade to: 4.3.6.E11\n\n\nstep: Match the RM within ALEOS and device\n\n\nstep: Check current ALEOS version\n\n\nStep:  get ALEOS FW version by AT command  ATI1\n(0, \x3C_sre.SRE_Match object at 0x05E35560\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35D78\x3E, \'ATI1\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35C28\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35D78\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35C28\x3E, \'4.3.4.009\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35560\x3E, \'12180306000700000000000000000000\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35C28\x3E, \'Boot v1.0.9\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35D78\x3E, \'   (c) 2009-2013 Sierra Wireless, Inc.\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E35C28\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.4.009\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2013 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\nWed Apr 23 17:13:05 2014 ===\x3E\x3E Current ALEOS Version: 4.3.4.009\n\n\nWed Apr 23 17:13:05 2014 ===\x3E\x3E ALEOS Build path: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\data\\builds\\GX_4.3.6.E11.bin\n\n\nWed Apr 23 17:13:05 2014 ===\x3E\x3E RM Build path: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\data\\builds\\MC8705_ATT001_3553.bin\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 17:13:15 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 17:13:25 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 17:13:28 2014 ===\x3E\x3E Browsing update file\n\n\nWed Apr 23 17:13:31 2014 ===\x3E\x3E Clicking Go\n\n\nPick timer for waiting FULL update process\n\n\nWait Applyting Step\n\n\nWed Apr 23 17:14:16 2014 ===\x3E\x3E RM frame shows\n\n\nWed Apr 23 17:14:16 2014 ===\x3E\x3E Applying ...\n\n\nWed Apr 23 17:14:48 2014 ===\x3E\x3E Applying Firmware ...\n\n\nWed Apr 23 17:24:51 2014 ===\x3E\x3E Done ALEOS Updating\n\n\nWed Apr 23 17:24:51 2014 ===\x3E\x3E Rebooting ...\n\n\nstep: Verify ALEOS version\n\n\nstep: Check current ALEOS version\n\n\nWed Apr 23 17:27:24 2014 ===\x3E\x3E aleos_check: Connection Failed, retry after 30 seconds\n\n\nWed Apr 23 17:27:55 2014 ===\x3E\x3E Current ALEOS version: connection fail\n\n\nfw version does not match\n\n\nstep: Check current ALEOS version\n\n\nStep:  get ALEOS FW version by AT command  ATI1\n(0, \x3C_sre.SRE_Match object at 0x04687B80\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E194F0\x3E, \'ATI1\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687B80\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19330\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687B80\x3E, \'4.3.6.E11\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19330\x3E, \'12180306000700000000000000000000\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687B80\x3E, \'Boot v1.0.9\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19330\x3E, \'   (c) 2009-2014 Sierra Wireless, Inc.\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687B80\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.6.E11\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2014 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\nWed Apr 23 17:27:59 2014 ===\x3E\x3E Current ALEOS version: 4.3.6.E11\n\n\nstep: Verify Radio Module\n\n\nStep:  get radio version by AT command  ATI2\n(0, \x3C_sre.SRE_Match object at 0x05E194F0\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19250\x3E, \'ATI2\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E194F0\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19330\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E194F0\x3E, \'T3_5_5_3AP R703 CNSZXD00000155 2013/09/28 16:32:14\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19330\x3E, \'MC8705\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E194F0\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI2\r\nOK\r\n\r\r\nT3_5_5_3AP R703 CNSZXD00000155 2013/09/28 16:32:14\r\r\nMC8705\r\r\nOK\r\r\n\n\nWed Apr 23 17:28:02 2014 ===\x3E\x3E Current RM version T3_5_5_3AP R703 CNSZXD00000155 2013/09/28 16:32:14\n\n\nWed Apr 23 17:28:02 2014 ===\x3E\x3E ALEOS and RM verify: True\n\n\nWed Apr 23 17:28:02 2014 ===\x3E\x3E Test case Completed\n\n\nWed Apr 23 17:28:02 2014 ===\x3E\x3E Downgrade to: 4.3.4.009\n\n\nstep: Match the RM within ALEOS and device\n\n\nstep: Check current ALEOS version\n\n\nStep:  get ALEOS FW version by AT command  ATI1\n(0, \x3C_sre.SRE_Match object at 0x05E19250\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19330\x3E, \'ATI1\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19250\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19368\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19250\x3E, \'4.3.6.E11\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19368\x3E, \'12180306000700000000000000000000\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19218\x3E, \'Boot v1.0.9\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19368\x3E, \'   (c) 2009-2014 Sierra Wireless, Inc.\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19218\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.6.E11\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2014 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\nWed Apr 23 17:28:06 2014 ===\x3E\x3E Current ALEOS Version: 4.3.6.E11\n\n\nWed Apr 23 17:28:06 2014 ===\x3E\x3E ALEOS Build path: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\data\\builds\\GX_4.3.4.009.bin\n\n\nWed Apr 23 17:28:06 2014 ===\x3E\x3E RM Build path: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\data\\builds\\MC8705_ATT001_1032.bin\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 17:28:15 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 17:28:25 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 17:28:28 2014 ===\x3E\x3E Browsing update file\n\n\nWed Apr 23 17:28:31 2014 ===\x3E\x3E Clicking Go\n\n\nPick timer for waiting FULL update process\n\n\nWait Applyting Step\n\n\nWed Apr 23 17:29:13 2014 ===\x3E\x3E RM frame shows\n\n\nWed Apr 23 17:29:13 2014 ===\x3E\x3E Applying ...\n\n\nWed Apr 23 17:29:46 2014 ===\x3E\x3E Applying Firmware ...\n\n\nWed Apr 23 17:39:49 2014 ===\x3E\x3E Done ALEOS Updating\n\n\nWed Apr 23 17:39:49 2014 ===\x3E\x3E Rebooting ...\n\n\nstep: Verify ALEOS version\n\n\nstep: Check current ALEOS version\n\n\nWed Apr 23 17:42:22 2014 ===\x3E\x3E aleos_check: Connection Failed, retry after 30 seconds\n\n\nWed Apr 23 17:42:55 2014 ===\x3E\x3E aleos_check: Connection Failed, retry after 30 seconds\n\n\nWed Apr 23 17:43:25 2014 ===\x3E\x3E Current ALEOS version: connection fail\n\n\nfw version does not match\n\n\nstep: Check current ALEOS version\n\n\nStep:  get ALEOS FW version by AT command  ATI1\n(0, \x3C_sre.SRE_Match object at 0x05E19678\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E193A0\x3E, \'ATI1\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19678\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19410\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19678\x3E, \'4.3.4.009\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19410\x3E, \'12180306000700000000000000000000\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19528\x3E, \'Boot v1.0.9\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19410\x3E, \'   (c) 2009-2013 Sierra Wireless, Inc.\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19528\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.4.009\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2013 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\nWed Apr 23 17:43:29 2014 ===\x3E\x3E Current ALEOS version: 4.3.4.009\n\n\nstep: Verify Radio Module\n\n\nStep:  get radio version by AT command  ATI2\n(0, \x3C_sre.SRE_Match object at 0x05E19528\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E193A0\x3E, \'ATI2\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19410\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E193A0\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19410\x3E, \'T1_0_3_2AP R361 CNSZXD00000061 2011/04/15 17:40:48\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E193A0\x3E, \'MC8705\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E19410\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI2\r\nOK\r\n\r\r\nT1_0_3_2AP R361 CNSZXD00000061 2011/04/15 17:40:48\r\r\nMC8705\r\r\nOK\r\r\n\n\nWed Apr 23 17:43:33 2014 ===\x3E\x3E Current RM version T1_0_3_2AP R361 CNSZXD00000061 2011/04/15 17:40:48\n\n\nWed Apr 23 17:43:33 2014 ===\x3E\x3E ALEOS and RM verify: True\n\n\nWed Apr 23 17:43:33 2014 ===\x3E\x3E Round: 2 Completed\n\n\nWed Apr 23 17:43:33 2014 ===\x3E\x3E Test case Completed\n\n';</script>
+</td>
+</tr>
+
+<tr id='ft1.3' class='none'>
+    <td class='errorCase'><div class='testcase'>tc_fwupdate_local_single_rm_customize</div></td>
+    <td colspan='5' align='center'><a href="javascript:showOutput('ft1.3', 'tc_fwupdate_local_single_rm_customize')">error</a>
+<script language="javascript" type="text/javascript">output_list['ft1.3'] = '\nWed Apr 23 17:43:38 2014 ===\x3E\x3E Test case:  ACEManager Firmware single upgrade \n\n\nstep: Check current ALEOS version\n\n\nStep:  get ALEOS FW version by AT command  ATI1\n(0, \x3C_sre.SRE_Match object at 0x05E451E0\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E451A8\x3E, \'ATI1\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E45218\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E451A8\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E45218\x3E, \'4.3.4.009\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E451E0\x3E, \'12180306000700000000000000000000\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E45218\x3E, \'Boot v1.0.9\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E451A8\x3E, \'   (c) 2009-2013 Sierra Wireless, Inc.\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E45218\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.4.009\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2013 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\nWed Apr 23 17:43:42 2014 ===\x3E\x3E RM Build: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\data\\builds\\MC8705_ATT001_3553.bin\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 17:43:56 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 17:44:06 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 17:44:09 2014 ===\x3E\x3E Browsing update file\n\n\nWed Apr 23 17:44:12 2014 ===\x3E\x3E Clicking Go\n\n\nWAIT_PROCESS_RM\n\n\nWait Applyting Step\n\n\nWed Apr 23 17:45:27 2014 ===\x3E\x3E Applying RM...\n\n\n(\x3Cclass \'selenium.common.exceptions.UnexpectedAlertPresentException\'\x3E, UnexpectedAlertPresentException(), \x3Ctraceback object at 0x06076E40\x3E)\n\n\nWed Apr 23 17:54:48 2014 ===\x3E\x3E Fail on wait log out\n\n\nCan\'t get the picture\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 17:54:58 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 17:55:08 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 17:55:08 2014 ===\x3E\x3EModal dialog present\n\n\nWed Apr 23 17:55:08 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nCan not Login, attemp: 1\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nCan not Login, attemp: 2\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nCan not Login, attemp: 3\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nCan not Login, attemp: 4\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 17:57:20 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 17:57:29 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 17:57:32 2014 ===\x3E\x3E Browsing update file\n\n\nWed Apr 23 17:57:35 2014 ===\x3E\x3E Clicking Go\n\n\nWAIT_PROCESS_RM\n\n\nWait Applyting Step\n\n\nWed Apr 23 17:58:24 2014 ===\x3E\x3E Applying RM...\n\n\n(\x3Cclass \'selenium.common.exceptions.UnexpectedAlertPresentException\'\x3E, UnexpectedAlertPresentException(), \x3Ctraceback object at 0x053A2120\x3E)\n\n\nWed Apr 23 18:08:15 2014 ===\x3E\x3E Fail on wait log out\n\n\nCan\'t get the picture\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 18:08:24 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 18:08:33 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 18:08:36 2014 ===\x3E\x3E Browsing update file\n\n\nWed Apr 23 18:08:39 2014 ===\x3E\x3E Clicking Go\n\n\nWAIT_PROCESS_RM\n\n\nWait Applyting Step\n\n\nWed Apr 23 18:09:29 2014 ===\x3E\x3E Applying RM...\n\n\n(\x3Cclass \'selenium.common.exceptions.TimeoutException\'\x3E, TimeoutException(), \x3Ctraceback object at 0x053A2FA8\x3E)\n\n\nWed Apr 23 18:38:44 2014 ===\x3E\x3E Fail on wait log out\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 18:38:52 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 18:39:02 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 18:39:05 2014 ===\x3E\x3E Browsing update file\n\n\nWed Apr 23 18:39:08 2014 ===\x3E\x3E Clicking Go\n\n\nWAIT_PROCESS_RM\n\n\nWait Applyting Step\n\n\nWed Apr 23 18:40:24 2014 ===\x3E\x3E Applying RM...\n\n\n(\x3Cclass \'selenium.common.exceptions.UnexpectedAlertPresentException\'\x3E, UnexpectedAlertPresentException(), \x3Ctraceback object at 0x060760D0\x3E)\n\n\nWed Apr 23 18:49:45 2014 ===\x3E\x3E Fail on wait log out\n\nTraceback (most recent call last):\n  File \"C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\testsuite\\Feature\\Fwupdate\\ts_fwupdate_ui.py\", line 131, in tc_fwupdate_local_single_rm_customize\n    result = self.fw_ins.fwupdate_ui_rm(rm1)\n  File \"C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\testsuite\\Feature\\Fwupdate\\fwupdate_airlink.py\", line 68, in fwupdate_ui_rm\n    result = self._pre_fwupdate_rm(update_rm_version)\n  File \"C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\testsuite\\Feature\\Fwupdate\\fwupdate_airlink.py\", line 424, in _pre_fwupdate_rm\n    result = self._fw_update(path_list,skip_rm)\n  File \"C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\testsuite\\Feature\\Fwupdate\\fwupdate_airlink.py\", line 828, in _fw_update\n    if not self._rm_update(self.driver, path_list[1], skip_rm=skip_rm):\nIndexError: list index out of range\n';</script>
+</td>
+</tr>
+
+<tr id='ft1.4' class='none'>
+    <td class='errorCase'><div class='testcase'>tc_fwupdate_local_roundtrip_rm_customize</div></td>
+    <td colspan='5' align='center'><a href="javascript:showOutput('ft1.4', 'tc_fwupdate_local_roundtrip_rm_customize')">error</a>
+<script language="javascript" type="text/javascript">output_list['ft1.4'] = '\nWed Apr 23 18:49:50 2014 ===\x3E\x3E Test case: ACEManager Firmware Roundtrip upgrade \n\n\nWed Apr 23 18:49:50 2014 ===\x3E\x3E Round: 1 Started\n\n\nWed Apr 23 18:49:50 2014 ===\x3E\x3E Upgrade to: MC8705_ATT001_3553\n\n\nstep: Check current ALEOS version\n\n\nWed Apr 23 18:49:53 2014 ===\x3E\x3E aleos_check: Connection Failed, retry after 30 seconds\n\n\nWed Apr 23 18:50:26 2014 ===\x3E\x3E aleos_check: Connection Failed, retry after 30 seconds\n\n\nWed Apr 23 18:50:59 2014 ===\x3E\x3E aleos_check: Connection Failed, retry after 30 seconds\n\n\nWed Apr 23 18:51:32 2014 ===\x3E\x3E aleos_check: Connection Failed, retry after 30 seconds\n\n\nWed Apr 23 18:52:03 2014 ===\x3E\x3E RM Build: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\data\\builds\\MC8705_ATT001_3553.bin\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 18:52:12 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 18:52:21 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 18:52:21 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 18:52:21 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 18:52:32 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 18:52:41 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 18:52:41 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 18:52:41 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 18:52:50 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 18:53:00 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 18:53:00 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 18:53:00 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 18:53:10 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 18:53:19 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 18:53:19 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 18:53:19 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 18:53:28 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 18:53:37 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 18:53:38 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 18:53:38 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 18:53:46 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 18:53:56 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 18:53:56 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 18:53:56 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nCan not Login, attemp: 1\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nCan not Login, attemp: 2\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nCan not Login, attemp: 3\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nCan not Login, attemp: 4\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nCan not Login, attemp: 5\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 18:56:27 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 18:56:37 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 18:56:37 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 18:56:37 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 18:56:45 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 18:56:55 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 18:56:55 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 18:56:55 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 18:57:04 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 18:57:14 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 18:57:14 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 18:57:14 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 18:57:27 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 18:57:37 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 18:57:37 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 18:57:37 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 18:57:52 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 18:58:01 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 18:58:01 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 18:58:01 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 18:58:10 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 18:58:20 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 18:58:20 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 18:58:20 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 18:58:36 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 18:58:39 2014 ===\x3E\x3E fail on btn_fw click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nCan not Login, attemp: 1\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nCan not Login, attemp: 2\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nCan not Login, attemp: 3\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nCan not Login, attemp: 4\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 19:00:51 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 19:01:00 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 19:01:00 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 19:01:00 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 19:01:08 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 19:01:18 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 19:01:18 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 19:01:18 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 19:01:26 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 19:01:36 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 19:01:36 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 19:01:36 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 19:01:44 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 19:01:54 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 19:01:54 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 19:01:54 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 19:02:04 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 19:02:14 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 19:02:14 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 19:02:14 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 19:02:28 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 19:02:37 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 19:02:37 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 19:02:37 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 19:02:45 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 19:02:55 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 19:02:55 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 19:02:55 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 19:03:06 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 19:03:09 2014 ===\x3E\x3E fail on btn_fw click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nCan not Login, attemp: 1\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nCan not Login, attemp: 2\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nCan not Login, attemp: 3\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nCan not Login, attemp: 4\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 19:05:34 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 19:05:44 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 19:05:44 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 19:05:44 2014 ===\x3E\x3E Fail on update type click\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nWed Apr 23 19:05:52 2014 ===\x3E\x3E Clicking firmware update button\n\n\nWed Apr 23 19:06:01 2014 ===\x3E\x3E Getting update type\n\n\nWed Apr 23 19:06:01 2014 ===\x3E\x3EElement is not currently visible and so may not be interacted with\n\n\nWed Apr 23 19:06:01 2014 ===\x3E\x3E Fail on update type click\n\nTraceback (most recent call last):\n  File \"C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\testsuite\\Feature\\Fwupdate\\ts_fwupdate_ui.py\", line 142, in tc_fwupdate_local_roundtrip_rm_customize\n    self.fw_ins.fwrmupdate_ui_rm_roundtrip(self.rm_from, self.rm_to)\n  File \"C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\testsuite\\Feature\\Fwupdate\\fwupdate_airlink.py\", line 153, in fwrmupdate_ui_rm_roundtrip\n    result = self.fwupdate_ui_rm(rm_to)\n  File \"C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\testsuite\\Feature\\Fwupdate\\fwupdate_airlink.py\", line 68, in fwupdate_ui_rm\n    result = self._pre_fwupdate_rm(update_rm_version)\n  File \"C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\testsuite\\Feature\\Fwupdate\\fwupdate_airlink.py\", line 424, in _pre_fwupdate_rm\n    result = self._fw_update(path_list,skip_rm)\n  File \"C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\testsuite\\Feature\\Fwupdate\\fwupdate_airlink.py\", line 842, in _fw_update\n    if not error_flag:\nUnboundLocalError: local variable \'error_flag\' referenced before assignment\n';</script>
+</td>
+</tr>
+
+<tr class='passClass'>
+    <td>ts_fwupdate_at_commands.TsFwupdateAtCommands: TsFwupdateAtCommands class provides a firmware update automation using At Command test features.</td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c2',1)">Detail</a></td>
+</tr>
+
+<tr id='pt2.1' class='hiddenRow'>
+    <td class='none'><div class='testcase'>tc_fwupdate_local_single_aleos: This method will run the single update using At Command</div></td>
+    <td colspan='5' align='center'><a href="javascript:showOutput('pt2.1', 'tc_fwupdate_local_single_aleos: This method will run the single update using At Command')">pass</a>
+<script language="javascript" type="text/javascript">output_list['pt2.1'] = '\nWed Apr 23 19:06:07 2014 ===\x3E\x3E Test Case: At Command Firmware upgrade to 4.3.6.E11\n\n\nstep: Check current ALEOS version\n\n\nStep:  get ALEOS FW version by AT command  ATI1\n(0, \x3C_sre.SRE_Match object at 0x04687DB0\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E45560\x3E, \'ATI1\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687DB0\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E453D8\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687DB0\x3E, \'4.3.4.009\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E453D8\x3E, \'12180306000700000000000000000000\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687DB0\x3E, \'Boot v1.0.9\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E453D8\x3E, \'   (c) 2009-2013 Sierra Wireless, Inc.\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687DB0\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.4.009\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2013 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\nWed Apr 23 19:06:11 2014 ===\x3E\x3E Step:  Start running the *fwupdate command\n\n\nWed Apr 23 19:06:12 2014 ===\x3E\x3E filename changed to fw.bin\n\n\nWed Apr 23 19:06:12 2014 ===\x3E\x3E Change file name:GX_4.3.6.E11.bin to fw.bin\n\n\nStep:  Update FW by AT command\n(0, \x3C_sre.SRE_Match object at 0x05E453D8\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04E51100\x3E, \'AT*FWUPDATE= 192.168.13.101,user1,12345,\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x05E453D8\x3E, \'OK\\r\\n\')\n(-1, None, \'\')\n\n\r\nAT*FWUPDATE= 192.168.13.101,user1,12345,\r\nOK\r\n\n\n\nCommand result: \r\nAT*FWUPDATE= 192.168.13.101,user1,12345,\r\nOK\r\n\n\n\nWed Apr 23 19:06:15 2014 ===\x3E\x3E Step:  Finished update, wait reboot...\n\n\nstep: Verify ALEOS version\n\n\nstep: Check current ALEOS version\n\n\nStep:  get ALEOS FW version by AT command  ATI1\n(0, \x3C_sre.SRE_Match object at 0x04687D40\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04E519F8\x3E, \'ATI1\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687D40\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04E51410\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687D40\x3E, \'4.3.6.E11\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04E51410\x3E, \'12180306000700000000000000000000\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687D40\x3E, \'Boot v1.0.9\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04E51410\x3E, \'   (c) 2009-2014 Sierra Wireless, Inc.\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04687D40\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.6.E11\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2014 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\nWed Apr 23 19:08:49 2014 ===\x3E\x3E Current ALEOS version: 4.3.6.E11\n\n\nWed Apr 23 19:08:49 2014 ===\x3E\x3E Test case Completed\n\n\nWed Apr 23 19:08:49 2014 ===\x3E\x3E ============ Test Completed====================\n\n';</script>
+</td>
+</tr>
+
+<tr id='total_row'>
+    <td>Total</td>
+    <td>5</td>
+    <td>3</td>
+    <td>0</td>
+    <td>2</td>
+    <td>&nbsp;</td>
+</tr>
+</table>
+
+<div id='ending'>&nbsp;</div>
+
+</body>
+</html>

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Firmware Update Test Report</title>
+    <meta name="generator" content="HTMLTestRunner 0.8.1"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    
+<style type="text/css" media="screen">
+body        { font-family: verdana, arial, helvetica, sans-serif; font-size: 80%; }
+table       { font-size: 100%; }
+pre         { }
+
+/* -- heading ---------------------------------------------------------------------- */
+h1 {
+}
+.heading {
+    margin-top: 0ex;
+    margin-bottom: 1ex;
+}
+
+.heading .attribute {
+    margin-top: 1ex;
+    margin-bottom: 0;
+}
+
+.heading .description {
+    margin-top: 4ex;
+    margin-bottom: 6ex;
+}
+
+/* -- report ------------------------------------------------------------------------ */
+#show_detail_line {
+    margin-top: 3ex;
+    margin-bottom: 1ex;
+}
+#result_table {
+    width: 80%;
+    border-collapse: collapse;
+    border: medium solid #777;
+}
+#header_row {
+    font-weight: bold;
+    color: white;
+    background-color: #777;
+}
+#result_table td {
+    border: thin solid #777;
+    padding: 2px;
+}
+#total_row  { font-weight: bold; }
+.passClass  { background-color: #6c6; }
+.failClass  { background-color: #c60; }
+.errorClass { background-color: #c00; }
+.passCase   { color: #6c6; }
+.failCase   { color: #c60; font-weight: bold; }
+.errorCase  { color: #c00; font-weight: bold; }
+.hiddenRow  { display: none; }
+.testcase   { margin-left: 2em; }
+
+
+/* -- ending ---------------------------------------------------------------------- */
+#ending {
+}
+
+</style>
+
+</head>
+<body>
+<script language="javascript" type="text/javascript"><!--
+output_list = Array();
+
+/* level - 0:Summary; 1:Failed; 2:All */
+function showCase(level) {
+    trs = document.getElementsByTagName("tr");
+    for (var i = 0; i < trs.length; i++) {
+        tr = trs[i];
+        id = tr.id;
+        if (id.substr(0,2) == 'ft') {
+            if (level < 1) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+            }
+        }
+        if (id.substr(0,2) == 'pt') {
+            if (level > 1) {
+                tr.className = '';
+            }
+            else {
+                tr.className = 'hiddenRow';
+            }
+        }
+    }
+}
+
+function showClassDetail(cid, count) {
+    var id_list = Array(count);
+    var toHide = 1;
+    for (var i = 0; i < count; i++) {
+        tid0 = 't' + cid.substr(1) + '.' + (i+1);
+        tid = 'f' + tid0;
+        tr = document.getElementById(tid);
+        if (!tr) {
+            tid = 'p' + tid0;
+            tr = document.getElementById(tid);
+        }
+        id_list[i] = tid;
+        if (tr.className) {
+            toHide = 0;
+        }
+    }
+    for (var i = 0; i < count; i++) {
+        tid = id_list[i];
+        if (toHide) {
+            document.getElementById(tid).className = 'hiddenRow';
+        }
+        else {
+            document.getElementById(tid).className = '';
+        }
+    }
+}
+
+function html_escape(s) {
+    s = s.replace(/&/g,'&amp;');
+    s = s.replace(/</g,'&lt;');
+    s = s.replace(/>/g,'&gt;');
+    return s;
+}
+
+function showOutput(id, name) {
+    var w = window.open("", //url
+                    "",
+                    "resizable,scrollbars,status,width=800,height=450");
+    d = w.document;
+    d.write("<pre>");
+    d.write(html_escape(output_list[id]));
+    d.write("\n");
+    d.write("<a href='javascript:window.close()'>close</a>\n");
+    d.write("</pre>\n");
+    d.close();
+}
+--></script>
+
+<div class='heading'>
+<h1>Firmware Update Test Report</h1>
+<p class='attribute'><strong>Start Time:</strong> 2014-04-24 11:23:43</p>
+<p class='attribute'><strong>Duration:</strong> 0:57:54.192000</p>
+<p class='attribute'><strong>Status:</strong> Pass 2</p>
+
+<p class='description'></p>
+</div>
+
+
+
+<p id='show_detail_line'>Show
+<a href='javascript:showCase(0)'>Summary</a>
+<a href='javascript:showCase(1)'>Failed</a>
+<a href='javascript:showCase(2)'>All</a>
+</p>
+<table id='result_table'>
+<colgroup>
+<col align='left' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+</colgroup>
+<tr id='header_row'>
+    <td>Test Group/Test case</td>
+    <td>Count</td>
+    <td>Pass</td>
+    <td>Fail</td>
+    <td>Error</td>
+    <td>View</td>
+</tr>
+
+<tr class='passClass'>
+    <td>ts_fwupdate_ui.TsFwupdateUi: TsFwupdateUi class provides a firmware update automation using Selenium UI test features.</td>
+    <td>2</td>
+    <td>2</td>
+    <td>0</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c1',2)">Detail</a></td>
+</tr>
+
+<tr id='pt1.1' class='hiddenRow'>
+    <td class='none'><div class='testcase'>tc_fwupdate_local_single_rm_customize</div></td>
+    <td colspan='5' align='center'><a href="javascript:showOutput('pt1.1', 'tc_fwupdate_local_single_rm_customize')">pass</a>
+<script language="javascript" type="text/javascript">output_list['pt1.1'] = '\nThu Apr 24 11:23:52 2014 ===\x3E\x3E Test case:  ACEManager Firmware single upgrade \n\n\nstep: Check current ALEOS version\n\n\nStep:  get ALEOS FW version by AT command  ATI1\n(0, \x3C_sre.SRE_Match object at 0x04612BF0\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04612BB8\x3E, \'ATI1\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04612BF0\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04612C28\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04612BF0\x3E, \'4.3.6.E11\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04612C28\x3E, \'12180306000700000000000000000000\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04612C60\x3E, \'Boot v1.0.9\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04612C28\x3E, \'   (c) 2009-2014 Sierra Wireless, Inc.\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04612C60\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.6.E11\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2014 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\nThu Apr 24 11:23:56 2014 ===\x3E\x3E RM Build: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\data\\builds\\MC8705_ATT001_3553.bin\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nThu Apr 24 11:24:07 2014 ===\x3E\x3E Clicking firmware update button\n\n\nThu Apr 24 11:24:17 2014 ===\x3E\x3E Getting update type\n\n\nThu Apr 24 11:24:20 2014 ===\x3E\x3E Browsing update file\n\n\nThu Apr 24 11:24:23 2014 ===\x3E\x3E Clicking Go\n\n\nWAIT_PROCESS_RM\n\n\nWait Applyting Step\n\n\nThu Apr 24 11:25:42 2014 ===\x3E\x3E Applying RM...\n\n\nThu Apr 24 11:30:08 2014 ===\x3E\x3E Done ALEOS Updating\n\n\nThu Apr 24 11:30:08 2014 ===\x3E\x3E Rebooting ...\n\n\nstep: Verify Radio Module\n\n\nStep:  get radio version by AT command  ATI2\n(0, \x3C_sre.SRE_Match object at 0x04BEA090\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04C13138\x3E, \'ATI2\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04BEA090\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04C13100\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04BEA090\x3E, \'T3_5_5_3AP R703 CNSZXD00000155 2013/09/28 16:32:14\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04C13100\x3E, \'MC8705\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04BEA090\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI2\r\nOK\r\n\r\r\nT3_5_5_3AP R703 CNSZXD00000155 2013/09/28 16:32:14\r\r\nMC8705\r\r\nOK\r\r\n\n\nThu Apr 24 11:32:42 2014 ===\x3E\x3E Current RM version T3_5_5_3AP R703 CNSZXD00000155 2013/09/28 16:32:14\n\n\nThu Apr 24 11:32:42 2014 ===\x3E\x3E RM verify: True\n\n\nThu Apr 24 11:32:42 2014 ===\x3E\x3E Test case Completed\n\n';</script>
+</td>
+</tr>
+
+<tr id='pt1.2' class='hiddenRow'>
+    <td class='none'><div class='testcase'>tc_fwupdate_local_roundtrip_rm_customize</div></td>
+    <td colspan='5' align='center'><a href="javascript:showOutput('pt1.2', 'tc_fwupdate_local_roundtrip_rm_customize')">pass</a>
+<script language="javascript" type="text/javascript">output_list['pt1.2'] = '\nThu Apr 24 11:32:51 2014 ===\x3E\x3E Test case: ACEManager Firmware Roundtrip upgrade \n\n\nThu Apr 24 11:32:51 2014 ===\x3E\x3E Round: 1 Started\n\n\nThu Apr 24 11:32:51 2014 ===\x3E\x3E Upgrade to: MC8705_ATT001_3553\n\n\nstep: Check current ALEOS version\n\n\nStep:  get ALEOS FW version by AT command  ATI1\n(0, \x3C_sre.SRE_Match object at 0x04612D08\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04612D78\x3E, \'ATI1\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04612D08\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04612D78\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04612D08\x3E, \'4.3.6.E11\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04612D78\x3E, \'12180306000700000000000000000000\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04612D08\x3E, \'Boot v1.0.9\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04612D78\x3E, \'   (c) 2009-2014 Sierra Wireless, Inc.\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x04612D08\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.6.E11\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2014 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\nThu Apr 24 11:32:55 2014 ===\x3E\x3E RM Build: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\data\\builds\\MC8705_ATT001_3553.bin\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nThu Apr 24 11:33:03 2014 ===\x3E\x3E Clicking firmware update button\n\n\nThu Apr 24 11:33:13 2014 ===\x3E\x3E Getting update type\n\n\nThu Apr 24 11:33:16 2014 ===\x3E\x3E Browsing update file\n\n\nThu Apr 24 11:33:19 2014 ===\x3E\x3E Clicking Go\n\n\nWAIT_PROCESS_RM\n\n\nWait Applyting Step\n\n\nThu Apr 24 11:34:40 2014 ===\x3E\x3E Applying RM...\n\n\nThu Apr 24 11:39:06 2014 ===\x3E\x3E Done ALEOS Updating\n\n\nThu Apr 24 11:39:06 2014 ===\x3E\x3E Rebooting ...\n\n\nstep: Verify Radio Module\n\n\nStep:  get radio version by AT command  ATI2\n(0, \x3C_sre.SRE_Match object at 0x0463B448\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B330\x3E, \'ATI2\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B448\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B480\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B448\x3E, \'T3_5_5_3AP R703 CNSZXD00000155 2013/09/28 16:32:14\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B480\x3E, \'MC8705\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B448\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI2\r\nOK\r\n\r\r\nT3_5_5_3AP R703 CNSZXD00000155 2013/09/28 16:32:14\r\r\nMC8705\r\r\nOK\r\r\n\n\nThu Apr 24 11:41:43 2014 ===\x3E\x3E Current RM version T3_5_5_3AP R703 CNSZXD00000155 2013/09/28 16:32:14\n\n\nThu Apr 24 11:41:43 2014 ===\x3E\x3E RM verify: True\n\n\nThu Apr 24 11:41:43 2014 ===\x3E\x3E Test case Completed\n\n\nThu Apr 24 11:41:43 2014 ===\x3E\x3E Downgrade to: MC8705_ATT001_1032\n\n\nstep: Check current ALEOS version\n\n\nStep:  get ALEOS FW version by AT command  ATI1\n(0, \x3C_sre.SRE_Match object at 0x0463B330\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B480\x3E, \'ATI1\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B330\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463BDB0\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B330\x3E, \'4.3.6.E11\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463BDB0\x3E, \'12180306000700000000000000000000\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B2C0\x3E, \'Boot v1.0.9\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463BDB0\x3E, \'   (c) 2009-2014 Sierra Wireless, Inc.\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B2C0\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.6.E11\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2014 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\nThu Apr 24 11:41:47 2014 ===\x3E\x3E RM Build: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\data\\builds\\MC8705_ATT001_1032.bin\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nThu Apr 24 11:41:57 2014 ===\x3E\x3E Clicking firmware update button\n\n\nThu Apr 24 11:42:07 2014 ===\x3E\x3E Getting update type\n\n\nThu Apr 24 11:42:10 2014 ===\x3E\x3E Browsing update file\n\n\nThu Apr 24 11:42:13 2014 ===\x3E\x3E Clicking Go\n\n\nWAIT_PROCESS_RM\n\n\nWait Applyting Step\n\n\nThu Apr 24 11:43:02 2014 ===\x3E\x3E Applying RM...\n\n\nThu Apr 24 11:55:06 2014 ===\x3E\x3E Done ALEOS Updating\n\n\nThu Apr 24 11:55:06 2014 ===\x3E\x3E Rebooting ...\n\n\nstep: Verify Radio Module\n\n\nStep:  get radio version by AT command  ATI2\n(0, \x3C_sre.SRE_Match object at 0x0463BD78\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463BAD8\x3E, \'ATI2\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463BD78\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B480\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463BD78\x3E, \'T1_0_3_2AP R361 CNSZXD00000061 2011/04/15 17:40:48\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B480\x3E, \'MC8705\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463BD78\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI2\r\nOK\r\n\r\r\nT1_0_3_2AP R361 CNSZXD00000061 2011/04/15 17:40:48\r\r\nMC8705\r\r\nOK\r\r\n\n\nThu Apr 24 11:57:40 2014 ===\x3E\x3E Current RM version T1_0_3_2AP R361 CNSZXD00000061 2011/04/15 17:40:48\n\n\nThu Apr 24 11:57:40 2014 ===\x3E\x3E RM verify: True\n\n\nThu Apr 24 11:57:40 2014 ===\x3E\x3E Round: 1 Completed\n\n\nThu Apr 24 11:57:40 2014 ===\x3E\x3E Round: 2 Started\n\n\nThu Apr 24 11:57:40 2014 ===\x3E\x3E Upgrade to: MC8705_ATT001_3553\n\n\nstep: Check current ALEOS version\n\n\nStep:  get ALEOS FW version by AT command  ATI1\n(0, \x3C_sre.SRE_Match object at 0x0463BAD8\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B480\x3E, \'ATI1\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463BE58\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B480\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463BE58\x3E, \'4.3.6.E11\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463BAD8\x3E, \'12180306000700000000000000000000\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463BE58\x3E, \'Boot v1.0.9\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B480\x3E, \'   (c) 2009-2014 Sierra Wireless, Inc.\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463BE58\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.6.E11\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2014 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\nThu Apr 24 11:57:43 2014 ===\x3E\x3E RM Build: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\data\\builds\\MC8705_ATT001_3553.bin\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nThu Apr 24 11:57:52 2014 ===\x3E\x3E Clicking firmware update button\n\n\nThu Apr 24 11:58:01 2014 ===\x3E\x3E Getting update type\n\n\nThu Apr 24 11:58:04 2014 ===\x3E\x3E Browsing update file\n\n\nThu Apr 24 11:58:07 2014 ===\x3E\x3E Clicking Go\n\n\nWAIT_PROCESS_RM\n\n\nWait Applyting Step\n\n\nThu Apr 24 11:59:26 2014 ===\x3E\x3E Applying RM...\n\n\nThu Apr 24 12:04:01 2014 ===\x3E\x3E Done ALEOS Updating\n\n\nThu Apr 24 12:04:01 2014 ===\x3E\x3E Rebooting ...\n\n\nstep: Verify Radio Module\n\n\nStep:  get radio version by AT command  ATI2\n(0, \x3C_sre.SRE_Match object at 0x0463B6B0\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B790\x3E, \'ATI2\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463BAD8\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B790\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463BAD8\x3E, \'T3_5_5_3AP R703 CNSZXD00000155 2013/09/28 16:32:14\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B790\x3E, \'MC8705\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463BAD8\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI2\r\nOK\r\n\r\r\nT3_5_5_3AP R703 CNSZXD00000155 2013/09/28 16:32:14\r\r\nMC8705\r\r\nOK\r\r\n\n\nThu Apr 24 12:06:35 2014 ===\x3E\x3E Current RM version T3_5_5_3AP R703 CNSZXD00000155 2013/09/28 16:32:14\n\n\nThu Apr 24 12:06:35 2014 ===\x3E\x3E RM verify: True\n\n\nThu Apr 24 12:06:35 2014 ===\x3E\x3E Test case Completed\n\n\nThu Apr 24 12:06:35 2014 ===\x3E\x3E Downgrade to: MC8705_ATT001_1032\n\n\nstep: Check current ALEOS version\n\n\nStep:  get ALEOS FW version by AT command  ATI1\n(0, \x3C_sre.SRE_Match object at 0x0463B6B0\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B790\x3E, \'ATI1\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B988\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B790\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B988\x3E, \'4.3.6.E11\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B6B0\x3E, \'12180306000700000000000000000000\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B988\x3E, \'Boot v1.0.9\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B790\x3E, \'   (c) 2009-2014 Sierra Wireless, Inc.\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B988\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI1\r\nOK\r\n\r\r\n4.3.6.E11\r\r\n12180306000700000000000000000000\r\r\nBoot v1.0.9\r\r\n   (c) 2009-2014 Sierra Wireless, Inc.\r\r\nOK\r\r\n\n\nThu Apr 24 12:06:39 2014 ===\x3E\x3E RM Build: C:\\Users\\airlink\\Documents\\GitHub\\airlinkautomation_Framework\\data\\builds\\MC8705_ATT001_1032.bin\n\n\nstep: login to ACEmanager\n\n\nlogin to HTTP://192.168.13.31:9191/ user 12345\n\n\nThu Apr 24 12:06:48 2014 ===\x3E\x3E Clicking firmware update button\n\n\nThu Apr 24 12:06:58 2014 ===\x3E\x3E Getting update type\n\n\nThu Apr 24 12:07:01 2014 ===\x3E\x3E Browsing update file\n\n\nThu Apr 24 12:07:04 2014 ===\x3E\x3E Clicking Go\n\n\nWAIT_PROCESS_RM\n\n\nWait Applyting Step\n\n\nThu Apr 24 12:07:53 2014 ===\x3E\x3E Applying RM...\n\n\nThu Apr 24 12:19:03 2014 ===\x3E\x3E Done ALEOS Updating\n\n\nThu Apr 24 12:19:03 2014 ===\x3E\x3E Rebooting ...\n\n\nstep: Verify Radio Module\n\n\nStep:  get radio version by AT command  ATI2\n(0, \x3C_sre.SRE_Match object at 0x0463B800\x3E, \'\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B9F8\x3E, \'ATI2\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B800\x3E, \'OK\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B330\x3E, \'\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B800\x3E, \'T1_0_3_2AP R361 CNSZXD00000061 2011/04/15 17:40:48\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B330\x3E, \'MC8705\\r\\r\\n\')\n(0, \x3C_sre.SRE_Match object at 0x0463B800\x3E, \'OK\\r\\r\\n\')\n(-1, None, \'\')\n\n\r\nATI2\r\nOK\r\n\r\r\nT1_0_3_2AP R361 CNSZXD00000061 2011/04/15 17:40:48\r\r\nMC8705\r\r\nOK\r\r\n\n\nThu Apr 24 12:21:37 2014 ===\x3E\x3E Current RM version T1_0_3_2AP R361 CNSZXD00000061 2011/04/15 17:40:48\n\n\nThu Apr 24 12:21:37 2014 ===\x3E\x3E RM verify: True\n\n\nThu Apr 24 12:21:37 2014 ===\x3E\x3E Round: 2 Completed\n\n\nThu Apr 24 12:21:37 2014 ===\x3E\x3E Test case Completed\n\n';</script>
+</td>
+</tr>
+
+<tr id='total_row'>
+    <td>Total</td>
+    <td>2</td>
+    <td>2</td>
+    <td>0</td>
+    <td>0</td>
+    <td>&nbsp;</td>
+</tr>
+</table>
+
+<div id='ending'>&nbsp;</div>
+
+</body>
+</html>

@@ -1296,7 +1296,7 @@ def cmd_stdout_last_line(command, argument, timeout=3):
     return line
 
 
-def get_report_url(tbd_config_map, test_area, report_filename):
+def get_report_url(ftp_report_path, tbd_config_map, test_area, report_filename):
     '''   Get report url    
     Args:
              tbd_config_map:  test bed configuration list 
@@ -1304,10 +1304,12 @@ def get_report_url(tbd_config_map, test_area, report_filename):
              report_filename  string, report file name 
     Returns: report_url
     '''     
-    report_url ="http://"+tbd_config_map["JENKINS"]["MASTER_ADDRESS"]+"/automation/results/temp/"+test_area+'/'+report_filename
+    
+#   ftp_report_path = "/automation/results/temp/"
+    report_url ="http://"+tbd_config_map["JENKINS"]["MASTER_ADDRESS"]+ftp_report_path+test_area+'/'+report_filename
     return report_url
 
-def upload_report(tbd_config_map, test_area,report_filename):
+def upload_report(ftp_report_path, tbd_config_map, test_area,report_filename):
     '''   Upload the report file to FTP server    
     Args:
              tbd_config_map:  test bed configuration list 
@@ -1316,8 +1318,9 @@ def upload_report(tbd_config_map, test_area,report_filename):
     Returns: result: True/False  Upload success or not
     ''' 
     result = True
-    ftp_path = '/results/temp/'+test_area+'/'
-    
+    #  ftp_report_path =  /automation/results/temp/
+    ftp_path = ftp_report_path + test_area+'/'
+
     try:
         
         ftp = ftplib.FTP(tbd_config_map["JENKINS"]["MASTER_ADDRESS"], tbd_config_map["JENKINS"]["USERNAME"], tbd_config_map["JENKINS"]["PASSWORD"])
@@ -1331,7 +1334,7 @@ def upload_report(tbd_config_map, test_area,report_filename):
     
     return result
 
-def make_csv(csv_file_path, test_result, area_config_map):
+def make_csv(csv_file_path, test_result, area_config_map, tc_ts_map, note="Note"):
     '''   Generating the csv file    
     Args:
              csv_file_path: the feature area of this test
@@ -1345,12 +1348,17 @@ def make_csv(csv_file_path, test_result, area_config_map):
     
     #csv filename format, To be discussed
     csv_filename =csv_file_path+"test_"+current_date_str+"_"+current_time_str+".csv"
+    
+    #To get the index of tese cases which already run 
+    tc_index = []
+    for key,value in tc_ts_map.iteritems():
+        if value[2] == 1:
+            tc_index.append(key)   
     try:
         csvfpp = open(csv_filename,'wb')
-        col_string = "ID,RESULT,NOTES,ATM_PRLINK"+'\n'
+        col_string = "ID,RESULT,NOTES"+'\n'
         csvfpp.writelines(col_string)
-        result_lst = test_result.result
-        for i in range(0,len(result_lst)):
+        for i in range(0,len(tc_index)):
             if test_result.result[i][0] == 0:
                 result_stat = "pass"
             elif test_result.result[i][0] == 1:
@@ -1358,7 +1366,7 @@ def make_csv(csv_file_path, test_result, area_config_map):
             else:
                 result_stat = "fail"        
             #For the Note, we can modifiy the output depands on the test result
-            csvfpp.writelines(area_config_map["LIST_TESTCASES"][i+1]["TC_ID"]+','+result_stat+','+"Note "+str(i)+'\n')
+            csvfpp.writelines(area_config_map["LIST_TESTCASES"][tc_index[i]]["TC_ID"]+','+result_stat+','+note+'\n')
         csvfpp.close()
     except Exception:
         result = False

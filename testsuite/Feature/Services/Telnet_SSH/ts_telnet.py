@@ -45,7 +45,10 @@ class TsTelnet(unittest.TestCase):
 #        self.driver = self.telnetssh_ins.login(self.url, self.username, self.password)
            
     def tearDown(self):
-#        self.driver.close()
+        try:
+            self.driver.close()
+        except:
+            pass
         pass
              
     def tc_telnet_login_attempt_wrong_password(self):
@@ -57,13 +60,6 @@ class TsTelnet(unittest.TestCase):
         #2, Login with Telnet, try incorrect password for the times which was set in the previous step
         #3, verify the time after trying login
                
-#         str1 = self.telnetssh_ins.get_remote_login_server_mode(self.driver)
-#         str2 = self.telnetssh_ins.get_remote_login_server_port(self.driver)
-#         str3 = self.telnetssh_ins.get_remote_login_server_port_timeout(self.driver)
-#         str4 = self.telnetssh_ins.get_maximum_login_attempts(self.driver)
-#         str5 = self.telnetssh_ins.get_telnet_ssh_echo(self.driver)
-#         str6 = self.telnetssh_ins.get_ssh_status(self.driver)
-        
         attempt_times = 3
         wrong_password = "12345"
 #        self.telnetssh_ins.set_maximum_login_attempts(self.driver, attempt_times)
@@ -75,13 +71,7 @@ class TsTelnet(unittest.TestCase):
             ret = telnet_ins.connect_test()
         time.sleep(15)
         str1 = at_ins.get_device_id(telnet_ins)
-        ba.cslog(str1)
-#         ba.cslog(str1)
-#         ba.cslog(str2)
-#         ba.cslog(str3)
-#         ba.cslog(str4)
-#         ba.cslog(str5)
-#         ba.cslog(str6)        
+        ba.cslog(str1)        
         pass
     
     def tc_telnet_login_attempt_wrong_username(self):

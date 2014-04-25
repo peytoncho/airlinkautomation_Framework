@@ -11,11 +11,7 @@
 ---
 #TESTBED2 : !include  /airlinkautomation/config/testbed2Conf.yml
 
-RUN_ALL_TESTCASES          :    NO
-RUN_SELECTIVE_TESTCASES    :    [[1,6]]
-RUN_REPEAT                 :    1
-ALL_TASECASE_NUMBER        :    6
-    
+   
 LIST_TESTCASES:
            1  : 
               TC_ID       : "Feature/ ACEmgr_Functions_Amit_Nasser_Shanifer/ FW_update_ALEOS_and_RMFU_Amit/ ALEOS_FW_update_Peyton/ Using_ACEManager/ Local_Connection/ ALEOS_update_to_current_version
